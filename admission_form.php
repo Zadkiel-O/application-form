@@ -295,6 +295,23 @@
                 <h2 class="text-lg font-bold mb-4">Confirmation</h2>
                 <p class="mb-4">Are you sure you want to submit?</p>
                 <button type="submit" class="bg-blue-500 text-white py-2 px-5 rounded hover:opacity-90">OK</button>
+                <button type="button" onclick="previewForm()" class="bg-gray-500 text-white py-2 px-5 rounded hover:opacity-90">Preview</button>
+
+                <script>
+                    function previewForm() {
+                        const form = document.querySelector('form');
+                        const formData = new FormData(form);
+                        let previewWindow = window.open("", "Preview", "width=800,height=600");
+                        previewWindow.document.write("<html><head><title>Form Preview</title><link rel='stylesheet' href='https://cdn.tailwindcss.com'></head><body class='bg-white p-5'>");
+                        previewWindow.document.write("<h1 class='text-2xl font-bold mb-4'>Form Preview</h1>");
+                        formData.forEach((value, key) => {
+                            previewWindow.document.write(`<p><strong>${key}:</strong> ${value}</p>`);
+                        });
+                        previewWindow.document.write("</body></html>");
+                        previewWindow.document.close();
+                        
+                    }
+                </script>
               </div>
              </div>
         </form>
