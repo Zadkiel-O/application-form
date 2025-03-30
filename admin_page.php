@@ -1,8 +1,12 @@
 <?php
-$conn = require_once 'db_connect.php';
+session_start();
+include 'db_connect.php';
 
-$sql = "SELECT id, first_name, middle_name, last_name, extension_name, personal_email FROM applicants ORDER BY id DESC";
-$result = $conn->query($sql);
+$sql = "SELECT applicant_ID as id, first_name, middle_name, last_name, extension_name, email_address as personal_email FROM applicants ORDER BY applicant_ID DESC";$result = $conn->query($sql);
+
+if (!$result) {
+    die("Error in query: " . $conn->error);
+}
 ?>
 
 <!DOCTYPE html>
@@ -78,8 +82,7 @@ $result = $conn->query($sql);
             </div>
         </div>
     </div>
-
-    <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden-flex items-center justify-center">
+    <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
         <div class="bg-white p-6 rounded-lg max-w-md w-full">
             <h3 class="text-xl font-bold mb-4">Confirm Deletion</h3>
             <p>Are you sure you want to delete this applicant? This action cannot be undone.</p>
@@ -123,6 +126,7 @@ $result = $conn->query($sql);
                         url: "delete_applicant.php",
                         type: "POST",
                         data: { id: deleteId },
+                        dataType: "json", // Specify expected response type
                         success: function(response) {
                             if (response.success) {
                                 $(`button[data-id="${deleteId}"]`).closest("tr").remove();
@@ -131,7 +135,8 @@ $result = $conn->query($sql);
                                 alert("Error: " + response.message);
                             }
                         },
-                        error: function() {
+                        error: function(xhr, status, error) {
+                            console.error(error);
                             alert("An error occurred during deletion.");
                         },
                         complete: function() {
