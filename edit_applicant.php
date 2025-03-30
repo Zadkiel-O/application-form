@@ -1,17 +1,13 @@
 <?php
-// Initialize variables
 $id = "";
 $error_message = "";
 $success_message = "";
 
-// Connect to database
 $conn = require_once 'db_connect.php';
 
-// Check if ID is provided in the URL
 if(isset($_GET['id']) && !empty($_GET['id'])) {
     $id = $_GET['id'];
     
-    // Fetch applicant data
     $sql = "SELECT * FROM applicants WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id);
@@ -28,9 +24,7 @@ if(isset($_GET['id']) && !empty($_GET['id'])) {
     $error_message = "Invalid request. Applicant ID is required.";
 }
 
-// Process form submission
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Validate and sanitize inputs
     $id = $_POST['id'];
     $first_name = trim($_POST['first_name']);
     $last_name = trim($_POST['last_name']);
@@ -66,13 +60,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $college_offered = trim($_POST['college_offered']);
     $course_offered = trim($_POST['course_offered']);
     
-    // Simple validation
     if(empty($first_name) || empty($last_name) || empty($personal_email)) {
         $error_message = "First name, last name, and email are required fields!";
     } else if(!filter_var($personal_email, FILTER_VALIDATE_EMAIL)) {
         $error_message = "Please enter a valid email address!";
     } else {
-        // Update applicant data
+
         $sql = "UPDATE applicants SET 
                 first_name = ?, 
                 last_name = ?, 
@@ -113,7 +106,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         if($stmt->execute()) {
             $success_message = "Applicant updated successfully!";
             
-            // Refresh applicant data
             $refresh_sql = "SELECT * FROM applicants WHERE id = ?";
             $refresh_stmt = $conn->prepare($refresh_sql);
             $refresh_stmt->bind_param("i", $id);
@@ -177,7 +169,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=" . $id); ?>" class="bg-white p-6 rounded-lg">
                         <input type="hidden" name="id" value="<?php echo $id; ?>">
                         
-                        <!-- Personal Information Section -->
                         <div class="mb-6">
                             <h2 class="text-lg font-bold mb-4 pb-2 border-b-2 border-gray-200">Personal Information</h2>
                             
@@ -270,7 +261,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                         </div>
                         
-                        <!-- Address Information Section -->
                         <div class="mb-6">
                             <h2 class="text-lg font-bold mb-4 pb-2 border-b-2 border-gray-200">Address Information</h2>
                             
@@ -307,7 +297,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                         </div>
                         
-                        <!-- Contact Information Section -->
                         <div class="mb-6">
                             <h2 class="text-lg font-bold mb-4 pb-2 border-b-2 border-gray-200">Contact Information</h2>
                             
@@ -332,7 +321,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                         </div>
                         
-                        <!-- Guardian Information Section -->
                         <div class="mb-6">
                             <h2 class="text-lg font-bold mb-4 pb-2 border-b-2 border-gray-200">Guardian Information</h2>
                             
@@ -402,7 +390,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                         </div>
                         
-                        <!-- Academic Information Section -->
                         <div class="mb-6">
                             <h2 class="text-lg font-bold mb-4 pb-2 border-b-2 border-gray-200">Academic Information</h2>
                             
