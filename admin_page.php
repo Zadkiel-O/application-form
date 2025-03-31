@@ -33,7 +33,7 @@ if (!$result) {
         <div class="bg-indigo-200 p-4 h-screen w-48 flex flex-col items-center">
             <h2 class="text-center font-bold text-2xl mb-5 text-black">ADMIN</h2>
             <div class="bg-gray-300 p-2 mt-2 text-center font-bold w-full rounded text-black">Applicant Form</div>
-            <a href="admin_dashboard.php" class="bg-purple-500 p-2 mt-2 text-center font-bold w-full rounded text-white hover:bg-purple-700">Dashboard</a>
+            <a href="admin_page.php" class="bg-purple-500 p-2 mt-2 text-center font-bold w-full rounded text-white hover:bg-purple-700">Dashboard</a>
             <a href="logout.php" class="bg-red-500 p-2 mt-2 text-center font-bold w-full rounded text-white hover:bg-red-700">Logout</a>
         </div>
 
@@ -126,7 +126,7 @@ if (!$result) {
                         url: "delete_applicant.php",
                         type: "POST",
                         data: { id: deleteId },
-                        dataType: "json", // Specify expected response type
+                        dataType: "json", 
                         success: function(response) {
                             if (response.success) {
                                 $(`button[data-id="${deleteId}"]`).closest("tr").remove();

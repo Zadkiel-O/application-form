@@ -1,16 +1,21 @@
+
 <?php
-$id = "";
+$applicant_ID = "";
 $error_message = "";
 $success_message = "";
 
 $conn = require_once 'db_connect.php';
 
 if(isset($_GET['id']) && !empty($_GET['id'])) {
-    $id = $_GET['id'];
+    $applicant_ID = $_GET['id'];
     
-    $sql = "SELECT * FROM applicants WHERE id = ?";
+    $sql = "SELECT a.*, p.*, g.* 
+            FROM applicants a 
+            LEFT JOIN personal_info p ON a.applicant_ID = p.applicant_ID 
+            LEFT JOIN guardian_info g ON a.applicant_ID = g.applicant_ID 
+            WHERE a.applicant_ID = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id);
+    $stmt->bind_param("i", $applicant_ID);
     $stmt->execute();
     $result = $stmt->get_result();
     
@@ -25,28 +30,30 @@ if(isset($_GET['id']) && !empty($_GET['id'])) {
 }
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $id = $_POST['id'];
+    $applicant_ID = $_POST['applicant_ID'];
     $first_name = trim($_POST['first_name']);
     $last_name = trim($_POST['last_name']);
     $middle_name = trim($_POST['middle_name']);
     $extension_name = trim($_POST['extension_name']);
-    $date_of_birth = trim($_POST['date_of_birth']);
-    $place_of_birth = trim($_POST['place_of_birth']);
+    $birthday = trim($_POST['birthday']);
+    $country_of_birth = trim($_POST['country_of_birth']);
     $age = trim($_POST['age']);
     $sex = trim($_POST['sex']);
     $blood_type = trim($_POST['blood_type']);
     $civil_status = trim($_POST['civil_status']);
     $religious_affiliation = trim($_POST['religious_affiliation']);
     $citizenship = trim($_POST['citizenship']);
-    $no_of_siblings = trim($_POST['no_of_siblings']);
-    $house = trim($_POST['house']);
+    $number_of_siblings = trim($_POST['number_of_siblings']);
+    $email_address = trim($_POST['email_address']);
+    $contact_number = trim($_POST['contact_number']);
+    
+    $address = trim($_POST['address']);
     $barangay = trim($_POST['barangay']);
     $city = trim($_POST['city']);
     $district = trim($_POST['district']);
+    $region = trim($_POST['region']);
     $zip_code = trim($_POST['zip_code']);
-    $personal_number = trim($_POST['personal_number']);
-    $personal_email = trim($_POST['personal_email']);
-    $landline_number = trim($_POST['landline_number']);
+    
     $guardian_first_name = trim($_POST['guardian_first_name']);
     $guardian_middle_name = trim($_POST['guardian_middle_name']);
     $guardian_last_name = trim($_POST['guardian_last_name']);
@@ -54,69 +61,124 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $guardian_age = trim($_POST['guardian_age']);
     $guardian_sex = trim($_POST['guardian_sex']);
     $guardian_relationship = trim($_POST['guardian_relationship']);
-    $guardian_address = trim($_POST['guardian_address']);
     $guardian_contact_number = trim($_POST['guardian_contact_number']);
-    $guardian_email = trim($_POST['guardian_email']);
-    $college_offered = trim($_POST['college_offered']);
-    $course_offered = trim($_POST['course_offered']);
+    $guardian_email_address = trim($_POST['guardian_email_address']);
     
-    if(empty($first_name) || empty($last_name) || empty($personal_email)) {
+    if(empty($first_name) || empty($last_name) || empty($email_address)) {
         $error_message = "First name, last name, and email are required fields!";
-    } else if(!filter_var($personal_email, FILTER_VALIDATE_EMAIL)) {
+    } else if(!filter_var($email_address, FILTER_VALIDATE_EMAIL)) {
         $error_message = "Please enter a valid email address!";
     } else {
+        $conn->begin_transaction();
+        
+        try {
+            $sql = "UPDATE applicants SET 
+                    first_name = ?, 
+                    last_name = ?, 
+                    middle_name = ?, 
+                    extension_name = ?, 
+                    birthday = ?, 
+                    country_of_birth = ?, 
+                    age = ?, 
+                    sex = ?, 
+                    blood_type = ?, 
+                    civil_status = ?, 
+                    religious_affiliation = ?, 
+                    citizenship = ?, 
+                    number_of_siblings = ?,
+                    email_address = ?,
+                    contact_number = ?
+                    WHERE applicant_ID = ?";
 
-        $sql = "UPDATE applicants SET 
-                first_name = ?, 
-                last_name = ?, 
-                middle_name = ?, 
-                extension_name = ?, 
-                date_of_birth = ?, 
-                place_of_birth = ?, 
-                age = ?, 
-                sex = ?, 
-                blood_type = ?, 
-                civil_status = ?, 
-                religious_affiliation = ?, 
-                citizenship = ?, 
-                no_of_siblings = ?, 
-                house = ?, 
-                barangay = ?, 
-                city = ?, 
-                district = ?, 
-                zip_code = ?, 
-                personal_number = ?, 
-                personal_email = ?, 
-                landline_number = ?, 
-                guardian_first_name = ?, 
-                guardian_middle_name = ?, 
-                guardian_last_name = ?, 
-                guardian_extension_name = ?, 
-                guardian_age = ?, 
-                guardian_sex = ?, 
-                guardian_relationship = ?, 
-                guardian_address = ?, 
-                guardian_contact_number = ?, 
-                guardian_email = ?, 
-                college_offered = ?, 
-                course_offered = ? 
-                WHERE id = ?";
-
-        $stmt = $conn->prepare($sql);
-        if($stmt->execute()) {
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ssssssisssssisii", 
+                $first_name, 
+                $last_name, 
+                $middle_name, 
+                $extension_name, 
+                $birthday, 
+                $country_of_birth, 
+                $age, 
+                $sex, 
+                $blood_type, 
+                $civil_status, 
+                $religious_affiliation, 
+                $citizenship, 
+                $number_of_siblings,
+                $email_address,
+                $contact_number,
+                $applicant_ID
+            );
+            $stmt->execute();
+            
+            $sql = "UPDATE personal_info SET 
+                    address = ?, 
+                    barangay = ?, 
+                    city = ?, 
+                    district = ?, 
+                    region = ?,
+                    zip_code = ? 
+                    WHERE applicant_ID = ?";
+            
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("sssisii", 
+                $address, 
+                $barangay, 
+                $city, 
+                $district, 
+                $region,
+                $zip_code,
+                $applicant_ID
+            );
+            $stmt->execute();
+            
+            $sql = "UPDATE guardian_info SET 
+                    guardian_first_name = ?, 
+                    guardian_last_name = ?, 
+                    guardian_middle_name = ?, 
+                    guardian_extension_name = ?, 
+                    guardian_age = ?, 
+                    guardian_sex = ?, 
+                    guardian_relationship = ?, 
+                    guardian_contact_number = ?,
+                    guardian_email_address = ?
+                    WHERE applicant_ID = ?";
+            
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ssssissssi", 
+                $guardian_first_name, 
+                $guardian_last_name, 
+                $guardian_middle_name, 
+                $guardian_extension_name, 
+                $guardian_age, 
+                $guardian_sex, 
+                $guardian_relationship, 
+                $guardian_contact_number,
+                $guardian_email_address,
+                $applicant_ID
+            );
+            $stmt->execute();
+            
+            $conn->commit();
+            
             $success_message = "Applicant updated successfully!";
             
-            $refresh_sql = "SELECT * FROM applicants WHERE id = ?";
+            $refresh_sql = "SELECT a.*, p.*, g.* 
+                          FROM applicants a 
+                          LEFT JOIN personal_info p ON a.applicant_ID = p.applicant_ID 
+                          LEFT JOIN guardian_info g ON a.applicant_ID = g.applicant_ID 
+                          WHERE a.applicant_ID = ?";
             $refresh_stmt = $conn->prepare($refresh_sql);
-            $refresh_stmt->bind_param("i", $id);
+            $refresh_stmt->bind_param("i", $applicant_ID);
             $refresh_stmt->execute();
             $refresh_result = $refresh_stmt->get_result();
             $applicant_data = $refresh_result->fetch_assoc();
             $refresh_stmt->close();
-        } else {
-            $error_message = "Error: " . $stmt->error;
+            
+        } catch (Exception $e) {
+            $conn->rollback();
+            $error_message = "Error: " . $e->getMessage();
         }
-        $stmt->close();
     }
 }
 ?>
@@ -166,8 +228,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <?php endif; ?>
                 
                 <?php if(!isset($error_message) || !empty($applicant_data)): ?>
-                    <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=" . $id); ?>" class="bg-white p-6 rounded-lg">
-                        <input type="hidden" name="id" value="<?php echo $id; ?>">
+                    <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=" . $applicant_ID); ?>" class="bg-white p-6 rounded-lg">
+                        <input type="hidden" name="applicant_ID" value="<?php echo $applicant_ID; ?>">
                         
                         <div class="mb-6">
                             <h2 class="text-lg font-bold mb-4 pb-2 border-b-2 border-gray-200">Personal Information</h2>
@@ -176,7 +238,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div>
                                     <label for="first_name" class="block text-gray-700 text-sm font-bold mb-2">First Name *</label>
                                     <input type="text" id="first_name" name="first_name" value="<?php echo htmlspecialchars($applicant_data['first_name'] ?? ''); ?>" 
-                                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" >
+                                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
                                 </div>
                                 
                                 <div>
@@ -188,24 +250,29 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div>
                                     <label for="last_name" class="block text-gray-700 text-sm font-bold mb-2">Last Name *</label>
                                     <input type="text" id="last_name" name="last_name" value="<?php echo htmlspecialchars($applicant_data['last_name'] ?? ''); ?>" 
-                                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" >
+                                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
                                 </div>
                                 
                                 <div>
                                     <label for="extension_name" class="block text-gray-700 text-sm font-bold mb-2">Extension Name</label>
-                                    <input type="text" id="extension_name" name="extension_name" value="<?php echo htmlspecialchars($applicant_data['extension_name'] ?? ''); ?>" 
+                                    <select id="extension_name" name="extension_name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                        <option value="N/A" <?php echo (isset($applicant_data['extension_name']) && $applicant_data['extension_name'] == 'N/A') ? 'selected' : ''; ?>>N/A</option>
+                                        <option value="Jr." <?php echo (isset($applicant_data['extension_name']) && $applicant_data['extension_name'] == 'Jr.') ? 'selected' : ''; ?>>Jr.</option>
+                                        <option value="Sr." <?php echo (isset($applicant_data['extension_name']) && $applicant_data['extension_name'] == 'Sr.') ? 'selected' : ''; ?>>Sr.</option>
+                                        <option value="III" <?php echo (isset($applicant_data['extension_name']) && $applicant_data['extension_name'] == 'III') ? 'selected' : ''; ?>>III</option>
+                                        <option value="IV" <?php echo (isset($applicant_data['extension_name']) && $applicant_data['extension_name'] == 'IV') ? 'selected' : ''; ?>>IV</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label for="birthday" class="block text-gray-700 text-sm font-bold mb-2">Date of Birth</label>
+                                    <input type="date" id="birthday" name="birthday" value="<?php echo htmlspecialchars($applicant_data['birthday'] ?? ''); ?>" 
                                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                 </div>
                                 
                                 <div>
-                                    <label for="date_of_birth" class="block text-gray-700 text-sm font-bold mb-2">Date of Birth</label>
-                                    <input type="date" id="date_of_birth" name="date_of_birth" value="<?php echo htmlspecialchars($applicant_data['date_of_birth'] ?? ''); ?>" 
-                                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                                </div>
-                                
-                                <div>
-                                    <label for="place_of_birth" class="block text-gray-700 text-sm font-bold mb-2">Place of Birth</label>
-                                    <input type="text" id="place_of_birth" name="place_of_birth" value="<?php echo htmlspecialchars($applicant_data['place_of_birth'] ?? ''); ?>" 
+                                    <label for="country_of_birth" class="block text-gray-700 text-sm font-bold mb-2">Country of Birth</label>
+                                    <input type="text" id="country_of_birth" name="country_of_birth" value="<?php echo htmlspecialchars($applicant_data['country_of_birth'] ?? ''); ?>" 
                                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                 </div>
                                 
@@ -221,13 +288,23 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <option value="">Select</option>
                                         <option value="Male" <?php echo (isset($applicant_data['sex']) && $applicant_data['sex'] == 'Male') ? 'selected' : ''; ?>>Male</option>
                                         <option value="Female" <?php echo (isset($applicant_data['sex']) && $applicant_data['sex'] == 'Female') ? 'selected' : ''; ?>>Female</option>
+                                        <option value="Other" <?php echo (isset($applicant_data['sex']) && $applicant_data['sex'] == 'Other') ? 'selected' : ''; ?>>Other</option>
                                     </select>
                                 </div>
                                 
                                 <div>
                                     <label for="blood_type" class="block text-gray-700 text-sm font-bold mb-2">Blood Type</label>
-                                    <input type="text" id="blood_type" name="blood_type" value="<?php echo htmlspecialchars($applicant_data['blood_type'] ?? ''); ?>" 
-                                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                    <select id="blood_type" name="blood_type" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                        <option value="">Select</option>
+                                        <option value="A+" <?php echo (isset($applicant_data['blood_type']) && $applicant_data['blood_type'] == 'A+') ? 'selected' : ''; ?>>A+</option>
+                                        <option value="A-" <?php echo (isset($applicant_data['blood_type']) && $applicant_data['blood_type'] == 'A-') ? 'selected' : ''; ?>>A-</option>
+                                        <option value="B+" <?php echo (isset($applicant_data['blood_type']) && $applicant_data['blood_type'] == 'B+') ? 'selected' : ''; ?>>B+</option>
+                                        <option value="B-" <?php echo (isset($applicant_data['blood_type']) && $applicant_data['blood_type'] == 'B-') ? 'selected' : ''; ?>>B-</option>
+                                        <option value="O+" <?php echo (isset($applicant_data['blood_type']) && $applicant_data['blood_type'] == 'O+') ? 'selected' : ''; ?>>O+</option>
+                                        <option value="O-" <?php echo (isset($applicant_data['blood_type']) && $applicant_data['blood_type'] == 'O-') ? 'selected' : ''; ?>>O-</option>
+                                        <option value="AB+" <?php echo (isset($applicant_data['blood_type']) && $applicant_data['blood_type'] == 'AB+') ? 'selected' : ''; ?>>AB+</option>
+                                        <option value="AB-" <?php echo (isset($applicant_data['blood_type']) && $applicant_data['blood_type'] == 'AB-') ? 'selected' : ''; ?>>AB-</option>
+                                    </select>
                                 </div>
                                 
                                 <div>
@@ -236,8 +313,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <option value="">Select</option>
                                         <option value="Single" <?php echo (isset($applicant_data['civil_status']) && $applicant_data['civil_status'] == 'Single') ? 'selected' : ''; ?>>Single</option>
                                         <option value="Married" <?php echo (isset($applicant_data['civil_status']) && $applicant_data['civil_status'] == 'Married') ? 'selected' : ''; ?>>Married</option>
+                                        <option value="Divorced" <?php echo (isset($applicant_data['civil_status']) && $applicant_data['civil_status'] == 'Divorced') ? 'selected' : ''; ?>>Divorced</option>
                                         <option value="Widowed" <?php echo (isset($applicant_data['civil_status']) && $applicant_data['civil_status'] == 'Widowed') ? 'selected' : ''; ?>>Widowed</option>
-                                        <option value="Separated" <?php echo (isset($applicant_data['civil_status']) && $applicant_data['civil_status'] == 'Separated') ? 'selected' : ''; ?>>Separated</option>
                                     </select>
                                 </div>
                                 
@@ -254,8 +331,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                                 
                                 <div>
-                                    <label for="no_of_siblings" class="block text-gray-700 text-sm font-bold mb-2">Number of Siblings</label>
-                                    <input type="number" id="no_of_siblings" name="no_of_siblings" value="<?php echo htmlspecialchars($applicant_data['no_of_siblings'] ?? ''); ?>" 
+                                    <label for="number_of_siblings" class="block text-gray-700 text-sm font-bold mb-2">Number of Siblings</label>
+                                    <input type="number" id="number_of_siblings" name="number_of_siblings" value="<?php echo htmlspecialchars($applicant_data['number_of_siblings'] ?? ''); ?>" 
                                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                 </div>
                             </div>
@@ -266,8 +343,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label for="house" class="block text-gray-700 text-sm font-bold mb-2">House/Building/Street</label>
-                                    <input type="text" id="house" name="house" value="<?php echo htmlspecialchars($applicant_data['house'] ?? ''); ?>" 
+                                    <label for="address" class="block text-gray-700 text-sm font-bold mb-2">House/Building/Street</label>
+                                    <input type="text" id="address" name="address" value="<?php echo htmlspecialchars($applicant_data['address'] ?? ''); ?>" 
+                                        class
                                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                 </div>
                                 
@@ -278,7 +356,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                                 
                                 <div>
-                                    <label for="city" class="block text-gray-700 text-sm font-bold mb-2">City/Municipality</label>
+                                    <label for="city" class="block text-gray-700 text-sm font-bold mb-2">City</label>
                                     <input type="text" id="city" name="city" value="<?php echo htmlspecialchars($applicant_data['city'] ?? ''); ?>" 
                                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                 </div>
@@ -290,32 +368,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                                 
                                 <div>
+                                    <label for="region" class="block text-gray-700 text-sm font-bold mb-2">Region</label>
+                                    <input type="text" id="region" name="region" value="<?php echo htmlspecialchars($applicant_data['region'] ?? ''); ?>" 
+                                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                                </div>
+                                
+                                <div>
                                     <label for="zip_code" class="block text-gray-700 text-sm font-bold mb-2">Zip Code</label>
                                     <input type="text" id="zip_code" name="zip_code" value="<?php echo htmlspecialchars($applicant_data['zip_code'] ?? ''); ?>" 
-                                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="mb-6">
-                            <h2 class="text-lg font-bold mb-4 pb-2 border-b-2 border-gray-200">Contact Information</h2>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="personal_number" class="block text-gray-700 text-sm font-bold mb-2">Personal Number</label>
-                                    <input type="text" id="personal_number" name="personal_number" value="<?php echo htmlspecialchars($applicant_data['personal_number'] ?? ''); ?>" 
-                                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                                </div>
-                                
-                                <div>
-                                    <label for="personal_email" class="block text-gray-700 text-sm font-bold mb-2">E-Mail Address *</label>
-                                    <input type="email" id="personal_email" name="personal_email" value="<?php echo htmlspecialchars($applicant_data['personal_email'] ?? ''); ?>" 
-                                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" >
-                                </div>
-                                
-                                <div>
-                                    <label for="landline_number" class="block text-gray-700 text-sm font-bold mb-2">Landline Number</label>
-                                    <input type="text" id="landline_number" name="landline_number" value="<?php echo htmlspecialchars($applicant_data['landline_number'] ?? ''); ?>" 
                                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                 </div>
                             </div>
@@ -361,6 +421,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <option value="">Select</option>
                                         <option value="Male" <?php echo (isset($applicant_data['guardian_sex']) && $applicant_data['guardian_sex'] == 'Male') ? 'selected' : ''; ?>>Male</option>
                                         <option value="Female" <?php echo (isset($applicant_data['guardian_sex']) && $applicant_data['guardian_sex'] == 'Female') ? 'selected' : ''; ?>>Female</option>
+                                        <option value="Other" <?php echo (isset($applicant_data['guardian_sex']) && $applicant_data['guardian_sex'] == 'Other') ? 'selected' : ''; ?>>Other</option>
                                     </select>
                                 </div>
                                 
@@ -371,55 +432,28 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                                 
                                 <div>
-                                    <label for="guardian_address" class="block text-gray-700 text-sm font-bold mb-2">Address</label>
-                                    <input type="text" id="guardian_address" name="guardian_address" value="<?php echo htmlspecialchars($applicant_data['guardian_address'] ?? ''); ?>" 
-                                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                                </div>
-                                
-                                <div>
                                     <label for="guardian_contact_number" class="block text-gray-700 text-sm font-bold mb-2">Contact Number</label>
                                     <input type="text" id="guardian_contact_number" name="guardian_contact_number" value="<?php echo htmlspecialchars($applicant_data['guardian_contact_number'] ?? ''); ?>" 
                                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                 </div>
                                 
                                 <div>
-                                    <label for="guardian_email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
-                                    <input type="email" id="guardian_email" name="guardian_email" value="<?php echo htmlspecialchars($applicant_data['guardian_email'] ?? ''); ?>" 
+                                    <label for="guardian_email_address" class="block text-gray-700 text-sm font-bold mb-2">Email Address</label>
+                                    <input type="email" id="guardian_email_address" name="guardian_email_address" value="<?php echo htmlspecialchars($applicant_data['guardian_email_address'] ?? ''); ?>" 
                                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="mb-6">
-                            <h2 class="text-lg font-bold mb-4 pb-2 border-b-2 border-gray-200">Academic Information</h2>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="college_offered" class="block text-gray-700 text-sm font-bold mb-2">College Offered</label>
-                                    <input type="text" id="college_offered" name="college_offered" value="<?php echo htmlspecialchars($applicant_data['college_offered'] ?? ''); ?>" 
-                                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                                </div>
-                                
-                                <div>
-                                    <label for="course_offered" class="block text-gray-700 text-sm font-bold mb-2">Course Offered</label>
-                                    <input type="text" id="course_offered" name="course_offered" value="<?php echo htmlspecialchars($applicant_data['course_offered'] ?? ''); ?>" 
-                                        class="shadow appearance-none border rounded w 
-                                        full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                
-                                                                <div class="flex justify-end">
-                                                                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                                                        Update Applicant
-                                                                    </button>
-                                                                </div>
-                                                            </form>
-                                                        <?php endif; ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </body>
-                                        </html>
-
+                        <div class="flex justify-end">
+                            <button type="submit" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                Update Applicant
+                            </button>
+                        </div>
+                    </form>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</body>
+</html></div>
