@@ -34,7 +34,7 @@
             <img src="phone.png" alt="Contact" class="w-10 h-10">
         </button>
         <button class="bg-transparent border-none cursor-pointer p-2 rounded-full transition-all hover:bg-black/10" title="Notification">
-            <img src="bell.png" alt="Notification" class="w-10 h-10">
+            <img src="application_form/src/bell.png" alt="Notification" class="w-10 h-10">
         </button>
         <button class="bg-transparent border-none cursor-pointer p-2 rounded-full transition-all hover:bg-black/10" title="User">
             <img src="user.png" alt="User" class="w-10 h-10">
