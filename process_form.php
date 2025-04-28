@@ -1,240 +1,291 @@
 <?php
-require_once 'db_connection.php'; 
+session_start();
+require_once 'config.php';
+require_once 'db_connect.php';
 
-function validateInput($data, &$errors) {
-    $validated = [];
+$errors = [];
 
-    if (empty($data['first_name']) || !preg_match("/^[a-zA-Z\s]+$/", $data['first_name'])) {
-        $errors[] = "Valid first name is required.";
-    } else {
-        $validated['first_name'] = $data['first_name'];
-    }
+// if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+//     $errors[] = "Invalid CSRF token.";
+//     $_SESSION['errors'] = $errors;
+    // header("Location: admission_form.php");
+//     exit;
+// }
 
-    if (empty($data['last_name']) || !preg_match("/^[a-zA-Z\s]+$/", $data['last_name'])) {
-        $errors[] = "Valid last name is required.";
-    } else {
-        $validated['last_name'] = $data['last_name'];
-    }
+// $required_fields = [
+//     'first_name', 'last_name', 'birthday', 'country_of_birth', 'age', 'sex',
+//     'civil_status', 'citizenship', 'email_address', 'contact_number',
+//     'address', 'city', 'region', 'zip_code',
+//     'guardian_first_name', 'guardian_last_name', 'guardian_relationship',
+//     'guardian_contact_number', 'grade12_school_name', 'grade12_academic_year',
+//     'grade12_GWA', 'grade11_school_name', 'grade11_academic_year', 'grade11_GWA',
+//     'first_course'
+// ];
 
-    $validated['middle_name'] = $data['middle_name'] ?? "";
-    $validated['extension_name'] = $data['extension_name'] ?? "N/A";
+// foreach ($required_fields as $field) {
+//     if (empty($_POST[$field])) {
+//         $errors[] = ucfirst(str_replace('_', ' ', $field)) . " is required.";
+//     }
+// }
 
-    if (empty($data['birthday']) || !DateTime::createFromFormat('Y-m-d', $data['birthday'])) {
-        $errors[] = "Valid birthday (YYYY-MM-DD) is required.";
-    } else {
-        $validated['birthday'] = $data['birthday'];
-        $birthDate = new DateTime($data['birthday']);
-        $today = new DateTime('today');
-        $validated['age'] = $birthDate->diff($today)->y;
-    }
+// if (!filter_var($_POST['email_address'], FILTER_VALIDATE_EMAIL)) {
+//     $errors[] = "Invalid email address.";
+// }
+// if (!empty($_POST['guardian_email_address']) && !filter_var($_POST['guardian_email_address'], FILTER_VALIDATE_EMAIL)) {
+//     $errors[] = "Invalid guardian email address.";
+// }
 
-    $validated['country_of_birth'] = $data['country_of_birth'] ?? "";
-    $validated['sex'] = in_array($data['sex'], ['Male', 'Female', 'Other']) ? $data['sex'] : "";
-    $validated['blood_type'] = $data['blood_type'] ?? "";
-    $validated['civil_status'] = in_array($data['civil_status'], ['Single', 'Married', 'Divorced', 'Widowed']) ? $data['civil_status'] : "";
-    $validated['religious_affiliation'] = $data['religious_affiliation'] ?? "";
-    $validated['citizenship'] = $data['citizenship'] ?? "";
-    $validated['number_of_siblings'] = isset($data['number_of_siblings']) ? (int)$data['number_of_siblings'] : 0;
+// if (!preg_match('/^\+?\d{10,15}$/', $_POST['contact_number'])) {
+//     $errors[] = "Contact number must be 10-15 digits.";
+// }
+// if (!empty($_POST['guardian_contact_number']) && !preg_match('/^\+?\d{10,15}$/', $_POST['guardian_contact_number'])) {
+//     $errors[] = "Guardian contact number must be 10-15 digits.";
+// }
 
-    if (empty($data['email_address']) || !filter_var($data['email_address'], FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Valid email address is required.";
-    } else {
-        $validated['email_address'] = $data['email_address'];
-    }
+// if (!empty($_POST['first_course']) && !empty($_POST['second_course']) && $_POST['first_course'] === $_POST['second_course']) {
+//     $errors[] = "First and second course choices must be different.";
+// }
 
-    if (empty($data['contact_number']) || !preg_match("/^\d{10,12}$/", $data['contact_number'])) {
-        $errors[] = "Valid contact number (10-12 digits) is required.";
-    } else {
-        $validated['contact_number'] = $data['contact_number'];
-    }
+// $allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
+// $max_size = 2 * 1024 * 1024; // 2MB
+// $upload_dir = UPLOAD_DIR;
+// $files = ['picture', 'document_transcript', 'document_birth', 'document_id'];
 
-    return $validated;
-}
+// foreach ($files as $file) {
+//     if (!empty($_FILES[$file]['name'])) {
+//         if ($_FILES[$file]['size'] > $max_size) {
+//             $errors[] = ucfirst(str_replace('_', ' ', $file)) . " exceeds 2MB limit.";
+//         }
+//         if (!in_array($_FILES[$file]['type'], $allowed_types)) {
+//             $errors[] = ucfirst(str_replace('_', ' ', $file)) . " has an invalid type. Only JPG, PNG, GIF, and PDF are allowed.";
+//         }
+//     }
+// }
 
-function handleFileUpload($file, &$errors) {
-    if (isset($file) && $file['error'] == 0) {
-        $allowed = ['jpg', 'jpeg', 'png', 'gif'];
-        $filename = $file['name'];
-        $filetype = pathinfo($filename, PATHINFO_EXTENSION);
+// if (!empty($errors)) {
+//     $_SESSION['errors'] = $errors;
+//     header("Location: index.php");
+//     exit;
+// }
 
-        if (in_array(strtolower($filetype), $allowed)) {
-            $new_name = uniqid() . "." . $filetype;
-            $upload_dir = "uploads/";
+$conn->begin_transaction();
 
-            if (!file_exists($upload_dir)) {
-                mkdir($upload_dir, 0777, true);
-            }
+try {
+    $stmt = $conn->prepare("
+        INSERT INTO " . TABLE_APPLICANTS . " (
+            first_name, last_name, middle_name, extension_name, birthday,
+            country_of_birth, age, sex, blood_type, civil_status,
+            religious_affiliation, citizenship, number_of_siblings,
+            email_address, contact_number
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ");
+    $stmt->bind_param(
+        "ssssssisssssiss",
+        $_POST['first_name'],
+        $_POST['last_name'],
+        $_POST['middle_name'],
+        $_POST['extension_name'],
+        $_POST['birthday'],
+        $_POST['country_of_birth'],
+        $_POST['age'],
+        $_POST['sex'],
+        $_POST['blood_type'],
+        $_POST['civil_status'],
+        $_POST['religious_affiliation'],
+        $_POST['citizenship'],
+        $_POST['number_of_siblings'],
+        $_POST['email_address'],
+        $_POST['contact_number']
+    );
+    $stmt->execute();
+    $applicant_id = $conn->insert_id;
+    $stmt->close();
 
-            if (move_uploaded_file($file['tmp_name'], $upload_dir . $new_name)) {
-                return $upload_dir . $new_name;
-            } else {
-                $errors[] = "Error uploading file.";
-            }
-        } else {
-            $errors[] = "Invalid file type. Only JPG, JPEG, PNG, and GIF are allowed.";
+    $picture_path = null;
+    if (!empty($_FILES['picture']['name'])) {
+        $ext = pathinfo($_FILES['picture']['name'], PATHINFO_EXTENSION);
+        $picture_path = $upload_dir . 'picture_' . $applicant_id . '_' . time() . '.' . $ext;
+        if (!move_uploaded_file($_FILES['picture']['tmp_name'], $picture_path)) {
+            throw new Exception("Failed to upload picture.");
         }
-    }
-    return null;
-}
-
-function insertData($conn, $applicant_data, $address_data, $guardian_data, $education_data, $course_data) {
-    $conn->begin_transaction();
-
-    try {
-        $stmt = $conn->prepare("
-            INSERT INTO applicants (
-                first_name, last_name, middle_name, extension_name, 
-                birthday, country_of_birth, age, sex, blood_type, 
-                civil_status, religious_affiliation, citizenship, 
-                number_of_siblings, picture, email_address, contact_number
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ");
-        $stmt->bind_param(
-            "ssssssississsss",
-            $applicant_data['first_name'],
-            $applicant_data['last_name'],
-            $applicant_data['middle_name'],
-            $applicant_data['extension_name'],
-            $applicant_data['birthday'],
-            $applicant_data['country_of_birth'],
-            $applicant_data['age'],
-            $applicant_data['sex'],
-            $applicant_data['blood_type'],
-            $applicant_data['civil_status'],
-            $applicant_data['religious_affiliation'],
-            $applicant_data['citizenship'],
-            $applicant_data['number_of_siblings'],
-            $applicant_data['picture'],
-            $applicant_data['email_address'],
-            $applicant_data['contact_number']
-        );
+        $stmt = $conn->prepare("UPDATE " . TABLE_APPLICANTS . " SET picture = ? WHERE applicant_ID = ?");
+        $stmt->bind_param("si", $picture_path, $applicant_id);
         $stmt->execute();
-        $applicant_id = $conn->insert_id;
+        $stmt->close();
+    }
+
+    $stmt = $conn->prepare("
+        INSERT INTO " . TABLE_PERSONAL_INFO . " (
+            applicant_ID, address, barangay, city, district, region, zip_code
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+    ");
+    $stmt->bind_param(
+        "issssss",
+        $applicant_id,
+        $_POST['address'],
+        $_POST['barangay'],
+        $_POST['city'],
+        $_POST['district'],
+        $_POST['region'],
+        $_POST['zip_code']
+    );
+    $stmt->execute();
+    $stmt->close();
+
+    $stmt = $conn->prepare("
+        INSERT INTO " . TABLE_GUARDIAN_INFO . " (
+            applicant_ID, guardian_first_name, guardian_last_name, guardian_middle_name,
+            guardian_extension_name, guardian_age, guardian_sex, guardian_relationship,
+            guardian_contact_number, guardian_email_address
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ");
+    $stmt->bind_param(
+        "isssssssss",
+        $applicant_id,
+        $_POST['guardian_first_name'],
+        $_POST['guardian_last_name'],
+        $_POST['guardian_middle_name'],
+        $_POST['guardian_extension_name'],
+        $_POST['guardian_age'],
+        $_POST['guardian_sex'],
+        $_POST['guardian_relationship'],
+        $_POST['guardian_contact_number'],
+        $_POST['guardian_email_address']
+    );
+    $stmt->execute();
+    $stmt->close();
+
+    $stmt = $conn->prepare("
+        INSERT INTO " . TABLE_ACADEMIC_BACKGROUND . " (
+            applicant_ID, grade12_school_name, grade12_academic_year, grade12_GWA,
+            grade11_school_name, grade11_academic_year, grade11_GWA,
+            grade10_school_name, grade10_academic_year,
+            grade9_school_name, grade9_academic_year,
+            grade8_school_name, grade8_academic_year,
+            grade7_school_name, grade7_academic_year
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ");
+    $stmt->bind_param(
+        "isssdssdsssssss",
+        $applicant_id,
+        $_POST['grade12_school_name'],
+        $_POST['grade12_academic_year'],
+        $_POST['grade12_GWA'],
+        $_POST['grade11_school_name'],
+        $_POST['grade11_academic_year'],
+        $_POST['grade11_GWA'],
+        $_POST['grade10_school_name'],
+        $_POST['grade10_academic_year'],
+        $_POST['grade9_school_name'],
+        $_POST['grade9_academic_year'],
+        $_POST['grade8_school_name'],
+        $_POST['grade8_academic_year'],
+        $_POST['grade7_school_name'],
+        $_POST['grade7_academic_year']
+    );
+    $stmt->execute();
+    $stmt->close();
+
+    $stmt = $conn->prepare("
+        INSERT INTO " . TABLE_APPLICATIONS . " (
+            applicant_ID, application_status, submission_date
+        ) VALUES (?, 'Pending', NOW())
+    ");
+    $stmt->bind_param("i", $applicant_id);
+    $stmt->execute();
+    $application_id = $conn->insert_id;
+    $stmt->close();
+
+    if (!empty($_POST['first_course'])) {
+        $stmt = $conn->prepare("
+            SELECT course_ID FROM " . TABLE_COURSE_LIST . " WHERE course_name = ?
+        ");
+        $stmt->bind_param("s", $_POST['first_course']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $course = $result->fetch_assoc();
         $stmt->close();
 
-        if (!empty($address_data['address']) || !empty($address_data['city'])) {
+        if ($course) {
             $stmt = $conn->prepare("
-                INSERT INTO applicant_address (
-                    applicant_id, address, barangay, city, district, region, zip_code
-                ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO " . TABLE_APPLICANT_COURSES . " (
+                    applicant_ID, course_ID, preference_order
+                ) VALUES (?, ?, 1)
             ");
-            $stmt->bind_param(
-                "issssss",
-                $applicant_id,
-                $address_data['address'],
-                $address_data['barangay'],
-                $address_data['city'],
-                $address_data['district'],
-                $address_data['region'],
-                $address_data['zip_code']
-            );
+            $stmt->bind_param("ii", $applicant_id, $course['course_ID']);
             $stmt->execute();
             $stmt->close();
         }
+    }
 
-        if (!empty($guardian_data['guardian_first_name']) || !empty($guardian_data['guardian_last_name'])) {
+    if (!empty($_POST['second_course'])) {
+        $stmt = $conn->prepare("
+            SELECT course_ID FROM " . TABLE_COURSE_LIST . " WHERE course_name = ?
+        ");
+        $stmt->bind_param("s", $_POST['second_course']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $course = $result->fetch_assoc();
+        $stmt->close();
+
+        if ($course) {
             $stmt = $conn->prepare("
-                INSERT INTO guardian_info (
-                    applicant_id, first_name, middle_name, last_name, extension_name,
-                    age, sex, relationship, contact_number, email_address
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO " . TABLE_APPLICANT_COURSES . " (
+                    applicant_ID, course_ID, preference_order
+                ) VALUES (?, ?, 2)
             ");
-            $stmt->bind_param(
-                "issssissss",
-                $applicant_id,
-                $guardian_data['guardian_first_name'],
-                $guardian_data['guardian_middle_name'],
-                $guardian_data['guardian_last_name'],
-                $guardian_data['guardian_extension_name'],
-                $guardian_data['guardian_age'],
-                $guardian_data['guardian_sex'],
-                $guardian_data['guardian_relationship'],
-                $guardian_data['guardian_contact_number'],
-                $guardian_data['guardian_email_address']
-            );
+            $stmt->bind_param("ii", $applicant_id, $course['course_ID']);
             $stmt->execute();
             $stmt->close();
         }
-
-        $stmt = $conn->prepare("
-            INSERT INTO education_history (
-                applicant_id, grade12_school, grade12_year, grade12_gwa,
-                grade11_school, grade11_year, grade11_gwa,
-                grade10_school, grade10_year,
-                grade9_school, grade9_year,
-                grade8_school, grade8_year,
-                grade7_school, grade7_year
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ");
-        $stmt->bind_param(
-            "issdssdsssssss",
-            $applicant_id,
-            $education_data['grade12_school_name'],
-            $education_data['grade12_academic_year'],
-            $education_data['grade12_GWA'],
-            $education_data['grade11_school_name'],
-            $education_data['grade11_academic_year'],
-            $education_data['grade11_GWA'],
-            $education_data['grade10_school_name'],
-            $education_data['grade10_academic_year'],
-            $education_data['grade9_school_name'],
-            $education_data['grade9_academic_year'],
-            $education_data['grade8_school_name'],
-            $education_data['grade8_academic_year'],
-            $education_data['grade7_school_name'],
-            $education_data['grade7_academic_year']
-        );
-        $stmt->execute();
-        $stmt->close();
-
-        // Insert Course Data
-        $stmt = $conn->prepare("
-            INSERT INTO course_application (
-                applicant_id, first_choice, second_choice, application_status, submission_date
-            ) VALUES (?, ?, ?, ?, ?)
-        ");
-        $stmt->bind_param(
-            "issss",
-            $applicant_id,
-            $course_data['first_course'],
-            $course_data['second_course'],
-            $course_data['application_status'],
-            $course_data['submission_date']
-        );
-        $stmt->execute();
-        $stmt->close();
-
-        $conn->commit();
-        return $applicant_id;
-    } catch (Exception $e) {
-        $conn->rollback();
-        throw $e;
     }
-}
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $errors = [];
-    $applicant_data = validateInput($_POST, $errors);
-    $applicant_data['picture'] = handleFileUpload($_FILES['picture'], $errors);
+    $document_types = [
+        'document_transcript' => 'Transcript',
+        'document_birth' => 'Birth Certificate',
+        'document_id' => 'Valid ID'
+    ];
 
-    if (!empty($errors)) {
-        // Display errors and exit
-        echo "<div style='background-color: #ffcccc; padding: 15px; margin-bottom: 20px; border-radius: 5px;'>";
-        echo "<h3>Please correct the following errors:</h3><ul>";
-        foreach ($errors as $error) {
-            echo "<li>$error</li>";
+    foreach ($document_types as $field => $type) {
+        if (!empty($_FILES[$field]['name'])) {
+            $ext = pathinfo($_FILES[$field]['name'], PATHINFO_EXTENSION);
+            $file_path = $upload_dir . $field . '_' . $applicant_id . '_' . time() . '.' . $ext;
+            if (!move_uploaded_file($_FILES[$field]['tmp_name'], $file_path)) {
+                throw new Exception("Failed to upload $type.");
+            }
+            $stmt = $conn->prepare("
+                INSERT INTO " . TABLE_SUPPORTING_DOCUMENTS . " (
+                    application_ID, document_type, file_path
+                ) VALUES (?, ?, ?)
+            ");
+            $stmt->bind_param("iss", $application_id, $type, $file_path);
+            $stmt->execute();
+            $stmt->close();
         }
-        echo "</ul><a href='javascript:history.back()'>Go Back</a></div>";
-        exit;
     }
 
-    try {
-        $applicant_id = insertData($conn, $applicant_data, $_POST['address_data'], $_POST['guardian_data'], $_POST['education_data'], $_POST['course_data']);
-        echo "<h1>Application Submitted Successfully! Your Application ID: $applicant_id</h1>";
-    } catch (Exception $e) {
-        echo "<h1>Error Submitting Application: " . htmlspecialchars($e->getMessage()) . "</h1>";
-    }
-} else {
+    $action = "Applicant submitted application";
+    $user_id = 0; 
+    $stmt = $conn->prepare("
+        INSERT INTO " . TABLE_AUDIT_LOG . " (
+            action, user_id, applicant_id, timestamp
+        ) VALUES (?, ?, ?, NOW())
+    ");
+    $stmt->bind_param("sii", $action, $user_id, $applicant_id);
+    $stmt->execute();
+    $stmt->close();
+    
+    $conn->commit();
+
+    $_SESSION['success_message'] = "Application submitted successfully!";
+    // $_SESSION['success'] = true;
+    // header("Location: index.php");
+    // exit;
+
+} catch (Exception $e) {
+    $conn->rollback();
+    $errors[] = "Error processing application: " . $e->getMessage();
+    $_SESSION['errors'] = $errors;
     header("Location: index.php");
     exit;
 }
