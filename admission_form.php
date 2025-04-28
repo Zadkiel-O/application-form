@@ -82,7 +82,7 @@ $courses = $result->fetch_all(MYSQLI_ASSOC);
             <?php unset($_SESSION['errors']); ?>
         <?php endif; ?>
 
-        <form id="admission_form" action="process_form.php" method="POST" enctype="multipart/form-data" class="px-5">
+        <form id="admission_form" action="process_form.php" method="POST" enctype="multipart/form-data" class="px-5"> 
             <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
             <div class="block">
                 <div class="bg-section text-white font-bold p-2 uppercase">A. NAME OF APPLICANT (AS IT APPEARS ON THE BIRTH CERTIFICATE)</div>
@@ -105,7 +105,7 @@ $courses = $result->fetch_all(MYSQLI_ASSOC);
                             </select>
                         </div>
                         <div class="bg-section h-5"></div>
-
+<!-- 
                         <div class="grid grid-cols-5">
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">DATE OF BIRTH</label>
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center col-span-2">COUNTRY OF BIRTH</label>
@@ -359,7 +359,7 @@ $courses = $result->fetch_all(MYSQLI_ASSOC);
                         <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">VALID ID</label>
                         <input type="file" name="document_id" accept=".pdf,.jpg,.jpeg,.png" class="p-1.5 border border-black w-full box-border">
                     </div>
-                </div>
+                </div> -->
 
                 <input type="hidden" name="application_status" value="Pending">
                 <input type="hidden" name="submission_date" value="<?php echo date('Y-m-d H:i:s'); ?>">
@@ -414,7 +414,7 @@ $courses = $result->fetch_all(MYSQLI_ASSOC);
             previewWindow.document.close();
         }
 
-        document.getElementById('applicationForm').addEventListener('submit', function(e) {
+        document.getElementById('admission_form').addEventListener('submit', function(e) {
             const email = document.querySelector('input[name="email_address"]').value;
             const contact = document.querySelector('input[name="contact_number"]').value;
             const guardianEmail = document.querySelector('input[name="guardian_email_address"]').value;
@@ -490,6 +490,7 @@ $courses = $result->fetch_all(MYSQLI_ASSOC);
                 }
             });
         });
+         console.log("Form validation script loaded.");
     </script>
 </body>
 </html>
