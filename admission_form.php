@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Admission Application Form</title>
-    <script src="https://cdn.tailwindcss.com"></script>vb                   
+    <script src="https://cdn.tailwindcss.com"></script>                   
     <script>
         tailwind.config = {
             theme: {
@@ -22,6 +22,19 @@
         }
     </script>
 
+    <style>
+    #popup {
+        transition: opacity 0.3s ease;
+    }
+    #popup.hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+    #popup:not(.hidden) {
+        opacity: 1;
+        pointer-events: auto;
+    }
+</style>
     
 </head>
 <body class="bg-white m-0 p-0 flex">
@@ -32,6 +45,9 @@
     </div>
 
     <div class="absolute top-5 right-5 flex z-10">
+        <button type="button" id="fillSampleData" style="margin: 20px; padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            Fill Sample Data
+        </button>
         <button class="bg-transparent border-none cursor-pointer p-2 rounded-full transition-all hover:bg-black/10" title="Contact">
             <img src="phone.png" alt="Contact" class="w-10 h-10">
         </button>
@@ -50,7 +66,7 @@
             COLLEGE ADMISSION APPLICATION FORM
         </div>
         
-        <form action="process_form.php" method="POST">
+        <form action="process_form.php" method="POST" enctype="multipart/form-data">
             <div class="block">
                 <div class="bg-section text-white font-bold p-2 uppercase">A. NAME OF APPLICANT (AS IT APPEARS ON THE BIRTH CERTIFICATE)</div>
                 <div class="flex justify-between items-start">
@@ -315,7 +331,113 @@
             document.getElementById("popup").classList.add("hidden");
         }
 
-      
+      document.querySelector('form').addEventListener('submit', function(e) {
+    const requiredFields = [
+        'first_name', 'last_name', 'date_of_birth', 'place_of_birth', 
+        'age', 'sex', 'civil_status', 'citizenship',
+        'house', 'barangay', 'city', 'personal_number', 'personal_email',
+        'guardian_first_name', 'guardian_last_name', 'guardian_age', 
+        'guardian_sex', 'guardian_relationship', 'guardian_address', 
+        'guardian_contact_number', 'college_offered', 'course_offered'
+    ];
+    
+    let isValid = true;
+    let firstInvalidField = null;
+    
+    requiredFields.forEach(field => {
+        const element = document.querySelector(`[name="${field}"]`);
+        if (!element.value.trim()) {
+            isValid = false;
+            element.classList.add('border-red-500');
+            if (!firstInvalidField) firstInvalidField = element;
+        } else {
+            element.classList.remove('border-red-500');
+        }
+    });
+    
+    if (!isValid) {
+        e.preventDefault();
+        closePopup();
+        alert('Please fill in all required fields');
+        firstInvalidField.focus();
+    }
+});
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sampleData = {
+            first_name: "John",
+            last_name: "Doe",
+            middle_name: "A.",
+            extension_name: "Jr.",
+            date_of_birth: "2000-01-01",
+            place_of_birth: "Manila",
+            age: 24,
+            sex: "Male",
+            blood_type: "O",
+            civil_status: "Single",
+            religious_affiliation: "Catholic",
+            citizenship: "Filipino",
+            no_of_siblings: 3,
+            house: "1234",
+            barangay: "Barangay 123",
+            city: "Quezon City",
+            district: "4th District",
+            zip_code: "1100",
+            personal_number: "09171234567",
+            personal_email: "john.doe@example.com",
+            landline_number: "82456789",
+            guardian_first_name: "Jane",
+            guardian_middle_name: "B.",
+            guardian_last_name: "Doe",
+            guardian_extension_name: "",
+            guardian_age: 45,
+            guardian_sex: "Female",
+            guardian_relationship: "Mother",
+            guardian_address: "456 Guardian St.",
+            guardian_contact_number: "09221234567",
+            guardian_email: "jane.doe@example.com",
+            grade12_school: "High School XYZ",
+            grade12_period: "2018-2019",
+            grade11_school: "High School XYZ",
+            grade11_period: "2017-2018",
+            grade10_school: "High School XYZ",
+            grade10_period: "2016-2017",
+            grade9_school: "High School XYZ",
+            grade9_period: "2015-2016",
+            grade8_school: "High School XYZ",
+            grade8_period: "2014-2015",
+            grade7_school: "High School XYZ",
+            grade7_period: "2013-2014",
+            college_offered: "College of Technology",
+            course_offered: "Information Technology (IT) ",
+        };
+
+        document.getElementById('fillSampleData').addEventListener('click', function () {
+            for (const [field, value] of Object.entries(sampleData)) {
+                const input = document.querySelector(`[name="${field}"]`);
+                if (input) {
+                    input.value = value;
+                }
+            }
+
+            // Optional: If you want to simulate radio button selection
+            if (sampleData.sex) {
+                const sexInput = document.querySelector(`input[name="sex"][value="${sampleData.sex}"]`);
+                if (sexInput) {
+                    sexInput.checked = true;
+                }
+            }
+
+            if (sampleData.guardian_sex) {
+                const guardianSexInput = document.querySelector(`input[name="guardian_sex"][value="${sampleData.guardian_sex}"]`);
+                if (guardianSexInput) {
+                    guardianSexInput.checked = true;
+                }
+            }
+        });
+    });
     </script>
 </body>
 </html>

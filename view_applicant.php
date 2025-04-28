@@ -166,3 +166,43 @@ $applicant = $result->fetch_assoc();
                             <p class="font-bold">Sex:</p>
                             <p><?php echo htmlspecialchars($applicant['guardian_sex']); ?></p>
                         </div>
+                        <div>
+                            <p class="font-bold">Relationship:</p>
+                            <p><?php echo htmlspecialchars($applicant['guardian_relationship']); ?></p>
+                        </div>
+                        <div>
+                            <p class="font-bold">Guardian Contact:</p>
+                            <p><?php echo htmlspecialchars($applicant['guardian_contact_number']); ?></p>
+                        </div>
+                        <div>
+                            <p class="font-bold">Guardian Email:</p>
+                            <p><?php echo htmlspecialchars($applicant['guardian_email']); ?></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Educational Information Section -->
+                <div class="border-b-2 border-purple-500 pb-4 mb-6">
+                    <h2 class="text-xl font-bold text-purple-800 mb-4">D. Educational Information</h2>
+                    <!-- Education details -->
+                </div>
+                
+                <!-- College/Course Information Section -->
+                <div>
+                    <h2 class="text-xl font-bold text-purple-800 mb-4">E. College and Course</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="font-bold">Selected College:</p>
+                            <p><?php echo htmlspecialchars($applicant['college_offered']); ?></p>
+                        </div>
+                        <div>
+                            <p class="font-bold">Selected Course:</p>
+                            <p><?php echo htmlspecialchars($applicant['course_offered']); ?></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
