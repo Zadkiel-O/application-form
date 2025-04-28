@@ -24,14 +24,16 @@ $applicant = $result->fetch_assoc();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Applicant - TOM YANG College</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-purple-200">
-    
+
     <div class="bg-indigo-200 flex justify-between items-center p-3 h-24">
         <img src="logo.png" alt="Logo" class="h-20 ml-3">
         <div class="mr-3 flex items-center">
@@ -42,7 +44,7 @@ $applicant = $result->fetch_assoc();
     </div>
 
     <div class="flex">
-        
+
         <div class="bg-indigo-200 p-4 h-screen w-48 flex flex-col items-center">
             <h2 class="text-center font-bold text-2xl mb-5 text-black">ADMIN</h2>
             <a href="admin_panel.php" class="bg-gray-300 p-2 mt-2 text-center font-bold w-full rounded text-black">Applicant List</a>
@@ -50,7 +52,7 @@ $applicant = $result->fetch_assoc();
             <a href="logout.php" class="bg-red-500 p-2 mt-2 text-center font-bold w-full rounded text-white hover:bg-red-700">Logout</a>
         </div>
 
-       
+
         <div class="bg-purple-500 rounded-lg w-4/5 max-w-6xl mx-auto p-5 mt-4 mb-8">
             <div class="flex justify-between items-center mb-4">
                 <h1 class="text-white text-2xl font-bold">Applicant Details</h1>
@@ -63,11 +65,11 @@ $applicant = $result->fetch_assoc();
                     </a>
                 </div>
             </div>
-            
+
             <div class="bg-white p-6 rounded-lg">
                 <div class="border-b-2 border-purple-500 pb-4 mb-6">
                     <h2 class="text-xl font-bold text-purple-800 mb-4">A. Personal Information</h2>
-                    
+
                     <div class="flex flex-wrap">
                         <div class="w-full md:w-3/4">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -108,7 +110,7 @@ $applicant = $result->fetch_assoc();
                                     <p><?php echo htmlspecialchars($applicant['citizenship']); ?></p>
                                 </div>
                                 <div>
-                                    <p class="font-bold">Number of Siblings:</p>
+                                    <p class="font-bold">No. of Siblings:</p>
                                     <p><?php echo $applicant['no_of_siblings']; ?></p>
                                 </div>
                             </div>
@@ -124,13 +126,25 @@ $applicant = $result->fetch_assoc();
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="border-b-2 border-purple-500 pb-4 mb-6">
-                    <h2 class="text-xl font-bold text-purple-800 mb-4">B. Address and Contact Information</h2>
+                    <h2 class="text-xl font-bold text-purple-800 mb-4">B. Applicant's Address and Contact Information</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <p class="font-bold">Complete Address:</p>
-                            <p><?php echo htmlspecialchars($applicant['house'] . ', ' . $applicant['barangay'] . ', ' . $applicant['city'] . ', ' . $applicant['district']); ?></p>
+                            <p class="font-bold">House/Room/Bldg:</p>
+                            <p><?php echo htmlspecialchars($applicant['house']); ?></p>
+                        </div>
+                        <div>
+                            <p class="font-bold">Barangay:</p>
+                            <p><?php echo htmlspecialchars($applicant['barangay']); ?></p>
+                        </div>
+                        <div>
+                            <p class="font-bold">City:</p>
+                            <p><?php echo htmlspecialchars($applicant['city']); ?></p>
+                        </div>
+                        <div>
+                            <p class="font-bold">District:</p>
+                            <p><?php echo htmlspecialchars($applicant['district']); ?></p>
                         </div>
                         <div>
                             <p class="font-bold">Zip Code:</p>
@@ -150,44 +164,107 @@ $applicant = $result->fetch_assoc();
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="border-b-2 border-purple-500 pb-4 mb-6">
                     <h2 class="text-xl font-bold text-purple-800 mb-4">C. Guardian Information</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <p class="font-bold">Guardian Name:</p>
-                            <p><?php echo htmlspecialchars($applicant['guardian_first_name'] . ' ' . $applicant['guardian_middle_name'] . ' ' . $applicant['guardian_last_name'] . ' ' . $applicant['guardian_extension_name']); ?></p>
+                            <p class="font-bold">Guardian's First Name:</p>
+                            <p><?php echo htmlspecialchars($applicant['guardian_first_name']); ?></p>
                         </div>
                         <div>
-                            <p class="font-bold">Age:</p>
-                            <p><?php echo $applicant['guardian_age']; ?></p>
+                            <p class="font-bold">Guardian's Middle Name:</p>
+                            <p><?php echo htmlspecialchars($applicant['guardian_middle_name']); ?></p>
                         </div>
                         <div>
-                            <p class="font-bold">Sex:</p>
+                            <p class="font-bold">Guardian's Last Name:</p>
+                            <p><?php echo htmlspecialchars($applicant['guardian_last_name']); ?></p>
+                        </div>
+                        <div>
+                            <p class="font-bold">Guardian's Extension Name:</p>
+                            <p><?php echo htmlspecialchars($applicant['guardian_extension_name']); ?></p>
+                        </div>
+                        <div>
+                            <p class="font-bold">Guardian's Age:</p>
+                            <p><?php echo htmlspecialchars($applicant['guardian_age']); ?></p>
+                        </div>
+                        <div>
+                            <p class="font-bold">Guardian's Sex:</p>
                             <p><?php echo htmlspecialchars($applicant['guardian_sex']); ?></p>
                         </div>
                         <div>
-                            <p class="font-bold">Relationship:</p>
+                            <p class="font-bold">Guardian's Relationship:</p>
                             <p><?php echo htmlspecialchars($applicant['guardian_relationship']); ?></p>
                         </div>
                         <div>
-                            <p class="font-bold">Guardian Contact:</p>
+                            <p class="font-bold">Guardian's Address:</p>
+                            <p><?php echo htmlspecialchars($applicant['guardian_address']); ?></p>
+                        </div>
+                        <div>
+                            <p class="font-bold">Guardian's Contact Number:</p>
                             <p><?php echo htmlspecialchars($applicant['guardian_contact_number']); ?></p>
                         </div>
                         <div>
-                            <p class="font-bold">Guardian Email:</p>
+                            <p class="font-bold">Guardian's Email:</p>
                             <p><?php echo htmlspecialchars($applicant['guardian_email']); ?></p>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Educational Information Section -->
+
                 <div class="border-b-2 border-purple-500 pb-4 mb-6">
                     <h2 class="text-xl font-bold text-purple-800 mb-4">D. Educational Information</h2>
-                    <!-- Education details -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="font-bold">Grade 12 School:</p>
+                            <p><?php echo htmlspecialchars($applicant['grade12_school']); ?></p>
+                        </div>
+                        <div>
+                            <p class="font-bold">Grade 12 Period:</p>
+                            <p><?php echo htmlspecialchars($applicant['grade12_period']); ?></p>
+                        </div>
+                        <div>
+                            <p class="font-bold">Grade 11 School:</p>
+                            <p><?php echo htmlspecialchars($applicant['grade11_school']); ?></p>
+                        </div>
+                        <div>
+                            <p class="font-bold">Grade 11 Period:</p>
+                            <p><?php echo htmlspecialchars($applicant['grade11_period']); ?></p>
+                        </div>
+                        <div>
+                            <p class="font-bold">Grade 10 School:</p>
+                            <p><?php echo htmlspecialchars($applicant['grade10_school']); ?></p>
+                        </div>
+                        <div>
+                            <p class="font-bold">Grade 10 Period:</p>
+                            <p><?php echo htmlspecialchars($applicant['grade10_period']); ?></p>
+                        </div>
+                        <div>
+                            <p class="font-bold">Grade 9 School:</p>
+                            <p><?php echo htmlspecialchars($applicant['grade9_school']); ?></p>
+                        </div>
+                        <div>
+                            <p class="font-bold">Grade 9 Period:</p>
+                            <p><?php echo htmlspecialchars($applicant['grade9_period']); ?></p>
+                         </div>
+                         <div>
+                            <p class="font-bold">Grade 8 School:</p>
+                            <p><?php echo htmlspecialchars($applicant['grade8_school']); ?></p>
+                        </div>
+                        <div>
+                            <p class="font-bold">Grade 8 Period:</p>
+                            <p><?php echo htmlspecialchars($applicant['grade8_period']); ?></p>
+                        </div>
+                        <div>
+                            <p class="font-bold">Grade 7 School:</p>
+                            <p><?php echo htmlspecialchars($applicant['grade7_school']); ?></p>
+                        </div>
+                        <div>
+                            <p class="font-bold">Grade 7 Period:</p>
+                            <p><?php echo htmlspecialchars($applicant['grade7_period']); ?></p>
+                        </div>
+                    </div>
                 </div>
-                
-                <!-- College/Course Information Section -->
+
                 <div>
                     <h2 class="text-xl font-bold text-purple-800 mb-4">E. College and Course</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -205,4 +282,5 @@ $applicant = $result->fetch_assoc();
         </div>
     </div>
 </body>
+
 </html>
