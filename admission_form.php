@@ -66,7 +66,7 @@
             COLLEGE ADMISSION APPLICATION FORM
         </div>
         
-        <form action="process_form.php" method="POST" enctype="multipart/form-data">
+        <form action="preview_form.php" method="POST" enctype="multipart/form-data">
             <div class="block">
                 <div class="bg-section text-white font-bold p-2 uppercase">A. NAME OF APPLICANT (AS IT APPEARS ON THE BIRTH CERTIFICATE)</div>
                 <div class="flex justify-between items-start">
@@ -309,8 +309,8 @@
             <div id="popup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96 text-center">
             <h2 class="text-lg font-bold mb-4">Confirmation</h2>
-            <p class="mb-4">Are you sure you want to proceed?</p>
-            <button type="submit" onclick="closePopup()" class="bg-blue-500 text-white py-2 px-5 rounded hover:opacity-90">OK</button>
+                    <p class="mb-4">Are you sure you want to proceed?</p>
+                    <button type="submit" class="bg-blue-500 text-white py-2 px-5 rounded hover:opacity-90">OK</button>
         </div>
     </div>
         </form>

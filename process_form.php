@@ -1,4 +1,5 @@
 <?php
+session_start(); // **VERY IMPORTANT: Start the session**
 $conn = require_once 'db_connect.php';
 
 $response = [
@@ -8,6 +9,14 @@ $response = [
 ];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve data from the session
+    if (isset($_SESSION['form_data'])) {
+        $_POST = $_SESSION['form_data'];  // Use session data
+        unset($_SESSION['form_data']);    // Clear session data after use
+    } else {
+        $errors[] = "No form data found in session.";
+    }
+    
     // Validation function
     function validate_input($conn, $data, $field_name, $required = true) {
         if ($required && empty($data)) {
@@ -31,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors[] = $first_name_result["message"];
     }
     $first_name = $first_name_result["value"];
-    
+
     $last_name_result = validate_input($conn, $_POST['last_name'] ?? '', 'Last Name');
     if (!$last_name_result["success"]) {
         $errors[] = $last_name_result["message"];
@@ -274,54 +283,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     
-    // For testing, temporary
-    var_dump($first_name);
-    var_dump($last_name);
-    var_dump($middle_name);
-    var_dump($extension_name);
-    var_dump($date_of_birth);
-    var_dump($place_of_birth);
-    var_dump($age);
-    var_dump($sex);
-    var_dump($blood_type);
-    var_dump($civil_status);
-    var_dump($religious_affiliation);
-    var_dump($citizenship);
-    var_dump($no_of_siblings);
-    var_dump($photo);
-    var_dump($house);
-    var_dump($barangay);
-    var_dump($city);
-    var_dump($district);
-    var_dump($zip_code);
-    var_dump($personal_number);
-    var_dump($personal_email);
-    var_dump($landline_number);
-    var_dump($guardian_first_name);
-    var_dump($guardian_middle_name);
-    var_dump($guardian_last_name);
-    var_dump($guardian_extension_name);
-    var_dump($guardian_age);
-    var_dump($guardian_sex);
-    var_dump($guardian_relationship);
-    var_dump($guardian_address);
-    var_dump($guardian_contact_number);
-    var_dump($guardian_email);
-    var_dump($grade12_school);
-    var_dump($grade12_period);
-    var_dump($grade11_school);
-    var_dump($grade11_period);
-    var_dump($grade10_school);
-    var_dump($grade10_period);
-    var_dump($grade9_school);
-    var_dump($grade9_period);
-    var_dump($grade8_school);
-    var_dump($grade8_period);
-    var_dump($grade7_school);
-    var_dump($grade7_period);
-    var_dump($college_offered);
-    var_dump($course_offered);
-
     // If there are validation errors, return them
     if (!empty($errors)) {
         $response['message'] = "Validation errors: " . implode(", ", $errors);
