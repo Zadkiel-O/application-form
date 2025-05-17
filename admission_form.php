@@ -120,9 +120,17 @@
                         </div>
                     </div>
                     <div class="w-48 h-48 border-2 border-dashed border-black text-center flex flex-col justify-center items-center text-black font-bold bg-white mt-1 mx-3 flex-shrink-0 relative">
-                        <div>Passport Size<br>1.8 inch x 1.4 inch</div>
-                        <label for="upload-photo" class="bg-section text-white p-2 rounded cursor-pointer text-sm mt-2.5 hover:bg-gray-800">Choose File</label>
-                        <input type="file" id="upload-photo" name="photo" accept="image/*" class="hidden">
+                        <img id="photo-preview" class="hidden max-w-full max-h-full object-contain absolute inset-0">
+                        <div id="photo-placeholder">
+                            <div>Passport Size<br>1.8 inch x 1.4 inch</div>
+                            <label for="upload-photo" class="bg-section text-white p-2 rounded cursor-pointer text-sm mt-2.5 hover:bg-gray-800">Choose File</label>
+                        </div>
+                        <div id="photo-success" class="hidden absolute top-2 right-2 text-green-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <input type="file" id="upload-photo" name="photo" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'photo-preview', 'photo-placeholder', 'photo-success')">
                     </div>
                 </div>
 
@@ -362,9 +370,15 @@
                                 <label class="block mb-2 font-bold">Student's Full Name</label>
                                 <input type="text" name="student_consent_name" required class="p-1.5 border border-black w-full box-border">
                                 <div class="border-2 border-dashed border-black h-32 mt-2 relative">
-                                    <input type="file" name="student_signature" accept="image/jpeg,image/png" class="absolute inset-0 opacity-0 cursor-pointer" required>
-                                    <div class="flex items-center justify-center h-full">
+                                    <img id="student-signature-preview" class="hidden max-w-full max-h-full object-contain absolute inset-0">
+                                    <input type="file" name="student_signature" accept="image/jpeg,image/png" class="absolute inset-0 opacity-0 cursor-pointer" required id="student-signature-input" onchange="handleImageUpload(this, 'student-signature-preview', 'student-signature-placeholder', 'student-signature-success')">
+                                    <div id="student-signature-placeholder" class="flex items-center justify-center h-full">
                                         <span class="text-gray-500">Click to upload signature (JPG/PNG)</span>
+                                    </div>
+                                    <div id="student-signature-success" class="hidden absolute top-2 right-2 text-green-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
                                     </div>
                                 </div>
                             </div>
@@ -372,9 +386,15 @@
                                 <label class="block mb-2 font-bold">Guardian/Parent's Full Name</label>
                                 <input type="text" name="guardian_consent_name" required class="p-1.5 border border-black w-full box-border">
                                 <div class="border-2 border-dashed border-black h-32 mt-2 relative">
-                                    <input type="file" name="guardian_signature" accept="image/jpeg,image/png" class="absolute inset-0 opacity-0 cursor-pointer" required>
-                                    <div class="flex items-center justify-center h-full">
+                                    <img id="guardian-signature-preview" class="hidden max-w-full max-h-full object-contain absolute inset-0">
+                                    <input type="file" name="guardian_signature" accept="image/jpeg,image/png" class="absolute inset-0 opacity-0 cursor-pointer" required id="guardian-signature-input" onchange="handleImageUpload(this, 'guardian-signature-preview', 'guardian-signature-placeholder', 'guardian-signature-success')">
+                                    <div id="guardian-signature-placeholder" class="flex items-center justify-center h-full">
                                         <span class="text-gray-500">Click to upload signature (JPG/PNG)</span>
+                                    </div>
+                                    <div id="guardian-signature-success" class="hidden absolute top-2 right-2 text-green-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
                                     </div>
                                 </div>
                             </div>
@@ -635,6 +655,61 @@
                         courseSelect.appendChild(option);
                     });
                 }
+            });
+        });
+    </script>
+
+    <script>
+        function handleImageUpload(input, previewId, placeholderId, successId) {
+            const file = input.files[0];
+            if (file) {
+                const preview = document.getElementById(previewId);
+                const placeholder = document.getElementById(placeholderId);
+                const success = document.getElementById(successId);
+                
+                // Check file size (max 2MB)
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('File size must be less than 2MB');
+                    input.value = '';
+                    return;
+                }
+
+                // Check file type
+                if (!file.type.startsWith('image/')) {
+                    alert('Please upload an image file');
+                    input.value = '';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    placeholder.classList.add('hidden');
+                    success.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Initialize file upload handlers
+        document.addEventListener('DOMContentLoaded', function() {
+            // Profile photo handler
+            const photoInput = document.getElementById('upload-photo');
+            photoInput.addEventListener('change', function() {
+                handleImageUpload(this, 'photo-preview', 'photo-placeholder', 'photo-success');
+            });
+
+            // Student signature handler
+            const studentSignatureInput = document.getElementById('student-signature-input');
+            studentSignatureInput.addEventListener('change', function() {
+                handleImageUpload(this, 'student-signature-preview', 'student-signature-placeholder', 'student-signature-success');
+            });
+
+            // Guardian signature handler
+            const guardianSignatureInput = document.getElementById('guardian-signature-input');
+            guardianSignatureInput.addEventListener('change', function() {
+                handleImageUpload(this, 'guardian-signature-preview', 'guardian-signature-placeholder', 'guardian-signature-success');
             });
         });
     </script>
