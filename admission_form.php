@@ -261,50 +261,78 @@
                 <div class="bg-section h-5 flex justify-center items-center">
                     <div class="text-white font-bold text-center text-sm uppercase">CHOOSE THE SELECTED COLLEGE AND COURSES</div>
                 </div>
-                
-                <div class="grid grid-cols-11 mt-2">
-                    <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center col-span-2">COLLEGE & COURSE</label>
-                    <div class="col-span-9 flex">
-                        <select name="college_offered"  class="p-1.5 border border-black w-full box-border">
-                            <option value="">Select Course Offered</option>
-                            <option value="College of Technology">College of Technology</option>
-                            <option value="College of Business Administration">College of Business Administration</option>
-                            <option value="College of Education">College of Education</option>
+                  <div class="grid grid-cols-11 mt-2">
+                    <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center col-span-2">SELECT COURSES</label>                    <div class="col-span-9 grid grid-cols-2 gap-4">
+                        <select name="course_1" id="course_1" class="p-1.5 border border-black w-full box-border" required>
+                            <option value="">Select Course 1</option>
+                            <optgroup label="Technology Courses">
+                                <option value="Information Technology (IT)">Information Technology (IT)</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Computer Engineering">Computer Engineering</option>
+                                <option value="Information Systems">Information Systems</option>
+                            </optgroup>
+                            <optgroup label="Business Courses">
+                                <option value="Marketing Management">Marketing Management</option>
+                                <option value="Business Administration">Business Administration</option>
+                                <option value="Accounting">Accounting</option>
+                                <option value="Economics">Economics</option>
+                            </optgroup>
+                            <optgroup label="Education Courses">
+                                <option value="Special Education (SPED)">Special Education (SPED)</option>
+                                <option value="Elementary Education">Elementary Education</option>
+                                <option value="Secondary Education">Secondary Education</option>
+                                <option value="Early Childhood Education">Early Childhood Education</option>
+                            </optgroup>
                         </select>
-                        <select name="course_offered"  class="p-1.5 border border-black w-full box-border">
-                            <option value="">Select Course Offered</option>
-                            <option value="Information Technology (IT)">Information Technology (IT)</option>
-                            <option value="Accountancy">Accountancy</option>
-                            <option value="Elementary Education (ELED)">Elementary Education (ELED)</option>
-                            <option value="Engineering">Engineering</option>
-                            <option value="Financial Management">Financial Management</option>
-                            <option value="Secondary Education (SEED)">Secondary Education (SEED)</option>
-                            <option value="Computer Science (CS)">Computer Science (CS)</option>
-                            <option value="Marketing Management">Marketing Management</option>
-                            <option value="Special Education (SPED)">Special Education (SPED)</option>
+                        <select name="course_2" id="course_2" class="p-1.5 border border-black w-full box-border" required>
+                            <option value="">Select Course 2</option>
+                            <optgroup label="Technology Courses">
+                                <option value="Information Technology (IT)">Information Technology (IT)</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Computer Engineering">Computer Engineering</option>
+                                <option value="Information Systems">Information Systems</option>
+                            </optgroup>
+                            <optgroup label="Business Courses">
+                                <option value="Marketing Management">Marketing Management</option>
+                                <option value="Business Administration">Business Administration</option>
+                                <option value="Accounting">Accounting</option>
+                                <option value="Economics">Economics</option>
+                            </optgroup>
+                            <optgroup label="Education Courses">
+                                <option value="Special Education (SPED)">Special Education (SPED)</option>
+                                <option value="Elementary Education">Elementary Education</option>
+                                <option value="Secondary Education">Secondary Education</option>
+                                <option value="Early Childhood Education">Early Childhood Education</option>
+                            </optgroup>
                         </select>
                     </div>
                 </div>
 
-                <div class="bg-section text-white font-bold p-2 uppercase mt-4">COURSE OFFERED</div>
+                <div class="bg-section text-white font-bold p-2 uppercase mt-4">AVAILABLE COURSES</div>
                 <div class="flex justify-between items-start">
                     <div class="flex-grow">
-                        <div class="grid grid-cols-3">
-                            <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">COLLEGE OF TECHNOLOGY</label>
-                            <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">COLLEGE OF BUSINESS ADMINISTRATION</label>
-                            <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">COLLEGE OF EDUCATION</label>
-                            
-                            <label class="p-1 font-bold text-sm text-black bg-white border border-black flex items-center">Information Technology (IT)</label>
-                            <label class="p-1 font-bold text-sm text-black bg-white border border-black flex items-center">Accountancy</label>
-                            <label class="p-1 font-bold text-sm text-black bg-white border border-black flex items-center">Elementary Education (ELED)</label>
-                            
-                            <label class="p-1 font-bold text-sm text-black bg-white border border-black flex items-center">Engineering</label>
-                            <label class="p-1 font-bold text-sm text-black bg-white border border-black flex items-center">Financial Management</label>
-                            <label class="p-1 font-bold text-sm text-black bg-white border border-black flex items-center">Secondary Education (SEED)</label>
-                            
-                            <label class="p-1 font-bold text-sm text-black bg-white border border-black flex items-center">Computer Science (CS)</label>
-                            <label class="p-1 font-bold text-sm text-black bg-white border border-black flex items-center">Marketing Management</label>
-                            <label class="p-1 font-bold text-sm text-black bg-white border border-black flex items-center">Special Education (SPED)</label>
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="flex flex-col gap-2">
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center justify-center">Technology Courses</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Information Technology (IT)</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Computer Science</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Computer Engineering</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Information Systems</label>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center justify-center">Business Courses</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Marketing Management</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Business Administration</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Accounting</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Economics</label>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center justify-center">Education Courses</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Special Education (SPED)</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Elementary Education</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Secondary Education</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Early Childhood Education</label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -389,9 +417,8 @@
         'first_name', 'last_name', 'date_of_birth', 'place_of_birth', 
         'age', 'sex', 'civil_status', 'citizenship',
         'house', 'barangay', 'city', 'personal_number', 'personal_email',
-        'guardian_first_name', 'guardian_last_name', 'guardian_age', 
-        'guardian_sex', 'guardian_relationship', 'guardian_address', 
-        'guardian_contact_number', 'guardian_email', 'college_offered', 'course_offered',
+        'guardian_first_name', 'guardian_last_name', 'guardian_age',        'guardian_sex', 'guardian_relationship', 'guardian_address', 
+        'guardian_contact_number', 'guardian_email', 'course_1', 'course_2',
         'grade12_gwa', 'grade11_gwa', 'student_consent_name', 'guardian_consent_name',
         'student_signature', 'guardian_signature'
     ];
@@ -554,9 +581,8 @@
             grade8_school: "High School XYZ",
             grade8_period: "2014-2015",
             grade7_school: "High School XYZ",
-            grade7_period: "2013-2014",
-            college_offered: "College of Technology",
-            course_offered: "Information Technology (IT) ",
+            grade7_period: "2013-2014",            course_1: "Information Technology (IT)",
+            course_2: "Marketing Management",
         };
 
         document.getElementById('fillSampleData').addEventListener('click', function () {
@@ -583,6 +609,34 @@
             }
         });
     });
+    </script>
+
+    <script>
+        // Course selection logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const coursesByCollege = {
+                'College of Technology': ['Information Technology (IT)'],
+                'College of Business Administration': ['Marketing Management'],
+                'College of Education': ['Special Education (SPED)']
+            };
+
+            const collegeSelect = document.getElementById('college_offered');
+            const courseSelect = document.getElementById('course_offered');
+
+            collegeSelect.addEventListener('change', function() {
+                const selectedCollege = this.value;
+                courseSelect.innerHTML = '<option value="">Select Course</option>';
+                
+                if (selectedCollege && coursesByCollege[selectedCollege]) {
+                    coursesByCollege[selectedCollege].forEach(course => {
+                        const option = document.createElement('option');
+                        option.value = course;
+                        option.textContent = course;
+                        courseSelect.appendChild(option);
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>
