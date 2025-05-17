@@ -76,10 +76,10 @@
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">LAST NAME</label>
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">MIDDLE NAME</label>
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">EXTENSION NAME</label>
-                            <input type="text" name="first_name"  class="p-1.5 border border-black w-full box-border">
-                            <input type="text" name="last_name"  class="p-1.5 border border-black w-full box-border">
-                            <input type="text" name="middle_name" class="p-1.5 border border-black w-full box-border">
-                            <input type="text" name="extension_name" class="p-1.5 border border-black w-full box-border">
+                <input type="text" name="first_name" maxlength="50" required class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="last_name" maxlength="50" required class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="middle_name" maxlength="50" class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="extension_name" maxlength="10" class="p-1.5 border border-black w-full box-border">
                         </div>
                         <div class="bg-section h-5"></div>
 
@@ -212,14 +212,22 @@
                         
                         <div class="grid grid-cols-4">
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 12</label>
-                            <input type="text" name="grade12_school"  class="p-1.5 border border-black w-full box-border col-span-2">
-                            <input type="text" name="grade12_period"  class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="grade12_school" class="p-1.5 border border-black w-full box-border col-span-2">
+                            <input type="text" name="grade12_period" class="p-1.5 border border-black w-full box-border">
+                        </div>
+                        <div class="grid grid-cols-4">
+                            <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 12 GWA</label>
+                            <input type="number" name="grade12_gwa" step="0.01" min="75" max="100" class="p-1.5 border border-black w-full box-border" required>
                         </div>
                         
                         <div class="grid grid-cols-4">
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 11</label>
-                            <input type="text" name="grade11_school"  class="p-1.5 border border-black w-full box-border col-span-2">
-                            <input type="text" name="grade11_period"  class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="grade11_school" class="p-1.5 border border-black w-full box-border col-span-2">
+                            <input type="text" name="grade11_period" class="p-1.5 border border-black w-full box-border">
+                        </div>
+                        <div class="grid grid-cols-4">
+                            <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 11 GWA</label>
+                            <input type="number" name="grade11_gwa" step="0.01" min="75" max="100" class="p-1.5 border border-black w-full box-border" required>
                         </div>
                         
                         <div class="grid grid-cols-4">
@@ -301,6 +309,51 @@
                     </div>
                 </div>
 
+                <div class="bg-section text-white font-bold p-2 uppercase mt-4">DATA PRIVACY AND CONSENT DECLARATION</div>
+                <div class="flex justify-between items-start">
+                    <div class="flex-grow p-4">
+                        <div class="bg-white p-4 border border-black rounded">
+                            <h3 class="font-bold mb-2">Consent Notice</h3>
+                            <p class="text-sm mb-4">
+                                I hereby give my consent to TOM YANG COLLEGE to collect, record, organize, update, use, consolidate, and/or process my personal data and my child's/ward's personal data. I understand that my personal information and my child's/ward's personal information is being collected, accessed, used, processed, and stored for the following purposes:
+                                <br><br>
+                                1. Processing of admission application and student registration
+                                <br>
+                                2. Academic-related purposes
+                                <br>
+                                3. Research and statistical purposes
+                                <br>
+                                4. Administrative purposes
+                                <br><br>
+                                I agree to the Terms and Conditions and consent to the collection and processing of my personal information in accordance with the Privacy Policy.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <label class="block mb-2 font-bold">Student's Full Name</label>
+                                <input type="text" name="student_consent_name" required class="p-1.5 border border-black w-full box-border">
+                                <div class="border-2 border-dashed border-black h-32 mt-2 relative">
+                                    <input type="file" name="student_signature" accept="image/jpeg,image/png" class="absolute inset-0 opacity-0 cursor-pointer" required>
+                                    <div class="flex items-center justify-center h-full">
+                                        <span class="text-gray-500">Click to upload signature (JPG/PNG)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block mb-2 font-bold">Guardian/Parent's Full Name</label>
+                                <input type="text" name="guardian_consent_name" required class="p-1.5 border border-black w-full box-border">
+                                <div class="border-2 border-dashed border-black h-32 mt-2 relative">
+                                    <input type="file" name="guardian_signature" accept="image/jpeg,image/png" class="absolute inset-0 opacity-0 cursor-pointer" required>
+                                    <div class="flex items-center justify-center h-full">
+                                        <span class="text-gray-500">Click to upload signature (JPG/PNG)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="flex justify-end mt-5 mb-2.5 mx-2.5">
                     <button type="button" onclick="cancelForm()" class="bg-red-500 text-white py-2.5 px-5 border-none cursor-pointer text-base ml-2.5 mb-2.5 mr-2.5 rounded-full hover:opacity-90">Cancel</button>
                     <button type="button" onclick="showPopup()" class="bg-green-500 text-white py-2.5 px-5 border-none cursor-pointer text-base ml-2.5 mb-2.5 mr-2.5 rounded-full hover:opacity-90">Proceed</button> 
@@ -338,27 +391,117 @@
         'house', 'barangay', 'city', 'personal_number', 'personal_email',
         'guardian_first_name', 'guardian_last_name', 'guardian_age', 
         'guardian_sex', 'guardian_relationship', 'guardian_address', 
-        'guardian_contact_number', 'college_offered', 'course_offered'
+        'guardian_contact_number', 'guardian_email', 'college_offered', 'course_offered',
+        'grade12_gwa', 'grade11_gwa', 'student_consent_name', 'guardian_consent_name',
+        'student_signature', 'guardian_signature'
     ];
     
     let isValid = true;
     let firstInvalidField = null;
-    
+    let errorMessages = [];
+
+    // Maximum character lengths
+    const maxLengths = {
+        first_name: 50,
+        last_name: 50,
+        middle_name: 50,
+        extension_name: 10,
+        place_of_birth: 100,
+        religious_affiliation: 50,
+        house: 100,
+        barangay: 50,
+        city: 50,
+        district: 50,
+        personal_email: 100,
+        guardian_first_name: 50,
+        guardian_last_name: 50,
+        guardian_middle_name: 50,
+        guardian_extension_name: 10,
+        guardian_relationship: 50,
+        guardian_address: 100,
+        guardian_email: 100
+    };
+
+    // Check required fields and max lengths
     requiredFields.forEach(field => {
         const element = document.querySelector(`[name="${field}"]`);
         if (!element.value.trim()) {
             isValid = false;
             element.classList.add('border-red-500');
             if (!firstInvalidField) firstInvalidField = element;
+            errorMessages.push(`${field.replace(/_/g, ' ').toUpperCase()} is required`);
         } else {
             element.classList.remove('border-red-500');
+            
+            // Check max length if specified
+            if (maxLengths[field] && element.value.length > maxLengths[field]) {
+                isValid = false;
+                element.classList.add('border-red-500');
+                if (!firstInvalidField) firstInvalidField = element;
+                errorMessages.push(`${field.replace(/_/g, ' ').toUpperCase()} must not exceed ${maxLengths[field]} characters`);
+            }
         }
     });
-    
+
+    // Email validation function
+    function validateEmail(email) {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return emailRegex.test(email);
+    }
+
+    // Phone number validation function
+    function validatePhoneNumber(phone) {
+        // Philippine phone number format: +63 or 0 followed by 9 digits
+        const phoneRegex = /^(\+63|0)[0-9]{10}$/;
+        return phoneRegex.test(phone);
+    }
+
+    // Validate email addresses
+    const emailFields = ['personal_email', 'guardian_email'];
+    emailFields.forEach(field => {
+        const element = document.querySelector(`[name="${field}"]`);
+        if (element.value.trim() && !validateEmail(element.value.trim())) {
+            isValid = false;
+            element.classList.add('border-red-500');
+            if (!firstInvalidField) firstInvalidField = element;
+            errorMessages.push(`Please enter a valid email address for ${field.replace(/_/g, ' ').toUpperCase()}`);
+        }
+    });
+
+    // Validate phone numbers
+    const phoneFields = ['personal_number', 'guardian_contact_number', 'landline_number'];
+    phoneFields.forEach(field => {
+        const element = document.querySelector(`[name="${field}"]`);
+        if (element.value.trim() && !validatePhoneNumber(element.value.trim())) {
+            isValid = false;
+            element.classList.add('border-red-500');
+            if (!firstInvalidField) firstInvalidField = element;
+            errorMessages.push(`Please enter a valid phone number for ${field.replace(/_/g, ' ').toUpperCase()} (format: 09XXXXXXXXX or +639XXXXXXXXX)`);
+        }
+    });
+
+    // Age validation
+    const ageField = document.querySelector('[name="age"]');
+    if (ageField.value < 16 || ageField.value > 70) {
+        isValid = false;
+        ageField.classList.add('border-red-500');
+        if (!firstInvalidField) firstInvalidField = ageField;
+        errorMessages.push('Age must be between 16 and 70');
+    }
+
+    // Guardian age validation
+    const guardianAgeField = document.querySelector('[name="guardian_age"]');
+    if (guardianAgeField.value < 21 || guardianAgeField.value > 100) {
+        isValid = false;
+        guardianAgeField.classList.add('border-red-500');
+        if (!firstInvalidField) firstInvalidField = guardianAgeField;
+        errorMessages.push('Guardian age must be between 21 and 100');
+    }
+
     if (!isValid) {
         e.preventDefault();
         closePopup();
-        alert('Please fill in all required fields');
+        alert(errorMessages.join('\n'));
         firstInvalidField.focus();
     }
 });
@@ -400,8 +543,10 @@
             guardian_email: "jane.doe@example.com",
             grade12_school: "High School XYZ",
             grade12_period: "2018-2019",
+            grade12_gwa: 90.5,
             grade11_school: "High School XYZ",
             grade11_period: "2017-2018",
+            grade11_gwa: 89.0,
             grade10_school: "High School XYZ",
             grade10_period: "2016-2017",
             grade9_school: "High School XYZ",
