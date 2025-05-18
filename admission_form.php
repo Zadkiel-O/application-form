@@ -158,7 +158,7 @@
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">LANDLINE NUMBER</label>
                             <input type="number" name="personal_number" min="0"  class="p-1.5 border border-black w-full box-border">
                             <input type="email" name="personal_email"  class="p-1.5 border border-black w-full box-border">
-                            <input type="number" name="landline_number" min="0" class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="landline_number" pattern="^$|^\(\d{2}\)\s?\d{4}[\s-]?\d{4}$" title="Please enter a valid landline number format like (02) 1234-5678 or leave it empty" class="p-1.5 border border-black w-full box-border">
                         </div>
                         <div class="bg-section h-5"></div>
                     </div>
@@ -406,12 +406,14 @@
                     <button type="button" onclick="cancelForm()" class="bg-red-500 text-white py-2.5 px-5 border-none cursor-pointer text-base ml-2.5 mb-2.5 mr-2.5 rounded-full hover:opacity-90">Cancel</button>
                     <button type="button" onclick="showPopup()" class="bg-green-500 text-white py-2.5 px-5 border-none cursor-pointer text-base ml-2.5 mb-2.5 mr-2.5 rounded-full hover:opacity-90">Proceed</button> 
                </div>
-            </div>
-            <div id="popup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+            </div>            <div id="popup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96 text-center">
             <h2 class="text-lg font-bold mb-4">Confirmation</h2>
                     <p class="mb-4">Are you sure you want to proceed?</p>
-                    <button type="submit" class="bg-blue-500 text-white py-2 px-5 rounded hover:opacity-90">OK</button>
+                    <div class="flex justify-center gap-4">
+                        <button type="button" onclick="closePopup()" class="bg-red-500 text-white py-2 px-5 rounded hover:opacity-90">Cancel</button>
+                        <button type="submit" class="bg-blue-500 text-white py-2 px-5 rounded hover:opacity-90">OK</button>
+                    </div>
         </div>
     </div>
         </form>
