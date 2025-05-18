@@ -1,3 +1,10 @@
+<?php
+session_start();
+// Function to get form value from session if it exists
+function getFormValue($field) {
+    return isset($_SESSION['form_data'][$field]) ? htmlspecialchars($_SESSION['form_data'][$field]) : '';
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,10 +95,10 @@
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">LAST NAME</label>
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">MIDDLE NAME</label>
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">EXTENSION NAME</label>
-                <input type="text" name="first_name" maxlength="50" required class="p-1.5 border border-black w-full box-border">
-                            <input type="text" name="last_name" maxlength="50" required class="p-1.5 border border-black w-full box-border">
-                            <input type="text" name="middle_name" maxlength="50" class="p-1.5 border border-black w-full box-border">
-                            <input type="text" name="extension_name" maxlength="10" class="p-1.5 border border-black w-full box-border">
+                <input type="text" name="first_name" maxlength="50" required class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('first_name'); ?>">
+                            <input type="text" name="last_name" maxlength="50" required class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('last_name'); ?>">
+                            <input type="text" name="middle_name" maxlength="50" class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('middle_name'); ?>">
+                            <input type="text" name="extension_name" maxlength="10" class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('extension_name'); ?>">
                         </div>
                         <div class="bg-section h-5"></div>
 
@@ -100,17 +107,17 @@
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center col-span-2">PLACE OF BIRTH</label>
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">AGE</label>
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">SEX</label>
-                            <input type="date" name="date_of_birth"  class="p-1.5 border border-black w-full box-border">
-                            <input type="text" name="place_of_birth"  class="p-1.5 border border-black w-full box-border col-span-2">
-                            <input type="number" name="age" min="0"  class="p-1.5 border border-black w-full box-border">
+                            <input type="date" name="date_of_birth"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('date_of_birth'); ?>">
+                            <input type="text" name="place_of_birth"  class="p-1.5 border border-black w-full box-border col-span-2" value="<?php echo getFormValue('place_of_birth'); ?>">
+                            <input type="number" name="age" min="0"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('age'); ?>">
                             <select name="sex"  class="p-1.5 border border-black w-full box-border">
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
+                                <option value="Male" <?php if(getFormValue('sex') == 'Male') echo 'selected'; ?>>Male</option>
+                                <option value="Female" <?php if(getFormValue('sex') == 'Female') echo 'selected'; ?>>Female</option>
                             </select>
                         </div>
                         <div class="grid grid-cols-5">
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">BLOOD TYPE</label>
-                            <input type="text" name="blood_type" class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="blood_type" class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('blood_type'); ?>">
                         </div>
                         <div class="bg-section h-5"></div>
 
@@ -120,15 +127,15 @@
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">CITIZENSHIP</label>
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">NO. OF SIBLINGS</label>
                             <select name="civil_status"  class="p-1.5 border border-black w-full box-border">
-                                <option value="Single">Single</option>
-                                <option value="Married">Married</option>
-                                <option value="Widowed">Widowed</option>
+                                <option value="Single" <?php if(getFormValue('civil_status') == 'Single') echo 'selected'; ?>>Single</option>
+                                <option value="Married" <?php if(getFormValue('civil_status') == 'Married') echo 'selected'; ?>>Married</option>
+                                <option value="Widowed" <?php if(getFormValue('civil_status') == 'Widowed') echo 'selected'; ?>>Widowed</option>
                             </select>
-                            <input type="text" name="religious_affiliation"  class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="religious_affiliation"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('religious_affiliation'); ?>">
                             <select name="citizenship"  class="p-1.5 border border-black w-full box-border">
-                                <option value="Filipino">Filipino</option>
+                                <option value="Filipino" <?php if(getFormValue('citizenship') == 'Filipino') echo 'selected'; ?>>Filipino</option>
                             </select>
-                            <input type="number" name="no_of_siblings" min="0"  class="p-1.5 border border-black w-full box-border">
+                            <input type="number" name="no_of_siblings" min="0"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('no_of_siblings'); ?>">
                         </div>
                     </div>                    <div class="w-48 h-48 border-2 border-dashed border-black text-center flex flex-col justify-center items-center text-black font-bold bg-white mt-1 mx-3 flex-shrink-0 relative">
                         <img id="photo-preview" class="hidden max-w-full max-h-full object-contain absolute inset-0">
@@ -153,22 +160,22 @@
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">BARANGAY</label>
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">CITY/MUNICIPALITY</label>
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">DISTRICT</label>
-                            <input type="text" name="house"  class="p-1.5 border border-black w-full box-border col-span-2">
-                            <input type="text" name="barangay"  class="p-1.5 border border-black w-full box-border">
-                            <input type="text" name="city"  class="p-1.5 border border-black w-full box-border">
-                            <input type="text" name="district"  class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="house"  class="p-1.5 border border-black w-full box-border col-span-2" value="<?php echo getFormValue('house'); ?>">
+                            <input type="text" name="barangay"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('barangay'); ?>">
+                            <input type="text" name="city"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('city'); ?>">
+                            <input type="text" name="district"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('district'); ?>">
                         </div>
                         <div class="grid grid-cols-5">
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">ZIP CODE</label>
-                            <input type="number" name="zip_code" min="0"  class="p-1.5 border border-black w-full box-border">
+                            <input type="number" name="zip_code" min="0"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('zip_code'); ?>">
                         </div>
 
                         <div class="grid grid-cols-3">                            <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">ACTIVE PERSONAL NUMBER</label>
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">ACTIVE PERSONAL EMAIL ADDRESS</label>
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">LANDLINE NUMBER</label>
-                            <input type="number" name="personal_number" min="0"  class="p-1.5 border border-black w-full box-border">
-                            <input type="email" name="personal_email"  class="p-1.5 border border-black w-full box-border">
-                            <input type="text" name="landline_number" pattern="^(N/A|n/a|(\(\d{2}\)\s?\d{4}[\s-]?\d{4}))$" title="Please enter a valid landline number format like (02) 1234-5678 or N/A" class="p-1.5 border border-black w-full box-border">
+                            <input type="number" name="personal_number" min="0"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('personal_number'); ?>">
+                            <input type="email" name="personal_email"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('personal_email'); ?>">
+                            <input type="text" name="landline_number" pattern="^(N/A|n/a|(\(\d{2}\)\s?\d{4}[\s-]?\d{4}))$" title="Please enter a valid landline number format like (02) 1234-5678 or N/A" class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('landline_number'); ?>">
                         </div>
                         <div class="bg-section h-5"></div>
                     </div>
@@ -189,14 +196,14 @@
                         </div>
 
                         <div class="grid grid-cols-6">
-                            <input type="text" name="guardian_first_name"  class="p-1.5 border border-black w-full box-border">
-                            <input type="text" name="guardian_middle_name" class="p-1.5 border border-black w-full box-border">
-                            <input type="text" name="guardian_last_name"  class="p-1.5 border border-black w-full box-border">
-                            <input type="text" name="guardian_extension_name" class="p-1.5 border border-black w-full box-border">
-                            <input type="number" name="guardian_age" min="0"  class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="guardian_first_name"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('guardian_first_name'); ?>">
+                            <input type="text" name="guardian_middle_name" class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('guardian_middle_name'); ?>">
+                            <input type="text" name="guardian_last_name"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('guardian_last_name'); ?>">
+                            <input type="text" name="guardian_extension_name" class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('guardian_extension_name'); ?>">
+                            <input type="number" name="guardian_age" min="0"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('guardian_age'); ?>">
                             <select name="guardian_sex"  class="p-1.5 border border-black w-full box-border">
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
+                                <option value="Male" <?php if(getFormValue('guardian_sex') == 'Male') echo 'selected'; ?>>Male</option>
+                                <option value="Female" <?php if(getFormValue('guardian_sex') == 'Female') echo 'selected'; ?>>Female</option>
                             </select>
                         </div>
 
@@ -207,14 +214,14 @@
                         </div>
 
                         <div class="grid grid-cols-4">
-                            <input type="text" name="guardian_relationship"  class="p-1.5 border border-black w-full box-border">
-                            <input type="text" name="guardian_address"  class="p-1.5 border border-black w-full box-border col-span-2">
-                            <input type="number" name="guardian_contact_number" min="0"  class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="guardian_relationship"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('guardian_relationship'); ?>">
+                            <input type="text" name="guardian_address"  class="p-1.5 border border-black w-full box-border col-span-2" value="<?php echo getFormValue('guardian_address'); ?>">
+                            <input type="number" name="guardian_contact_number" min="0"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('guardian_contact_number'); ?>">
                         </div>
                         
                         <div class="grid grid-cols-4">
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">ACTIVE EMAIL ADDRESS</label>
-                            <input type="email" name="guardian_email"  class="p-1.5 border border-black w-full box-border">
+                            <input type="email" name="guardian_email"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('guardian_email'); ?>">
                         </div>
                     </div>
                 </div>
@@ -230,46 +237,46 @@
                         
                         <div class="grid grid-cols-4">
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 12</label>
-                            <input type="text" name="grade12_school" class="p-1.5 border border-black w-full box-border col-span-2">
-                            <input type="text" name="grade12_period" class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="grade12_school" class="p-1.5 border border-black w-full box-border col-span-2" value="<?php echo getFormValue('grade12_school'); ?>">
+                            <input type="text" name="grade12_period" class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('grade12_period'); ?>">
                         </div>
                         <div class="grid grid-cols-4">
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 12 GWA</label>
-                            <input type="number" name="grade12_gwa" step="0.01" min="75" max="100" class="p-1.5 border border-black w-full box-border" required>
+                            <input type="number" name="grade12_gwa" step="0.01" min="75" max="100" class="p-1.5 border border-black w-full box-border" required value="<?php echo getFormValue('grade12_gwa'); ?>">
                         </div>
                         
                         <div class="grid grid-cols-4">
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 11</label>
-                            <input type="text" name="grade11_school" class="p-1.5 border border-black w-full box-border col-span-2">
-                            <input type="text" name="grade11_period" class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="grade11_school" class="p-1.5 border border-black w-full box-border col-span-2" value="<?php echo getFormValue('grade11_school'); ?>">
+                            <input type="text" name="grade11_period" class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('grade11_period'); ?>">
                         </div>
                         <div class="grid grid-cols-4">
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 11 GWA</label>
-                            <input type="number" name="grade11_gwa" step="0.01" min="75" max="100" class="p-1.5 border border-black w-full box-border" required>
+                            <input type="number" name="grade11_gwa" step="0.01" min="75" max="100" class="p-1.5 border border-black w-full box-border" required value="<?php echo getFormValue('grade11_gwa'); ?>">
                         </div>
                         
                         <div class="grid grid-cols-4">
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 10</label>
-                            <input type="text" name="grade10_school"  class="p-1.5 border border-black w-full box-border col-span-2">
-                            <input type="text" name="grade10_period"  class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="grade10_school"  class="p-1.5 border border-black w-full box-border col-span-2" value="<?php echo getFormValue('grade10_school'); ?>">
+                            <input type="text" name="grade10_period"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('grade10_period'); ?>">
                         </div>
                         
                         <div class="grid grid-cols-4">
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 9</label>
-                            <input type="text" name="grade9_school"  class="p-1.5 border border-black w-full box-border col-span-2">
-                            <input type="text" name="grade9_period"  class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="grade9_school"  class="p-1.5 border border-black w-full box-border col-span-2" value="<?php echo getFormValue('grade9_school'); ?>">
+                            <input type="text" name="grade9_period"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('grade9_period'); ?>">
                         </div>
                         
                         <div class="grid grid-cols-4">
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 8</label>
-                            <input type="text" name="grade8_school"  class="p-1.5 border border-black w-full box-border col-span-2">
-                            <input type="text" name="grade8_period"  class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="grade8_school"  class="p-1.5 border border-black w-full box-border col-span-2" value="<?php echo getFormValue('grade8_school'); ?>">
+                            <input type="text" name="grade8_period"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('grade8_period'); ?>">
                         </div>
                         
                         <div class="grid grid-cols-4">
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 7</label>
-                            <input type="text" name="grade7_school"  class="p-1.5 border border-black w-full box-border col-span-2">
-                            <input type="text" name="grade7_period"  class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="grade7_school"  class="p-1.5 border border-black w-full box-border col-span-2" value="<?php echo getFormValue('grade7_school'); ?>">
+                            <input type="text" name="grade7_period"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('grade7_period'); ?>">
                         </div>
                     </div>
                 </div>
@@ -284,43 +291,43 @@
                         <select name="course_1" id="course_1" class="p-1.5 border border-black w-full box-border" required>
                             <option value="">Select Course 1</option>
                             <optgroup label="Technology Courses">
-                                <option value="Information Technology (IT)">Information Technology (IT)</option>
-                                <option value="Computer Science">Computer Science</option>
-                                <option value="Computer Engineering">Computer Engineering</option>
-                                <option value="Information Systems">Information Systems</option>
+                                <option value="Information Technology (IT)" <?php if(getFormValue('course_1') == 'Information Technology (IT)') echo 'selected'; ?>>Information Technology (IT)</option>
+                                <option value="Computer Science" <?php if(getFormValue('course_1') == 'Computer Science') echo 'selected'; ?>>Computer Science</option>
+                                <option value="Computer Engineering" <?php if(getFormValue('course_1') == 'Computer Engineering') echo 'selected'; ?>>Computer Engineering</option>
+                                <option value="Information Systems" <?php if(getFormValue('course_1') == 'Information Systems') echo 'selected'; ?>>Information Systems</option>
                             </optgroup>
                             <optgroup label="Business Courses">
-                                <option value="Marketing Management">Marketing Management</option>
-                                <option value="Business Administration">Business Administration</option>
-                                <option value="Accounting">Accounting</option>
-                                <option value="Economics">Economics</option>
+                                <option value="Marketing Management" <?php if(getFormValue('course_1') == 'Marketing Management') echo 'selected'; ?>>Marketing Management</option>
+                                <option value="Business Administration" <?php if(getFormValue('course_1') == 'Business Administration') echo 'selected'; ?>>Business Administration</option>
+                                <option value="Accounting" <?php if(getFormValue('course_1') == 'Accounting') echo 'selected'; ?>>Accounting</option>
+                                <option value="Economics" <?php if(getFormValue('course_1') == 'Economics') echo 'selected'; ?>>Economics</option>
                             </optgroup>
                             <optgroup label="Education Courses">
-                                <option value="Special Education (SPED)">Special Education (SPED)</option>
-                                <option value="Elementary Education">Elementary Education</option>
-                                <option value="Secondary Education">Secondary Education</option>
-                                <option value="Early Childhood Education">Early Childhood Education</option>
+                                <option value="Special Education (SPED)" <?php if(getFormValue('course_1') == 'Special Education (SPED)') echo 'selected'; ?>>Special Education (SPED)</option>
+                                <option value="Elementary Education" <?php if(getFormValue('course_1') == 'Elementary Education') echo 'selected'; ?>>Elementary Education</option>
+                                <option value="Secondary Education" <?php if(getFormValue('course_1') == 'Secondary Education') echo 'selected'; ?>>Secondary Education</option>
+                                <option value="Early Childhood Education" <?php if(getFormValue('course_1') == 'Early Childhood Education') echo 'selected'; ?>>Early Childhood Education</option>
                             </optgroup>
                         </select>
                         <select name="course_2" id="course_2" class="p-1.5 border border-black w-full box-border" required>
                             <option value="">Select Course 2</option>
                             <optgroup label="Technology Courses">
-                                <option value="Information Technology (IT)">Information Technology (IT)</option>
-                                <option value="Computer Science">Computer Science</option>
-                                <option value="Computer Engineering">Computer Engineering</option>
-                                <option value="Information Systems">Information Systems</option>
+                                <option value="Information Technology (IT)" <?php if(getFormValue('course_2') == 'Information Technology (IT)') echo 'selected'; ?>>Information Technology (IT)</option>
+                                <option value="Computer Science" <?php if(getFormValue('course_2') == 'Computer Science') echo 'selected'; ?>>Computer Science</option>
+                                <option value="Computer Engineering" <?php if(getFormValue('course_2') == 'Computer Engineering') echo 'selected'; ?>>Computer Engineering</option>
+                                <option value="Information Systems" <?php if(getFormValue('course_2') == 'Information Systems') echo 'selected'; ?>>Information Systems</option>
                             </optgroup>
                             <optgroup label="Business Courses">
-                                <option value="Marketing Management">Marketing Management</option>
-                                <option value="Business Administration">Business Administration</option>
-                                <option value="Accounting">Accounting</option>
-                                <option value="Economics">Economics</option>
+                                <option value="Marketing Management" <?php if(getFormValue('course_2') == 'Marketing Management') echo 'selected'; ?>>Marketing Management</option>
+                                <option value="Business Administration" <?php if(getFormValue('course_2') == 'Business Administration') echo 'selected'; ?>>Business Administration</option>
+                                <option value="Accounting" <?php if(getFormValue('course_2') == 'Accounting') echo 'selected'; ?>>Accounting</option>
+                                <option value="Economics" <?php if(getFormValue('course_2') == 'Economics') echo 'selected'; ?>>Economics</option>
                             </optgroup>
                             <optgroup label="Education Courses">
-                                <option value="Special Education (SPED)">Special Education (SPED)</option>
-                                <option value="Elementary Education">Elementary Education</option>
-                                <option value="Secondary Education">Secondary Education</option>
-                                <option value="Early Childhood Education">Early Childhood Education</option>
+                                <option value="Special Education (SPED)" <?php if(getFormValue('course_2') == 'Special Education (SPED)') echo 'selected'; ?>>Special Education (SPED)</option>
+                                <option value="Elementary Education" <?php if(getFormValue('course_2') == 'Elementary Education') echo 'selected'; ?>>Elementary Education</option>
+                                <option value="Secondary Education" <?php if(getFormValue('course_2') == 'Secondary Education') echo 'selected'; ?>>Secondary Education</option>
+                                <option value="Early Childhood Education" <?php if(getFormValue('course_2') == 'Early Childhood Education') echo 'selected'; ?>>Early Childhood Education</option>
                             </optgroup>
                         </select>
                     </div>
@@ -378,7 +385,7 @@
                         <div class="grid grid-cols-2 gap-4 mt-4">
                             <div>
                                 <label class="block mb-2 font-bold">Student's Full Name</label>
-                                <input type="text" name="student_consent_name" required class="p-1.5 border border-black w-full box-border">                                <div class="border-2 border-dashed border-black h-32 mt-2 relative">
+                                <input type="text" name="student_consent_name" required class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('student_consent_name'); ?>">                                <div class="border-2 border-dashed border-black h-32 mt-2 relative">
                                     <img id="student-signature-preview" class="hidden max-w-full max-h-full object-contain absolute inset-0">
                                     <input type="file" name="student_signature" accept="image/jpeg,image/png" class="absolute inset-0 opacity-0 cursor-pointer" required id="student-signature-input" onchange="handleImageUpload(this, 'student-signature-preview', 'student-signature-placeholder', 'student-signature-success', 'delete-student-signature')">
                                     <div id="student-signature-placeholder" class="flex items-center justify-center h-full">
@@ -393,7 +400,7 @@
                             </div>
                             <div>
                                 <label class="block mb-2 font-bold">Guardian/Parent's Full Name</label>
-                                <input type="text" name="guardian_consent_name" required class="p-1.5 border border-black w-full box-border">                                <div class="border-2 border-dashed border-black h-32 mt-2 relative">
+                                <input type="text" name="guardian_consent_name" required class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('guardian_consent_name'); ?>">                                <div class="border-2 border-dashed border-black h-32 mt-2 relative">
                                     <img id="guardian-signature-preview" class="hidden max-w-full max-h-full object-contain absolute inset-0">
                                     <input type="file" name="guardian_signature" accept="image/jpeg,image/png" class="absolute inset-0 opacity-0 cursor-pointer" required id="guardian-signature-input" onchange="handleImageUpload(this, 'guardian-signature-preview', 'guardian-signature-placeholder', 'guardian-signature-success', 'delete-guardian-signature')">
                                     <div id="guardian-signature-placeholder" class="flex items-center justify-center h-full">

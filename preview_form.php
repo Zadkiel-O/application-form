@@ -116,8 +116,7 @@ if (!empty($_FILES)) {
             </table>
         </div>
         
-        <div class="flex justify-center mt-8">
-            <form action="process_form.php" method="POST" class="mr-4">
+        <div class="flex justify-center mt-8">            <form action="process_form.php" method="POST" class="mr-4">
                 <?php foreach ($_SESSION['form_data'] as $key => $value): ?>
                     <?php if (is_array($value)): ?>
                         <?php foreach ($value as $subKey => $subValue): ?>
@@ -130,9 +129,7 @@ if (!empty($_FILES)) {
                 <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">Confirm & Submit</button>
             </form>
             
-            <form action="admission_form.php" method="GET" enctype="multipart/form-data">
-                <button type="submit" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600">Edit</button>
-            </form>
+            <a href="admission_form.php" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600">Edit</a>
         </div>
         <?php else: ?>
         <p class="text-red-500">No data to preview.</p>
