@@ -75,7 +75,8 @@ if (!empty($_FILES)) {
 
         <?php if (isset($_SESSION['form_data'])): ?>
         <div class="overflow-x-auto">
-            <table class="table-auto w-full border-collapse border border-black">                <tbody>
+            <table class="table-auto w-full border-collapse border border-black">
+                <tbody>
                     <?php foreach ($_SESSION['form_data'] as $key => $value): ?>
                     <?php if (!in_array($key, ['photo', 'student_signature', 'guardian_signature'])): ?>
                     <tr class="border-b border-black">
@@ -114,24 +115,29 @@ if (!empty($_FILES)) {
                     <?php endif; ?>
                 </tbody>
             </table>
-        </div>        <div class="flex justify-center mt-8">
-            <form action="process_form.php" method="POST" enctype="multipart/form-data" class="mr-4">
+        </div>
+        
+        <div class="flex justify-center mt-8">
+            <form action="process_form.php" method="POST" class="mr-4">
                 <?php foreach ($_SESSION['form_data'] as $key => $value): ?>
-                <input type="hidden" name="<?php echo $key; ?>" value="<?php echo htmlspecialchars($value); ?>">
+                    <?php if (is_array($value)): ?>
+                        <?php foreach ($value as $subKey => $subValue): ?>
+                            <input type="hidden" name="<?php echo htmlspecialchars($key); ?>[<?php echo htmlspecialchars($subKey); ?>]" value="<?php echo htmlspecialchars($subValue); ?>">
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <input type="hidden" name="<?php echo htmlspecialchars($key); ?>" value="<?php echo htmlspecialchars($value); ?>">
+                    <?php endif; ?>
                 <?php endforeach; ?>
                 <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">Confirm & Submit</button>
             </form>
-            <form action="edit_applicant.php" method="POST" enctype="multipart/form-data">
-                <?php foreach ($_SESSION['form_data'] as $key => $value): ?>
-                <input type="hidden" name="<?php echo $key; ?>" value="<?php echo htmlspecialchars($value); ?>">
-                <?php endforeach; ?>
+            
+            <form action="admission_form.php" method="GET" enctype="multipart/form-data">
                 <button type="submit" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600">Edit</button>
             </form>
         </div>
         <?php else: ?>
         <p class="text-red-500">No data to preview.</p>
         <?php endif; ?>
-
     </div>
 </body>
 
