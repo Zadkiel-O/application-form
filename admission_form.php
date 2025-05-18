@@ -141,7 +141,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
-                        <input type="file" id="upload-photo" name="photo" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'photo-preview', 'photo-placeholder', 'photo-success', 'delete-photo')">
+                        <input type="file" id="upload-photo" name="profile_photo" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'photo-preview', 'photo-placeholder', 'photo-success', 'delete-photo')">
                     </div>
                 </div>
 

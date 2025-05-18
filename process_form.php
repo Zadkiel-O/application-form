@@ -30,8 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'house', 'barangay', 'city', 'district', 'zip_code', 'personal_number', 'personal_email', 'landline_number',
         'guardian_first_name', 'guardian_middle_name', 'guardian_last_name', 'guardian_extension_name',
         'guardian_age', 'guardian_sex', 'guardian_relationship', 'guardian_address', 'guardian_contact_number',
-        'guardian_email', 'grade12_school', 'grade12_period', 'grade12_gwa', 'grade11_school', 'grade11_period',
-        'grade11_gwa', 'grade10_school', 'grade10_period', 'grade9_school', 'grade9_period', 'grade8_school',
+        'guardian_email', 'grade12_school', 'grade12_period', 'grade12_gwa', 'grade11_school', 'grade11_period',        'grade11_gwa', 'grade10_school', 'grade10_period', 'grade9_school', 'grade9_period', 'grade8_school',
         'grade8_period', 'grade7_school', 'grade7_period', 'course_1', 'course_2', 'profile_photo', 'student_signature',
         'guardian_signature'
     ];

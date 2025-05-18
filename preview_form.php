@@ -9,7 +9,7 @@ function validateFileSize($file) {
 
 // Validate uploaded files
 $fileErrors = [];
-$fileFields = ['photo', 'student_signature', 'guardian_signature'];
+$fileFields = ['profile_photo', 'student_signature', 'guardian_signature'];
 
 foreach ($fileFields as $field) {
     if (!empty($_FILES[$field]['name'])) {
@@ -46,7 +46,7 @@ function handleFileUpload($file) {
 
 // Handle uploaded files
 if (!empty($_FILES)) {
-    foreach (['photo', 'student_signature', 'guardian_signature'] as $fileField) {
+    foreach (['profile_photo', 'student_signature', 'guardian_signature'] as $fileField) {
         if (!empty($_FILES[$fileField]['name'])) {
             $filename = handleFileUpload($_FILES[$fileField]);
             if ($filename) {
@@ -78,20 +78,19 @@ if (!empty($_FILES)) {
             <table class="table-auto w-full border-collapse border border-black">
                 <tbody>
                     <?php foreach ($_SESSION['form_data'] as $key => $value): ?>
-                    <?php if (!in_array($key, ['photo', 'student_signature', 'guardian_signature'])): ?>
+                    <?php if (!in_array($key, ['profile_photo', 'student_signature', 'guardian_signature'])): ?>
                     <tr class="border-b border-black">
                         <td class="p-2 font-bold text-black border-r border-black w-1/4"><?php echo ucfirst(str_replace('_', ' ', $key)); ?></td>
                         <td class="p-2 text-black"><?php echo htmlspecialchars($value); ?></td>
                     </tr>
                     <?php endif; ?>
                     <?php endforeach; ?>
-                    
-                    <!-- Display uploaded files -->
-                    <?php if (!empty($_SESSION['form_data']['photo'])): ?>
+                      <!-- Display uploaded files -->
+                    <?php if (!empty($_SESSION['form_data']['profile_photo'])): ?>
                     <tr class="border-b border-black">
                         <td class="p-2 font-bold text-black border-r border-black w-1/4">Profile Photo</td>
                         <td class="p-2 text-black">
-                            <img src="uploads/<?php echo htmlspecialchars($_SESSION['form_data']['photo']); ?>" alt="Applicant Photo" class="max-w-48 max-h-48">
+                            <img src="uploads/<?php echo htmlspecialchars($_SESSION['form_data']['profile_photo']); ?>" alt="Applicant Photo" class="max-w-48 max-h-48">
                         </td>
                     </tr>
                     <?php endif; ?>
