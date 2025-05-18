@@ -25,17 +25,23 @@ $conn->select_db($db_name);
 $alterTableQueries = [
     "ALTER TABLE applicants ADD COLUMN IF NOT EXISTS profile_photo VARCHAR(255)",
     "ALTER TABLE applicants ADD COLUMN IF NOT EXISTS student_signature VARCHAR(255)",
-    "ALTER TABLE applicants ADD COLUMN IF NOT EXISTS guardian_signature VARCHAR(255)"
+    "ALTER TABLE applicants ADD COLUMN IF NOT EXISTS guardian_signature VARCHAR(255)",
+    "ALTER TABLE applicants ADD COLUMN IF NOT EXISTS grade12_gwa DECIMAL(4,2)",
+    "ALTER TABLE applicants ADD COLUMN IF NOT EXISTS grade11_gwa DECIMAL(4,2)",
+    "ALTER TABLE applicants ADD COLUMN IF NOT EXISTS course_1 VARCHAR(100)",
+    "ALTER TABLE applicants ADD COLUMN IF NOT EXISTS course_2 VARCHAR(100)",
+    "ALTER TABLE applicants ADD COLUMN IF NOT EXISTS status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending'",
+    "ALTER TABLE applicants ADD COLUMN IF NOT EXISTS status_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
 ];
 
 foreach ($alterTableQueries as $alterQuery) {
     if ($conn->query($alterQuery) === FALSE) {
-        // Log the error but don't die, as the column might already exist
+        // Log the error but don't die, as the column might alreasdy exist
         error_log("Error executing query: " . $conn->error);
     }
 }
 
-// Create applicants table if it doesn't exist
+
 $sql = "CREATE TABLE IF NOT EXISTS applicants (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
@@ -54,7 +60,6 @@ $sql = "CREATE TABLE IF NOT EXISTS applicants (
     religious_affiliation VARCHAR(50),
     citizenship VARCHAR(50) NOT NULL,
     no_of_siblings INT(3),
-    photo VARCHAR(255),
     
     house VARCHAR(100) NOT NULL,
     barangay VARCHAR(50) NOT NULL,
@@ -78,8 +83,10 @@ $sql = "CREATE TABLE IF NOT EXISTS applicants (
     
     grade12_school VARCHAR(100),
     grade12_period VARCHAR(50),
+    grade12_gwa DECIMAL(4,2),
     grade11_school VARCHAR(100),
     grade11_period VARCHAR(50),
+    grade11_gwa DECIMAL(4,2),
     grade10_school VARCHAR(100),
     grade10_period VARCHAR(50),
     grade9_school VARCHAR(100),
@@ -91,9 +98,12 @@ $sql = "CREATE TABLE IF NOT EXISTS applicants (
     
     college_offered VARCHAR(100) NOT NULL,
     course_offered VARCHAR(100) NOT NULL,
+    course_1 VARCHAR(100),
+    course_2 VARCHAR(100),
     
-    date_submitted TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    application_status VARCHAR(20) DEFAULT 'Pending'
+    status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+    status_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    date_submitted TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )";
 
 if ($conn->query($sql) === FALSE) {

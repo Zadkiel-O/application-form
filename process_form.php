@@ -298,6 +298,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     $course_offered = $course_offered_result["value"];
     
+    // Validate GWA information
+    $grade12_gwa = $_POST['grade12_gwa'] ? floatval($_POST['grade12_gwa']) : null;
+    $grade11_gwa = $_POST['grade11_gwa'] ? floatval($_POST['grade11_gwa']) : null;
+    
+    // Validate course choices
+    $course_1_result = validate_input($conn, $_POST['course_1'] ?? '', 'Course 1');
+    if (!$course_1_result["success"]) {
+        $errors[] = $course_1_result["message"];
+    }
+    $course_1 = $course_1_result["value"];
+    
+    $course_2_result = validate_input($conn, $_POST['course_2'] ?? '', 'Course 2');
+    if (!$course_2_result["success"]) {
+        $errors[] = $course_2_result["message"];
+    }
+    $course_2 = $course_2_result["value"];
+    
     // If there are validation errors, return them
     if (!empty($errors)) {
         $response['message'] = "Validation errors: " . implode(", ", $errors);
@@ -305,31 +322,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Insert data into database
         $sql = "INSERT INTO applicants (
             first_name, last_name, middle_name, extension_name, date_of_birth, place_of_birth, 
-            age, sex, blood_type, civil_status, religious_affiliation, citizenship, no_of_siblings, photo,
+            age, sex, blood_type, civil_status, religious_affiliation, citizenship, no_of_siblings,
             house, barangay, city, district, zip_code, personal_number, personal_email, landline_number,
             guardian_first_name, guardian_middle_name, guardian_last_name, guardian_extension_name, 
             guardian_age, guardian_sex, guardian_relationship, guardian_address, guardian_contact_number, guardian_email,
-            grade12_school, grade12_period, grade11_school, grade11_period, grade10_school, grade10_period,
-            grade9_school, grade9_period, grade8_school, grade8_period, grade7_school, grade7_period,
-            college_offered, course_offered, profile_photo, student_signature, guardian_signature
+            grade12_school, grade12_period, grade12_gwa, grade11_school, grade11_period, grade11_gwa,
+            grade10_school, grade10_period, grade9_school, grade9_period,
+            grade8_school, grade8_period, grade7_school, grade7_period,
+            college_offered, course_offered, course_1, course_2, status,
+            profile_photo, student_signature, guardian_signature
         ) VALUES (
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending',
+            ?, ?, ?
         )";
         
         $stmt = $conn->prepare($sql);
         
-        if ($stmt) {
-            $stmt->bind_param(
-                "ssssssiiiissssssssssssssssssssssssssssssssssssss", 
+        if ($stmt) {            $stmt->bind_param(
+                "ssssssiisssssissssssssssissssssssddssssssssssssssssss", 
                 $first_name, $last_name, $middle_name, $extension_name, $date_of_birth, $place_of_birth,
-                $age, $sex, $blood_type, $civil_status, $religious_affiliation, $citizenship, $no_of_siblings, $photo,
+                $age, $sex, $blood_type, $civil_status, $religious_affiliation, $citizenship, $no_of_siblings,
                 $house, $barangay, $city, $district, $zip_code, $personal_number, $personal_email, $landline_number,
                 $guardian_first_name, $guardian_middle_name, $guardian_last_name, $guardian_extension_name,
                 $guardian_age, $guardian_sex, $guardian_relationship, $guardian_address, $guardian_contact_number, $guardian_email,
-                $grade12_school, $grade12_period, $grade11_school, $grade11_period, $grade10_school, $grade10_period,
-                $grade9_school, $grade9_period, $grade8_school, $grade8_period, $grade7_school, $grade7_period,
-                $college_offered, $course_offered, $profile_photo['filename'], $student_signature['filename'], $guardian_signature['filename']
+                $grade12_school, $grade12_period, $grade12_gwa, $grade11_school, $grade11_period, $grade11_gwa,
+                $grade10_school, $grade10_period, $grade9_school, $grade9_period,
+                $grade8_school, $grade8_period, $grade7_school, $grade7_period,
+                $college_offered, $course_offered, $course_1, $course_2,
+                $profile_photo['filename'] ?? '', $student_signature['filename'] ?? '', $guardian_signature['filename'] ?? ''
             );
         
             if ($stmt->execute()) {
