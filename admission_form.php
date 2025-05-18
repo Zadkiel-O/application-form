@@ -76,10 +76,10 @@
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">LAST NAME</label>
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">MIDDLE NAME</label>
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">EXTENSION NAME</label>
-                            <input type="text" name="first_name"  class="p-1.5 border border-black w-full box-border">
-                            <input type="text" name="last_name"  class="p-1.5 border border-black w-full box-border">
-                            <input type="text" name="middle_name" class="p-1.5 border border-black w-full box-border">
-                            <input type="text" name="extension_name" class="p-1.5 border border-black w-full box-border">
+                <input type="text" name="first_name" maxlength="50" required class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="last_name" maxlength="50" required class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="middle_name" maxlength="50" class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="extension_name" maxlength="10" class="p-1.5 border border-black w-full box-border">
                         </div>
                         <div class="bg-section h-5"></div>
 
@@ -120,9 +120,17 @@
                         </div>
                     </div>
                     <div class="w-48 h-48 border-2 border-dashed border-black text-center flex flex-col justify-center items-center text-black font-bold bg-white mt-1 mx-3 flex-shrink-0 relative">
-                        <div>Passport Size<br>1.8 inch x 1.4 inch</div>
-                        <label for="upload-photo" class="bg-section text-white p-2 rounded cursor-pointer text-sm mt-2.5 hover:bg-gray-800">Choose File</label>
-                        <input type="file" id="upload-photo" name="photo" accept="image/*" class="hidden">
+                        <img id="photo-preview" class="hidden max-w-full max-h-full object-contain absolute inset-0">
+                        <div id="photo-placeholder">
+                            <div>Passport Size<br>1.8 inch x 1.4 inch</div>
+                            <label for="upload-photo" class="bg-section text-white p-2 rounded cursor-pointer text-sm mt-2.5 hover:bg-gray-800">Choose File</label>
+                        </div>
+                        <div id="photo-success" class="hidden absolute top-2 right-2 text-green-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <input type="file" id="upload-photo" name="photo" accept="image/*" class="hidden" onchange="handleImageUpload(this, 'photo-preview', 'photo-placeholder', 'photo-success')">
                     </div>
                 </div>
 
@@ -150,7 +158,7 @@
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">LANDLINE NUMBER</label>
                             <input type="number" name="personal_number" min="0"  class="p-1.5 border border-black w-full box-border">
                             <input type="email" name="personal_email"  class="p-1.5 border border-black w-full box-border">
-                            <input type="number" name="landline_number" min="0" class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="landline_number" pattern="^$|^\(\d{2}\)\s?\d{4}[\s-]?\d{4}$" title="Please enter a valid landline number format like (02) 1234-5678 or leave it empty" class="p-1.5 border border-black w-full box-border">
                         </div>
                         <div class="bg-section h-5"></div>
                     </div>
@@ -212,14 +220,22 @@
                         
                         <div class="grid grid-cols-4">
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 12</label>
-                            <input type="text" name="grade12_school"  class="p-1.5 border border-black w-full box-border col-span-2">
-                            <input type="text" name="grade12_period"  class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="grade12_school" class="p-1.5 border border-black w-full box-border col-span-2">
+                            <input type="text" name="grade12_period" class="p-1.5 border border-black w-full box-border">
+                        </div>
+                        <div class="grid grid-cols-4">
+                            <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 12 GWA</label>
+                            <input type="number" name="grade12_gwa" step="0.01" min="75" max="100" class="p-1.5 border border-black w-full box-border" required>
                         </div>
                         
                         <div class="grid grid-cols-4">
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 11</label>
-                            <input type="text" name="grade11_school"  class="p-1.5 border border-black w-full box-border col-span-2">
-                            <input type="text" name="grade11_period"  class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="grade11_school" class="p-1.5 border border-black w-full box-border col-span-2">
+                            <input type="text" name="grade11_period" class="p-1.5 border border-black w-full box-border">
+                        </div>
+                        <div class="grid grid-cols-4">
+                            <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 11 GWA</label>
+                            <input type="number" name="grade11_gwa" step="0.01" min="75" max="100" class="p-1.5 border border-black w-full box-border" required>
                         </div>
                         
                         <div class="grid grid-cols-4">
@@ -253,50 +269,135 @@
                 <div class="bg-section h-5 flex justify-center items-center">
                     <div class="text-white font-bold text-center text-sm uppercase">CHOOSE THE SELECTED COLLEGE AND COURSES</div>
                 </div>
-                
-                <div class="grid grid-cols-11 mt-2">
-                    <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center col-span-2">COLLEGE & COURSE</label>
-                    <div class="col-span-9 flex">
-                        <select name="college_offered"  class="p-1.5 border border-black w-full box-border">
-                            <option value="">Select Course Offered</option>
-                            <option value="College of Technology">College of Technology</option>
-                            <option value="College of Business Administration">College of Business Administration</option>
-                            <option value="College of Education">College of Education</option>
+                  <div class="grid grid-cols-11 mt-2">
+                    <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center col-span-2">SELECT COURSES</label>                    <div class="col-span-9 grid grid-cols-2 gap-4">
+                        <select name="course_1" id="course_1" class="p-1.5 border border-black w-full box-border" required>
+                            <option value="">Select Course 1</option>
+                            <optgroup label="Technology Courses">
+                                <option value="Information Technology (IT)">Information Technology (IT)</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Computer Engineering">Computer Engineering</option>
+                                <option value="Information Systems">Information Systems</option>
+                            </optgroup>
+                            <optgroup label="Business Courses">
+                                <option value="Marketing Management">Marketing Management</option>
+                                <option value="Business Administration">Business Administration</option>
+                                <option value="Accounting">Accounting</option>
+                                <option value="Economics">Economics</option>
+                            </optgroup>
+                            <optgroup label="Education Courses">
+                                <option value="Special Education (SPED)">Special Education (SPED)</option>
+                                <option value="Elementary Education">Elementary Education</option>
+                                <option value="Secondary Education">Secondary Education</option>
+                                <option value="Early Childhood Education">Early Childhood Education</option>
+                            </optgroup>
                         </select>
-                        <select name="course_offered"  class="p-1.5 border border-black w-full box-border">
-                            <option value="">Select Course Offered</option>
-                            <option value="Information Technology (IT)">Information Technology (IT)</option>
-                            <option value="Accountancy">Accountancy</option>
-                            <option value="Elementary Education (ELED)">Elementary Education (ELED)</option>
-                            <option value="Engineering">Engineering</option>
-                            <option value="Financial Management">Financial Management</option>
-                            <option value="Secondary Education (SEED)">Secondary Education (SEED)</option>
-                            <option value="Computer Science (CS)">Computer Science (CS)</option>
-                            <option value="Marketing Management">Marketing Management</option>
-                            <option value="Special Education (SPED)">Special Education (SPED)</option>
+                        <select name="course_2" id="course_2" class="p-1.5 border border-black w-full box-border" required>
+                            <option value="">Select Course 2</option>
+                            <optgroup label="Technology Courses">
+                                <option value="Information Technology (IT)">Information Technology (IT)</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Computer Engineering">Computer Engineering</option>
+                                <option value="Information Systems">Information Systems</option>
+                            </optgroup>
+                            <optgroup label="Business Courses">
+                                <option value="Marketing Management">Marketing Management</option>
+                                <option value="Business Administration">Business Administration</option>
+                                <option value="Accounting">Accounting</option>
+                                <option value="Economics">Economics</option>
+                            </optgroup>
+                            <optgroup label="Education Courses">
+                                <option value="Special Education (SPED)">Special Education (SPED)</option>
+                                <option value="Elementary Education">Elementary Education</option>
+                                <option value="Secondary Education">Secondary Education</option>
+                                <option value="Early Childhood Education">Early Childhood Education</option>
+                            </optgroup>
                         </select>
                     </div>
                 </div>
 
-                <div class="bg-section text-white font-bold p-2 uppercase mt-4">COURSE OFFERED</div>
+                <div class="bg-section text-white font-bold p-2 uppercase mt-4">AVAILABLE COURSES</div>
                 <div class="flex justify-between items-start">
                     <div class="flex-grow">
-                        <div class="grid grid-cols-3">
-                            <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">COLLEGE OF TECHNOLOGY</label>
-                            <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">COLLEGE OF BUSINESS ADMINISTRATION</label>
-                            <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">COLLEGE OF EDUCATION</label>
-                            
-                            <label class="p-1 font-bold text-sm text-black bg-white border border-black flex items-center">Information Technology (IT)</label>
-                            <label class="p-1 font-bold text-sm text-black bg-white border border-black flex items-center">Accountancy</label>
-                            <label class="p-1 font-bold text-sm text-black bg-white border border-black flex items-center">Elementary Education (ELED)</label>
-                            
-                            <label class="p-1 font-bold text-sm text-black bg-white border border-black flex items-center">Engineering</label>
-                            <label class="p-1 font-bold text-sm text-black bg-white border border-black flex items-center">Financial Management</label>
-                            <label class="p-1 font-bold text-sm text-black bg-white border border-black flex items-center">Secondary Education (SEED)</label>
-                            
-                            <label class="p-1 font-bold text-sm text-black bg-white border border-black flex items-center">Computer Science (CS)</label>
-                            <label class="p-1 font-bold text-sm text-black bg-white border border-black flex items-center">Marketing Management</label>
-                            <label class="p-1 font-bold text-sm text-black bg-white border border-black flex items-center">Special Education (SPED)</label>
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="flex flex-col gap-2">
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center justify-center">Technology Courses</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Information Technology (IT)</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Computer Science</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Computer Engineering</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Information Systems</label>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center justify-center">Business Courses</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Marketing Management</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Business Administration</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Accounting</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Economics</label>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center justify-center">Education Courses</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Special Education (SPED)</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Elementary Education</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Secondary Education</label>
+                                <label class="p-1 text-sm text-black bg-white border border-black flex items-center justify-center">Early Childhood Education</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-section text-white font-bold p-2 uppercase mt-4">DATA PRIVACY AND CONSENT DECLARATION</div>
+                <div class="flex justify-between items-start">
+                    <div class="flex-grow p-4">
+                        <div class="bg-white p-4 border border-black rounded">
+                            <h3 class="font-bold mb-2">Consent Notice</h3>
+                            <p class="text-sm mb-4">
+                                I hereby give my consent to TOM YANG COLLEGE to collect, record, organize, update, use, consolidate, and/or process my personal data and my child's/ward's personal data. I understand that my personal information and my child's/ward's personal information is being collected, accessed, used, processed, and stored for the following purposes:
+                                <br><br>
+                                1. Processing of admission application and student registration
+                                <br>
+                                2. Academic-related purposes
+                                <br>
+                                3. Research and statistical purposes
+                                <br>
+                                4. Administrative purposes
+                                <br><br>
+                                I agree to the Terms and Conditions and consent to the collection and processing of my personal information in accordance with the Privacy Policy.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <label class="block mb-2 font-bold">Student's Full Name</label>
+                                <input type="text" name="student_consent_name" required class="p-1.5 border border-black w-full box-border">
+                                <div class="border-2 border-dashed border-black h-32 mt-2 relative">
+                                    <img id="student-signature-preview" class="hidden max-w-full max-h-full object-contain absolute inset-0">
+                                    <input type="file" name="student_signature" accept="image/jpeg,image/png" class="absolute inset-0 opacity-0 cursor-pointer" required id="student-signature-input" onchange="handleImageUpload(this, 'student-signature-preview', 'student-signature-placeholder', 'student-signature-success')">
+                                    <div id="student-signature-placeholder" class="flex items-center justify-center h-full">
+                                        <span class="text-gray-500">Click to upload signature (JPG/PNG)</span>
+                                    </div>
+                                    <div id="student-signature-success" class="hidden absolute top-2 right-2 text-green-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block mb-2 font-bold">Guardian/Parent's Full Name</label>
+                                <input type="text" name="guardian_consent_name" required class="p-1.5 border border-black w-full box-border">
+                                <div class="border-2 border-dashed border-black h-32 mt-2 relative">
+                                    <img id="guardian-signature-preview" class="hidden max-w-full max-h-full object-contain absolute inset-0">
+                                    <input type="file" name="guardian_signature" accept="image/jpeg,image/png" class="absolute inset-0 opacity-0 cursor-pointer" required id="guardian-signature-input" onchange="handleImageUpload(this, 'guardian-signature-preview', 'guardian-signature-placeholder', 'guardian-signature-success')">
+                                    <div id="guardian-signature-placeholder" class="flex items-center justify-center h-full">
+                                        <span class="text-gray-500">Click to upload signature (JPG/PNG)</span>
+                                    </div>
+                                    <div id="guardian-signature-success" class="hidden absolute top-2 right-2 text-green-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -305,12 +406,14 @@
                     <button type="button" onclick="cancelForm()" class="bg-red-500 text-white py-2.5 px-5 border-none cursor-pointer text-base ml-2.5 mb-2.5 mr-2.5 rounded-full hover:opacity-90">Cancel</button>
                     <button type="button" onclick="showPopup()" class="bg-green-500 text-white py-2.5 px-5 border-none cursor-pointer text-base ml-2.5 mb-2.5 mr-2.5 rounded-full hover:opacity-90">Proceed</button> 
                </div>
-            </div>
-            <div id="popup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+            </div>            <div id="popup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96 text-center">
             <h2 class="text-lg font-bold mb-4">Confirmation</h2>
                     <p class="mb-4">Are you sure you want to proceed?</p>
-                    <button type="submit" class="bg-blue-500 text-white py-2 px-5 rounded hover:opacity-90">OK</button>
+                    <div class="flex justify-center gap-4">
+                        <button type="button" onclick="closePopup()" class="bg-red-500 text-white py-2 px-5 rounded hover:opacity-90">Cancel</button>
+                        <button type="submit" class="bg-blue-500 text-white py-2 px-5 rounded hover:opacity-90">OK</button>
+                    </div>
         </div>
     </div>
         </form>
@@ -336,29 +439,118 @@
         'first_name', 'last_name', 'date_of_birth', 'place_of_birth', 
         'age', 'sex', 'civil_status', 'citizenship',
         'house', 'barangay', 'city', 'personal_number', 'personal_email',
-        'guardian_first_name', 'guardian_last_name', 'guardian_age', 
-        'guardian_sex', 'guardian_relationship', 'guardian_address', 
-        'guardian_contact_number', 'college_offered', 'course_offered'
+        'guardian_first_name', 'guardian_last_name', 'guardian_age',        'guardian_sex', 'guardian_relationship', 'guardian_address', 
+        'guardian_contact_number', 'guardian_email', 'course_1', 'course_2',
+        'grade12_gwa', 'grade11_gwa', 'student_consent_name', 'guardian_consent_name',
+        'student_signature', 'guardian_signature'
     ];
     
     let isValid = true;
     let firstInvalidField = null;
-    
+    let errorMessages = [];
+
+    // Maximum character lengths
+    const maxLengths = {
+        first_name: 50,
+        last_name: 50,
+        middle_name: 50,
+        extension_name: 10,
+        place_of_birth: 100,
+        religious_affiliation: 50,
+        house: 100,
+        barangay: 50,
+        city: 50,
+        district: 50,
+        personal_email: 100,
+        guardian_first_name: 50,
+        guardian_last_name: 50,
+        guardian_middle_name: 50,
+        guardian_extension_name: 10,
+        guardian_relationship: 50,
+        guardian_address: 100,
+        guardian_email: 100
+    };
+
+    // Check required fields and max lengths
     requiredFields.forEach(field => {
         const element = document.querySelector(`[name="${field}"]`);
         if (!element.value.trim()) {
             isValid = false;
             element.classList.add('border-red-500');
             if (!firstInvalidField) firstInvalidField = element;
+            errorMessages.push(`${field.replace(/_/g, ' ').toUpperCase()} is required`);
         } else {
             element.classList.remove('border-red-500');
+            
+            // Check max length if specified
+            if (maxLengths[field] && element.value.length > maxLengths[field]) {
+                isValid = false;
+                element.classList.add('border-red-500');
+                if (!firstInvalidField) firstInvalidField = element;
+                errorMessages.push(`${field.replace(/_/g, ' ').toUpperCase()} must not exceed ${maxLengths[field]} characters`);
+            }
         }
     });
-    
+
+    // Email validation function
+    function validateEmail(email) {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return emailRegex.test(email);
+    }
+
+    // Phone number validation function
+    function validatePhoneNumber(phone) {
+        // Philippine phone number format: +63 or 0 followed by 9 digits
+        const phoneRegex = /^(\+63|0)[0-9]{10}$/;
+        return phoneRegex.test(phone);
+    }
+
+    // Validate email addresses
+    const emailFields = ['personal_email', 'guardian_email'];
+    emailFields.forEach(field => {
+        const element = document.querySelector(`[name="${field}"]`);
+        if (element.value.trim() && !validateEmail(element.value.trim())) {
+            isValid = false;
+            element.classList.add('border-red-500');
+            if (!firstInvalidField) firstInvalidField = element;
+            errorMessages.push(`Please enter a valid email address for ${field.replace(/_/g, ' ').toUpperCase()}`);
+        }
+    });
+
+    // Validate phone numbers
+    const phoneFields = ['personal_number', 'guardian_contact_number', 'landline_number'];
+    phoneFields.forEach(field => {
+        const element = document.querySelector(`[name="${field}"]`);
+        if (element.value.trim() && !validatePhoneNumber(element.value.trim())) {
+            isValid = false;
+            element.classList.add('border-red-500');
+            if (!firstInvalidField) firstInvalidField = element;
+            errorMessages.push(`Please enter a valid phone number for ${field.replace(/_/g, ' ').toUpperCase()} (format: 09XXXXXXXXX or +639XXXXXXXXX)`);
+        }
+    });
+
+    // Age validation
+    const ageField = document.querySelector('[name="age"]');
+    if (ageField.value < 16 || ageField.value > 70) {
+        isValid = false;
+        ageField.classList.add('border-red-500');
+        if (!firstInvalidField) firstInvalidField = ageField;
+        errorMessages.push('Age must be between 16 and 70');
+    }
+
+    // Guardian age validation
+    const guardianAgeField = document.querySelector('[name="guardian_age"]');
+    if (guardianAgeField.value < 21 || guardianAgeField.value > 100) {
+        isValid = false;
+        guardianAgeField.classList.add('border-red-500');
+        if (!firstInvalidField) firstInvalidField = guardianAgeField;
+        errorMessages.push('Guardian age must be between 21 and 100');
+    }
+
     if (!isValid) {
         e.preventDefault();
         closePopup();
-        alert('Please fill in all required fields');
+        alert(errorMessages.join('\n'));
         firstInvalidField.focus();
     }
 });
@@ -400,8 +592,10 @@
             guardian_email: "jane.doe@example.com",
             grade12_school: "High School XYZ",
             grade12_period: "2018-2019",
+            grade12_gwa: 90.5,
             grade11_school: "High School XYZ",
             grade11_period: "2017-2018",
+            grade11_gwa: 89.0,
             grade10_school: "High School XYZ",
             grade10_period: "2016-2017",
             grade9_school: "High School XYZ",
@@ -409,9 +603,8 @@
             grade8_school: "High School XYZ",
             grade8_period: "2014-2015",
             grade7_school: "High School XYZ",
-            grade7_period: "2013-2014",
-            college_offered: "College of Technology",
-            course_offered: "Information Technology (IT) ",
+            grade7_period: "2013-2014",            course_1: "Information Technology (IT)",
+            course_2: "Marketing Management",
         };
 
         document.getElementById('fillSampleData').addEventListener('click', function () {
@@ -438,6 +631,89 @@
             }
         });
     });
+    </script>
+
+    <script>
+        // Course selection logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const coursesByCollege = {
+                'College of Technology': ['Information Technology (IT)'],
+                'College of Business Administration': ['Marketing Management'],
+                'College of Education': ['Special Education (SPED)']
+            };
+
+            const collegeSelect = document.getElementById('college_offered');
+            const courseSelect = document.getElementById('course_offered');
+
+            collegeSelect.addEventListener('change', function() {
+                const selectedCollege = this.value;
+                courseSelect.innerHTML = '<option value="">Select Course</option>';
+                
+                if (selectedCollege && coursesByCollege[selectedCollege]) {
+                    coursesByCollege[selectedCollege].forEach(course => {
+                        const option = document.createElement('option');
+                        option.value = course;
+                        option.textContent = course;
+                        courseSelect.appendChild(option);
+                    });
+                }
+            });
+        });
+    </script>
+
+    <script>
+        function handleImageUpload(input, previewId, placeholderId, successId) {
+            const file = input.files[0];
+            if (file) {
+                const preview = document.getElementById(previewId);
+                const placeholder = document.getElementById(placeholderId);
+                const success = document.getElementById(successId);
+                
+                // Check file size (max 2MB)
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('File size must be less than 2MB');
+                    input.value = '';
+                    return;
+                }
+
+                // Check file type
+                if (!file.type.startsWith('image/')) {
+                    alert('Please upload an image file');
+                    input.value = '';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    placeholder.classList.add('hidden');
+                    success.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Initialize file upload handlers
+        document.addEventListener('DOMContentLoaded', function() {
+            // Profile photo handler
+            const photoInput = document.getElementById('upload-photo');
+            photoInput.addEventListener('change', function() {
+                handleImageUpload(this, 'photo-preview', 'photo-placeholder', 'photo-success');
+            });
+
+            // Student signature handler
+            const studentSignatureInput = document.getElementById('student-signature-input');
+            studentSignatureInput.addEventListener('change', function() {
+                handleImageUpload(this, 'student-signature-preview', 'student-signature-placeholder', 'student-signature-success');
+            });
+
+            // Guardian signature handler
+            const guardianSignatureInput = document.getElementById('guardian-signature-input');
+            guardianSignatureInput.addEventListener('change', function() {
+                handleImageUpload(this, 'guardian-signature-preview', 'guardian-signature-placeholder', 'guardian-signature-success');
+            });
+        });
     </script>
 </body>
 </html>

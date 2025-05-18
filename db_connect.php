@@ -21,6 +21,20 @@ if ($conn->query($sql) === FALSE) {
 // Select the database
 $conn->select_db($db_name);
 
+// Add file upload columns if they don't exist
+$alterTableQueries = [
+    "ALTER TABLE applicants ADD COLUMN IF NOT EXISTS profile_photo VARCHAR(255)",
+    "ALTER TABLE applicants ADD COLUMN IF NOT EXISTS student_signature VARCHAR(255)",
+    "ALTER TABLE applicants ADD COLUMN IF NOT EXISTS guardian_signature VARCHAR(255)"
+];
+
+foreach ($alterTableQueries as $alterQuery) {
+    if ($conn->query($alterQuery) === FALSE) {
+        // Log the error but don't die, as the column might already exist
+        error_log("Error executing query: " . $conn->error);
+    }
+}
+
 // Create applicants table if it doesn't exist
 $sql = "CREATE TABLE IF NOT EXISTS applicants (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
@@ -34,6 +48,9 @@ $sql = "CREATE TABLE IF NOT EXISTS applicants (
     sex VARCHAR(10) NOT NULL,
     blood_type VARCHAR(5),
     civil_status VARCHAR(20) NOT NULL,
+    profile_photo VARCHAR(255),
+    student_signature VARCHAR(255),
+    guardian_signature VARCHAR(255),
     religious_affiliation VARCHAR(50),
     citizenship VARCHAR(50) NOT NULL,
     no_of_siblings INT(3),

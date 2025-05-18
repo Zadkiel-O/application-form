@@ -8,7 +8,55 @@ $response = [
     'redirect' => 'success.php'
 ];
 
+// Function to handle file upload
+function handleFileUpload($file, $uploadDir = 'uploads/') {
+    if (!$file || $file['error'] !== UPLOAD_ERR_OK) {
+        return ['success' => false, 'message' => 'File upload failed', 'filename' => ''];
+    }
+
+    // Validate file type
+    $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!in_array($file['type'], $allowedTypes)) {
+        return ['success' => false, 'message' => 'Invalid file type. Only JPG, JPEG, and PNG are allowed.', 'filename' => ''];
+    }
+
+    // Validate file size (max 2MB)
+    if ($file['size'] > 2 * 1024 * 1024) {
+        return ['success' => false, 'message' => 'File size must be less than 2MB', 'filename' => ''];
+    }
+
+    // Create unique filename
+    $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+    $uniqueName = uniqid() . '.' . $extension;
+    $targetPath = $uploadDir . $uniqueName;
+
+    // Create uploads directory if it doesn't exist
+    if (!file_exists($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
+    }
+
+    // Move uploaded file
+    if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+        return ['success' => true, 'message' => 'File uploaded successfully', 'filename' => $uniqueName];
+    }
+
+    return ['success' => false, 'message' => 'Failed to move uploaded file', 'filename' => ''];
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Handle file uploads
+    $profile_photo = isset($_FILES['photo']) ? handleFileUpload($_FILES['photo']) : ['success' => true, 'filename' => ''];
+    $student_signature = isset($_FILES['student_signature']) ? handleFileUpload($_FILES['student_signature']) : ['success' => true, 'filename' => ''];
+    $guardian_signature = isset($_FILES['guardian_signature']) ? handleFileUpload($_FILES['guardian_signature']) : ['success' => true, 'filename' => ''];
+
+    // Check for file upload errors
+    if (!$profile_photo['success'] || !$student_signature['success'] || !$guardian_signature['success']) {
+        $errors[] = "File upload error: " . 
+                   ($profile_photo['success'] ? '' : "Profile photo: {$profile_photo['message']} ") .
+                   ($student_signature['success'] ? '' : "Student signature: {$student_signature['message']} ") .
+                   ($guardian_signature['success'] ? '' : "Guardian signature: {$guardian_signature['message']}");
+    }
+
     // Retrieve data from the session
     if (isset($_SESSION['form_data'])) {
         $_POST = $_SESSION['form_data'];  // Use session data
@@ -250,39 +298,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     $course_offered = $course_offered_result["value"];
     
-    // Process photo upload
-    $photo = '';
-    if(isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
-        $allowed = ['jpg', 'jpeg', 'png'];
-        $filename = $_FILES['photo']['name'];
-        $filetype = pathinfo($filename, PATHINFO_EXTENSION);
-        
-        if(in_array(strtolower($filetype), $allowed)) {
-            $new_filename = uniqid() . '.' . $filetype;
-            $upload_dir = 'uploads/';
-            
-            // Create upload directory with proper permissions if it doesn't exist
-            if(!is_dir($upload_dir)) {
-                if(!mkdir($upload_dir, 0755, true)) {
-                    $errors[] = "Failed to create upload directory.";
-                }
-            } elseif(!is_writable($upload_dir)) {
-                chmod($upload_dir, 0755);
-                if(!is_writable($upload_dir)) {
-                    $errors[] = "Upload directory is not writable.";
-                }
-            }
-            
-            if(empty($errors) && move_uploaded_file($_FILES['photo']['tmp_name'], $upload_dir . $new_filename)) {
-                $photo = $upload_dir . $new_filename;
-            } else {
-                $errors[] = "Failed to upload photo.";
-            }
-        } else {
-            $errors[] = "Invalid file type. Only JPG, JPEG, and PNG files are allowed.";
-        }
-    }
-    
     // If there are validation errors, return them
     if (!empty($errors)) {
         $response['message'] = "Validation errors: " . implode(", ", $errors);
@@ -296,17 +311,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             guardian_age, guardian_sex, guardian_relationship, guardian_address, guardian_contact_number, guardian_email,
             grade12_school, grade12_period, grade11_school, grade11_period, grade10_school, grade10_period,
             grade9_school, grade9_period, grade8_school, grade8_period, grade7_school, grade7_period,
-            college_offered, course_offered
+            college_offered, course_offered, profile_photo, student_signature, guardian_signature
         ) VALUES (
             ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
         )";
         
         $stmt = $conn->prepare($sql);
         
         if ($stmt) {
             $stmt->bind_param(
-                "ssssssiiiissssssssssssssssssssssssssssssssssss", 
+                "ssssssiiiissssssssssssssssssssssssssssssssssssss", 
                 $first_name, $last_name, $middle_name, $extension_name, $date_of_birth, $place_of_birth,
                 $age, $sex, $blood_type, $civil_status, $religious_affiliation, $citizenship, $no_of_siblings, $photo,
                 $house, $barangay, $city, $district, $zip_code, $personal_number, $personal_email, $landline_number,
@@ -314,7 +329,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $guardian_age, $guardian_sex, $guardian_relationship, $guardian_address, $guardian_contact_number, $guardian_email,
                 $grade12_school, $grade12_period, $grade11_school, $grade11_period, $grade10_school, $grade10_period,
                 $grade9_school, $grade9_period, $grade8_school, $grade8_period, $grade7_school, $grade7_period,
-                $college_offered, $course_offered
+                $college_offered, $course_offered, $profile_photo['filename'], $student_signature['filename'], $guardian_signature['filename']
             );
         
             if ($stmt->execute()) {
