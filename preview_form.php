@@ -121,7 +121,7 @@ if (!empty($_FILES)) {
                 <?php endforeach; ?>
                 <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">Confirm & Submit</button>
             </form>
-            <form action="admission_form.php" method="POST" enctype="multipart/form-data">
+            <form action="edit_applicant.php" method="POST" enctype="multipart/form-data">
                 <?php foreach ($_SESSION['form_data'] as $key => $value): ?>
                 <input type="hidden" name="<?php echo $key; ?>" value="<?php echo htmlspecialchars($value); ?>">
                 <?php endforeach; ?>

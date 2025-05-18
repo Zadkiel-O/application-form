@@ -20,6 +20,7 @@ if ($conn->query($sql) === FALSE) {
 
 // Select the database
 $conn->select_db($db_name);
+$conn->select_db($db_name);
 
 // Add file upload columns if they don't exist
 $alterTableQueries = [

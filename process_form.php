@@ -1,6 +1,5 @@
 <?php
 session_start(); // **VERY IMPORTANT: Start the session**
-$conn = require_once 'db_connect.php';
 
 $response = [
     'success' => false,
@@ -43,348 +42,85 @@ function handleFileUpload($file, $uploadDir = 'uploads/') {
     return ['success' => false, 'message' => 'Failed to move uploaded file', 'filename' => ''];
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Handle file uploads
-    $profile_photo = isset($_FILES['photo']) ? handleFileUpload($_FILES['photo']) : ['success' => true, 'filename' => ''];
-    $student_signature = isset($_FILES['student_signature']) ? handleFileUpload($_FILES['student_signature']) : ['success' => true, 'filename' => ''];
-    $guardian_signature = isset($_FILES['guardian_signature']) ? handleFileUpload($_FILES['guardian_signature']) : ['success' => true, 'filename' => ''];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {    // Retrieve data from the session or POST data
+    $formData = isset($_SESSION['form_data']) ? $_SESSION['form_data'] : $_POST;
+    
+    // Get database connection
+    $conn = require_once 'db_connect.php';
+    
+    if ($conn->connect_error) {
+        $_SESSION['error_message'] = "Connection failed: " . $conn->connect_error;
+        header("Location: admission_form.php");
+        exit();
+    }
+    
+    // Select the database again to ensure we're using it
+    $conn->select_db("college_admissions");
+      // Debug form data
+    error_log("Form Data: " . print_r($formData, true));
 
-    // Check for file upload errors
-    if (!$profile_photo['success'] || !$student_signature['success'] || !$guardian_signature['success']) {
-        $errors[] = "File upload error: " . 
-                   ($profile_photo['success'] ? '' : "Profile photo: {$profile_photo['message']} ") .
-                   ($student_signature['success'] ? '' : "Student signature: {$student_signature['message']} ") .
-                   ($guardian_signature['success'] ? '' : "Guardian signature: {$guardian_signature['message']}");
-    }
+    // Count our parameters to ensure they match
+    $fields = [
+        'first_name', 'last_name', 'middle_name', 'extension_name', 'date_of_birth', 'place_of_birth',
+        'age', 'sex', 'blood_type', 'civil_status', 'religious_affiliation', 'citizenship', 'no_of_siblings',
+        'house', 'barangay', 'city', 'district', 'zip_code', 'personal_number', 'personal_email', 'landline_number',
+        'guardian_first_name', 'guardian_middle_name', 'guardian_last_name', 'guardian_extension_name',
+        'guardian_age', 'guardian_sex', 'guardian_relationship', 'guardian_address', 'guardian_contact_number',
+        'guardian_email', 'grade12_school', 'grade12_period', 'grade12_gwa', 'grade11_school', 'grade11_period',
+        'grade11_gwa', 'grade10_school', 'grade10_period', 'grade9_school', 'grade9_period', 'grade8_school',
+        'grade8_period', 'grade7_school', 'grade7_period', 'college_offered', 'course_offered', 'course_1',
+        'course_2', 'profile_photo', 'student_signature', 'guardian_signature'
+    ];
+    
+    // Create the SQL query dynamically
+    $columns = implode(", ", $fields);
+    $placeholders = str_repeat("?,", count($fields) - 1) . "?";
+    $sql = "INSERT INTO applicants ($columns) VALUES ($placeholders)";
 
-    // Retrieve data from the session
-    if (isset($_SESSION['form_data'])) {
-        $_POST = $_SESSION['form_data'];  // Use session data
-        unset($_SESSION['form_data']);    // Clear session data after use
-    } else {
-        $errors[] = "No form data found in session.";
-    }
+    $stmt = $conn->prepare($sql);
     
-    // Validation function
-    function validate_input($conn, $data, $field_name, $required = true) {
-        if ($required && empty($data)) {
-            return ["success" => false, "message" => "Field '$field_name' is required.", "value" => ""];
-        }
+    if ($stmt) {
+        // Create references for bind_param
+        $types = str_repeat("s", count($fields)); // Default all to string
+        $params = array($types);
         
-        // Sanitize data
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-        $sanitized = $conn->real_escape_string($data);
-        return ["success" => true, "message" => "", "value" => $sanitized];
-    }
-    
-    // Validation errors array
-    $errors = [];
-    
-    // Validate personal information
-    $first_name_result = validate_input($conn, $_POST['first_name'] ?? '', 'First Name');
-    if (!$first_name_result["success"]) {
-        $errors[] = $first_name_result["message"];
-    }
-    $first_name = $first_name_result["value"];
-
-    $last_name_result = validate_input($conn, $_POST['last_name'] ?? '', 'Last Name');
-    if (!$last_name_result["success"]) {
-        $errors[] = $last_name_result["message"];
-    }
-    $last_name = $last_name_result["value"];
-    
-    $middle_name_result = validate_input($conn, $_POST['middle_name'] ?? '', 'Middle Name', false);
-    $middle_name = $middle_name_result["value"];
-    
-    $extension_name_result = validate_input($conn, $_POST['extension_name'] ?? '', 'Extension Name', false);
-    $extension_name = $extension_name_result["value"];
-    
-    $date_of_birth_result = validate_input($conn, $_POST['date_of_birth'] ?? '', 'Date of Birth');
-    if (!$date_of_birth_result["success"]) {
-        $errors[] = $date_of_birth_result["message"];
-    }
-    $date_of_birth = $date_of_birth_result["value"];
-    
-    $place_of_birth_result = validate_input($conn, $_POST['place_of_birth'] ?? '', 'Place of Birth');
-    if (!$place_of_birth_result["success"]) {
-        $errors[] = $place_of_birth_result["message"];
-    }
-    $place_of_birth = $place_of_birth_result["value"];
-    
-    $age = filter_var($_POST['age'] ?? '', FILTER_VALIDATE_INT);
-    if ($age === false || $age < 1) {
-        $errors[] = "Age must be a valid number.";
-    }
-    
-    $sex_result = validate_input($conn, $_POST['sex'] ?? '', 'Sex');
-    if (!$sex_result["success"]) {
-        $errors[] = $sex_result["message"];
-    }
-    $sex = $sex_result["value"];
-    
-    $blood_type_result = validate_input($conn, $_POST['blood_type'] ?? '', 'Blood Type', false);
-    $blood_type = $blood_type_result["value"];
-    
-    $civil_status_result = validate_input($conn, $_POST['civil_status'] ?? '', 'Civil Status');
-    if (!$civil_status_result["success"]) {
-        $errors[] = $civil_status_result["message"];
-    }
-    $civil_status = $civil_status_result["value"];
-    
-    $religious_affiliation_result = validate_input($conn, $_POST['religious_affiliation'] ?? '', 'Religious Affiliation', false);
-    $religious_affiliation = $religious_affiliation_result["value"];
-    
-    $citizenship_result = validate_input($conn, $_POST['citizenship'] ?? '', 'Citizenship');
-    if (!$citizenship_result["success"]) {
-        $errors[] = $citizenship_result["message"];
-    }
-    $citizenship = $citizenship_result["value"];
-    
-    $no_of_siblings = filter_var($_POST['no_of_siblings'] ?? '', FILTER_VALIDATE_INT);
-    if ($no_of_siblings === false) {
-        $no_of_siblings = 0;
-    }
-    
-    // Validate address information
-    $house_result = validate_input($conn, $_POST['house'] ?? '', 'House/Address');
-    if (!$house_result["success"]) {
-        $errors[] = $house_result["message"];
-    }
-    $house = $house_result["value"];
-    
-    $barangay_result = validate_input($conn, $_POST['barangay'] ?? '', 'Barangay');
-    if (!$barangay_result["success"]) {
-        $errors[] = $barangay_result["message"];
-    }
-    $barangay = $barangay_result["value"];
-    
-    $city_result = validate_input($conn, $_POST['city'] ?? '', 'City/Municipality');
-    if (!$city_result["success"]) {
-        $errors[] = $city_result["message"];
-    }
-    $city = $city_result["value"];
-    
-    $district_result = validate_input($conn, $_POST['district'] ?? '', 'District', false);
-    $district = $district_result["value"];
-    
-    $zip_code_result = validate_input($conn, $_POST['zip_code'] ?? '', 'Zip Code', false);
-    $zip_code = $zip_code_result["value"];
-    
-    $personal_number_result = validate_input($conn, $_POST['personal_number'] ?? '', 'Personal Number');
-    if (!$personal_number_result["success"]) {
-        $errors[] = $personal_number_result["message"];
-    }
-    $personal_number = $personal_number_result["value"];
-    
-    $personal_email_result = validate_input($conn, $_POST['personal_email'] ?? '', 'Personal Email');
-    if (!$personal_email_result["success"]) {
-        $errors[] = $personal_email_result["message"];
-    }
-    $personal_email = $personal_email_result["value"];
-    
-    // Validate email format
-    if (!filter_var($personal_email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Invalid email format for Personal Email.";
-    }
-    
-    $landline_number_result = validate_input($conn, $_POST['landline_number'] ?? '', 'Landline Number', false);
-    $landline_number = $landline_number_result["value"];
-    
-    // Validate guardian information
-    $guardian_first_name_result = validate_input($conn, $_POST['guardian_first_name'] ?? '', 'Guardian First Name');
-    if (!$guardian_first_name_result["success"]) {
-        $errors[] = $guardian_first_name_result["message"];
-    }
-    $guardian_first_name = $guardian_first_name_result["value"];
-    
-    $guardian_middle_name_result = validate_input($conn, $_POST['guardian_middle_name'] ?? '', 'Guardian Middle Name', false);
-    $guardian_middle_name = $guardian_middle_name_result["value"];
-    
-    $guardian_last_name_result = validate_input($conn, $_POST['guardian_last_name'] ?? '', 'Guardian Last Name');
-    if (!$guardian_last_name_result["success"]) {
-        $errors[] = $guardian_last_name_result["message"];
-    }
-    $guardian_last_name = $guardian_last_name_result["value"];
-    
-    $guardian_extension_name_result = validate_input($conn, $_POST['guardian_extension_name'] ?? '', 'Guardian Extension Name', false);
-    $guardian_extension_name = $guardian_extension_name_result["value"];
-    
-    $guardian_age = filter_var($_POST['guardian_age'] ?? '', FILTER_VALIDATE_INT);
-    if ($guardian_age === false || $guardian_age < 1) {
-        $errors[] = "Guardian Age must be a valid number.";
-    }
-    
-    $guardian_sex_result = validate_input($conn, $_POST['guardian_sex'] ?? '', 'Guardian Sex');
-    if (!$guardian_sex_result["success"]) {
-        $errors[] = $guardian_sex_result["message"];
-    }
-    $guardian_sex = $guardian_sex_result["value"];
-    
-    $guardian_relationship_result = validate_input($conn, $_POST['guardian_relationship'] ?? '', 'Guardian Relationship');
-    if (!$guardian_relationship_result["success"]) {
-        $errors[] = $guardian_relationship_result["message"];
-    }
-    $guardian_relationship = $guardian_relationship_result["value"];
-    
-    $guardian_address_result = validate_input($conn, $_POST['guardian_address'] ?? '', 'Guardian Address');
-    if (!$guardian_address_result["success"]) {
-        $errors[] = $guardian_address_result["message"];
-    }
-    $guardian_address = $guardian_address_result["value"];
-    
-    $guardian_contact_number_result = validate_input($conn, $_POST['guardian_contact_number'] ?? '', 'Guardian Contact Number');
-    if (!$guardian_contact_number_result["success"]) {
-        $errors[] = $guardian_contact_number_result["message"];
-    }
-    $guardian_contact_number = $guardian_contact_number_result["value"];
-    
-    $guardian_email_result = validate_input($conn, $_POST['guardian_email'] ?? '', 'Guardian Email', false);
-    $guardian_email = $guardian_email_result["value"];
-    
-    // Validate guardian email format if provided
-    if (!empty($guardian_email) && !filter_var($guardian_email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Invalid email format for Guardian Email.";
-    }
-    
-    // Validate educational information
-    $grade12_school_result = validate_input($conn, $_POST['grade12_school'] ?? '', 'Grade 12 School', false);
-    $grade12_school = $grade12_school_result["value"];
-    
-    $grade12_period_result = validate_input($conn, $_POST['grade12_period'] ?? '', 'Grade 12 Period', false);
-    $grade12_period = $grade12_period_result["value"];
-    
-    $grade11_school_result = validate_input($conn, $_POST['grade11_school'] ?? '', 'Grade 11 School', false);
-    $grade11_school = $grade11_school_result["value"];
-    
-    $grade11_period_result = validate_input($conn, $_POST['grade11_period'] ?? '', 'Grade 11 Period', false);
-    $grade11_period = $grade11_period_result["value"];
-    
-    $grade10_school_result = validate_input($conn, $_POST['grade10_school'] ?? '', 'Grade 10 School', false);
-    $grade10_school = $grade10_school_result["value"];
-    
-    $grade10_period_result = validate_input($conn, $_POST['grade10_period'] ?? '', 'Grade 10 Period', false);
-    $grade10_period = $grade10_period_result["value"];
-    
-    $grade9_school_result = validate_input($conn, $_POST['grade9_school'] ?? '', 'Grade 9 School', false);
-    $grade9_school = $grade9_school_result["value"];
-    
-    $grade9_period_result = validate_input($conn, $_POST['grade9_period'] ?? '', 'Grade 9 Period', false);
-    $grade9_period = $grade9_period_result["value"];
-    
-    $grade8_school_result = validate_input($conn, $_POST['grade8_school'] ?? '', 'Grade 8 School', false);
-    $grade8_school = $grade8_school_result["value"];
-    
-    $grade8_period_result = validate_input($conn, $_POST['grade8_period'] ?? '', 'Grade 8 Period', false);
-    $grade8_period = $grade8_period_result["value"];
-    
-    $grade7_school_result = validate_input($conn, $_POST['grade7_school'] ?? '', 'Grade 7 School', false);
-    $grade7_school = $grade7_school_result["value"];
-    
-    $grade7_period_result = validate_input($conn, $_POST['grade7_period'] ?? '', 'Grade 7 Period', false);
-    $grade7_period = $grade7_period_result["value"];
-    
-    // Validate course information
-    $college_offered_result = validate_input($conn, $_POST['college_offered'] ?? '', 'College');
-    if (!$college_offered_result["success"]) {
-        $errors[] = $college_offered_result["message"];
-    }
-    $college_offered = $college_offered_result["value"];
-    
-    $course_offered_result = validate_input($conn, $_POST['course_offered'] ?? '', 'Course');
-    if (!$course_offered_result["success"]) {
-        $errors[] = $course_offered_result["message"];
-    }
-    $course_offered = $course_offered_result["value"];
-    
-    // Validate GWA information
-    $grade12_gwa = $_POST['grade12_gwa'] ? floatval($_POST['grade12_gwa']) : null;
-    $grade11_gwa = $_POST['grade11_gwa'] ? floatval($_POST['grade11_gwa']) : null;
-    
-    // Validate course choices
-    $course_1_result = validate_input($conn, $_POST['course_1'] ?? '', 'Course 1');
-    if (!$course_1_result["success"]) {
-        $errors[] = $course_1_result["message"];
-    }
-    $course_1 = $course_1_result["value"];
-    
-    $course_2_result = validate_input($conn, $_POST['course_2'] ?? '', 'Course 2');
-    if (!$course_2_result["success"]) {
-        $errors[] = $course_2_result["message"];
-    }
-    $course_2 = $course_2_result["value"];
-    
-    // If there are validation errors, return them
-    if (!empty($errors)) {
-        $response['message'] = "Validation errors: " . implode(", ", $errors);
-    } else {
-        // Insert data into database
-        $sql = "INSERT INTO applicants (
-            first_name, last_name, middle_name, extension_name, date_of_birth, place_of_birth, 
-            age, sex, blood_type, civil_status, religious_affiliation, citizenship, no_of_siblings,
-            house, barangay, city, district, zip_code, personal_number, personal_email, landline_number,
-            guardian_first_name, guardian_middle_name, guardian_last_name, guardian_extension_name, 
-            guardian_age, guardian_sex, guardian_relationship, guardian_address, guardian_contact_number, guardian_email,
-            grade12_school, grade12_period, grade12_gwa, grade11_school, grade11_period, grade11_gwa,
-            grade10_school, grade10_period, grade9_school, grade9_period,
-            grade8_school, grade8_period, grade7_school, grade7_period,
-            college_offered, course_offered, course_1, course_2, status,
-            profile_photo, student_signature, guardian_signature
-        ) VALUES (
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending',
-            ?, ?, ?
-        )";
-        
-        $stmt = $conn->prepare($sql);
-        
-        if ($stmt) {            $stmt->bind_param(
-                "ssssssiisssssissssssssssissssssssddssssssssssssssssss", 
-                $first_name, $last_name, $middle_name, $extension_name, $date_of_birth, $place_of_birth,
-                $age, $sex, $blood_type, $civil_status, $religious_affiliation, $citizenship, $no_of_siblings,
-                $house, $barangay, $city, $district, $zip_code, $personal_number, $personal_email, $landline_number,
-                $guardian_first_name, $guardian_middle_name, $guardian_last_name, $guardian_extension_name,
-                $guardian_age, $guardian_sex, $guardian_relationship, $guardian_address, $guardian_contact_number, $guardian_email,
-                $grade12_school, $grade12_period, $grade12_gwa, $grade11_school, $grade11_period, $grade11_gwa,
-                $grade10_school, $grade10_period, $grade9_school, $grade9_period,
-                $grade8_school, $grade8_period, $grade7_school, $grade7_period,
-                $college_offered, $course_offered, $course_1, $course_2,
-                $profile_photo['filename'] ?? '', $student_signature['filename'] ?? '', $guardian_signature['filename'] ?? ''
-            );
-        
-            if ($stmt->execute()) {
-                $response['success'] = true;
-                $response['message'] = "Application submitted successfully!";
-            } else {
-                $response['message'] = "Execution Error: " . $stmt->error;
+        // Create references for each parameter
+        foreach ($fields as $field) {
+            if ($field === 'age' || $field === 'guardian_age' || $field === 'no_of_siblings') {
+                $types[count($params)-1] = 'i'; // Integer
+            } elseif ($field === 'grade11_gwa' || $field === 'grade12_gwa') {
+                $types[count($params)-1] = 'd'; // Double
             }
+            
+            // Get the value, using photo if the field is profile_photo
+            $value = ($field === 'profile_photo') ? ($formData['photo'] ?? '') : ($formData[$field] ?? '');
+            $params[] = &$value;
+        }
         
+        // Bind parameters using call_user_func_array
+        call_user_func_array(array($stmt, 'bind_param'), $params);
+
+        // Execute the statement
+        if ($stmt->execute()) {
+            $_SESSION['success_message'] = "Application submitted successfully!";
             $stmt->close();
+            $conn->close();
+            header("Location: success.php");
+            exit();
         } else {
-            $response['message'] = "Preparation Error: " . $conn->error;
-        }
-    }
-    
-    $conn->close();
-    
-    // Return JSON response for AJAX or redirect for form submit
-    if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
-        header('Content-Type: application/json');
-        echo json_encode($response);
-        exit;
-    } else {
-        if($response['success']) {
-            header("Location: " . $response['redirect']);
-            exit;
-        } else {
-            // Store error message in session to display it after redirect
-            session_start();
-            $_SESSION['form_error'] = $response['message'];
+            $_SESSION['error_message'] = "Error submitting application: " . $stmt->error;
+            $stmt->close();
+            $conn->close();
             header("Location: admission_form.php");
-            exit;
+            exit();
         }
+    } else {
+        $_SESSION['error_message'] = "Error preparing statement: " . $conn->error;
+        $conn->close();
+        header("Location: admission_form.php");
+        exit();
     }
+} else {
+    header("Location: admission_form.php");
+    exit();
 }
