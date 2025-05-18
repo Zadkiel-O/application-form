@@ -152,13 +152,12 @@
                             <input type="number" name="zip_code" min="0"  class="p-1.5 border border-black w-full box-border">
                         </div>
 
-                        <div class="grid grid-cols-3">
-                            <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">ACTIVE PERSONAL NUMBER</label>
+                        <div class="grid grid-cols-3">                            <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">ACTIVE PERSONAL NUMBER</label>
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">ACTIVE PERSONAL EMAIL ADDRESS</label>
                             <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">LANDLINE NUMBER</label>
                             <input type="number" name="personal_number" min="0"  class="p-1.5 border border-black w-full box-border">
                             <input type="email" name="personal_email"  class="p-1.5 border border-black w-full box-border">
-                            <input type="text" name="landline_number" pattern="^$|^\(\d{2}\)\s?\d{4}[\s-]?\d{4}$" title="Please enter a valid landline number format like (02) 1234-5678 or leave it empty" class="p-1.5 border border-black w-full box-border">
+                            <input type="text" name="landline_number" pattern="^(N/A|n/a|(\(\d{2}\)\s?\d{4}[\s-]?\d{4}))$" title="Please enter a valid landline number format like (02) 1234-5678 or N/A" class="p-1.5 border border-black w-full box-border">
                         </div>
                         <div class="bg-section h-5"></div>
                     </div>
