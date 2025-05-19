@@ -136,36 +136,59 @@ if (!empty($_FILES)) {
             <div class="overflow-x-auto">
                 <table class="table-auto w-full border-collapse border border-black">
                     <tbody>
-                        <?php foreach ($_SESSION['form_data'] as $key => $value): ?>
-                        <?php if (!in_array($key, ['profile_photo', 'student_signature', 'guardian_signature'])): ?>
-                        <tr class="border-b border-black">
-                            <td class="p-2 font-bold text-black border-r border-black w-1/4"><?php echo ucfirst(str_replace('_', ' ', $key)); ?></td>
-                            <td class="p-2 text-black"><?php echo htmlspecialchars($value); ?></td>
-                        </tr>
-                        <?php endif; ?>
-                        <?php endforeach; ?>
-                          <!-- Display uploaded files -->
                         <?php if (!empty($_SESSION['form_data']['profile_photo'])): ?>
-                        <tr class="border-b border-black">
+                        <tr class="bg-white border-b border-black">
                             <td class="p-2 font-bold text-black border-r border-black w-1/4">Profile Photo</td>
                             <td class="p-2 text-black">
                                 <img src="uploads/<?php echo htmlspecialchars($_SESSION['form_data']['profile_photo']); ?>" alt="Applicant Photo" class="max-w-48 max-h-48">
                             </td>
                         </tr>
                         <?php endif; ?>
+                        <?php foreach ($_SESSION['form_data'] as $key => $value): ?>
+                        <?php if (!in_array($key, ['profile_photo', 'student_signature', 'guardian_signature'])): ?>
+                        <tr class="bg-white border-b border-black">
+                            <td class="p-2 font-bold text-black border-r border-black w-1/4"><?php echo ucfirst(str_replace('_', ' ', $key)); ?></td>
+                            <td class="p-2 text-black"><?php echo htmlspecialchars($value); ?></td>
+                        </tr>
+                        <?php endif; ?>
+                        <?php endforeach; ?>
+                          <!-- Display uploaded files -->
                         
+                    </tbody>
+                </table>
+
+                <table>
+                    <tr>
+                        <td>
+                            <div class="bg-white p-4 border border-black">
+                                <h3 class="font-bold mb-2">Consent Notice</h3>
+                                <p class="text-sm mb-4">
+                                    I hereby give my consent to TOM YANG COLLEGE to collect, record, organize, update, use, consolidate, and/or process my personal data and my personal data. I understand that my personal information and my child's/ward's personal information is being collected, accessed, used, processed, and stored for the following purposes:
+                                    <br><br>
+                                    1. Processing of admission application and student registration
+                                    <br>
+                                    2. Academic-related purposes
+                                    <br>
+                                    3. Research and statistical purposes
+                                    <br>
+                                    4. Administrative purposes
+                                    <br><br>
+                                    I agree to the Terms and Conditions and consent to the collection and processing of my personal information in accordance with the Privacy Policy.
+                                </p>
+                            </div>
+
+                        </td>
+                    </tr>
+                </table>
+                 <table class="bg-white table-auto w-full border-collapse border border-black">
+                    <tbody>
                         <?php if (!empty($_SESSION['form_data']['student_signature'])): ?>
                         <tr class="border-b border-black">
                             <td class="p-2 font-bold text-black border-r border-black w-1/4">Student Signature</td>
-                            <td class="p-2 text-black">
+                            <td class="p-2 text-black border-r border-black w-1/4">
                                 <img src="uploads/<?php echo htmlspecialchars($_SESSION['form_data']['student_signature']); ?>" alt="Student Signature" class="max-w-48 max-h-48">
                             </td>
-                        </tr>
-                        <?php endif; ?>
-                        
-                        <?php if (!empty($_SESSION['form_data']['guardian_signature'])): ?>
-                        <tr class="border-b border-black">
-                            <td class="p-2 font-bold text-black border-r border-black w-1/4">Guardian Signature</td>
+                             <td class="p-2 font-bold text-black border-r border-black w-1/4">Guardian Signature</td>
                             <td class="p-2 text-black">
                                 <img src="uploads/<?php echo htmlspecialchars($_SESSION['form_data']['guardian_signature']); ?>" alt="Guardian Signature" class="max-w-48 max-h-48">
                             </td>

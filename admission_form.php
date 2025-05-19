@@ -68,6 +68,7 @@ if (isset($_GET['cancel']) && $_GET['cancel'] === '1') {
     }
   </script>
   <style>
+    
     @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
     
     #popup {
@@ -450,9 +451,9 @@ if (isset($_GET['cancel']) && $_GET['cancel'] === '1') {
                                         <?php if (!empty($_SESSION['form_data']['student_signature'])): ?>
                                             <img id="student-signature-preview" src="uploads/<?php echo htmlspecialchars($_SESSION['form_data']['student_signature']); ?>" class="max-w-full max-h-full object-contain absolute inset-0">
                                             <div id="student-signature-placeholder" class="hidden flex items-center justify-center h-full">
-                                                <label for="student-signature-input" class="cursor-pointer w-full h-full flex items-center justify-center m-0">
+                                                <label for="student-signature-input" class="bg-black cursor-pointer w-full h-full flex items-center justify-center m-0">
                                                     <span class="text-gray-500">Click to upload signature (JPG/PNG)</span>
-                                                    <input type="file" name="student_signature" accept="image/jpeg,image/png" class="absolute inset-0 opacity-0 z-10" id="student-signature-input" onchange="handleImageUpload(this, 'student-signature-preview', 'student-signature-placeholder', 'student-signature-success', 'delete-student-signature')" style="pointer-events: auto;">
+                                                    <input type="file" name="student_signature" accept="image/jpeg,image/png" class="bg-black absolute inset-0 opacity-0 z-10" id="student-signature-input" onchange="handleImageUpload(this, 'student-signature-preview', 'student-signature-placeholder', 'student-signature-success', 'delete-student-signature')" style=" pointer-events: auto;">
                                                 </label>
                                             </div>
                                         <?php else: ?>
@@ -475,7 +476,7 @@ if (isset($_GET['cancel']) && $_GET['cancel'] === '1') {
                                 <div>
                                     <label class="block mb-2 font-bold">Guardian/Parent's Full Name</label>
                                     <input type="text" name="guardian_consent_name" required class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('guardian_consent_name'); ?>">
-                                                                        <div class="border-2 border-dashed border-black h-32 mt-2 relative">
+                                        <div class="border-2 border-dashed border-black h-32 mt-2 relative">
                                         <?php if (!empty($_SESSION['form_data']['guardian_signature'])): ?>
                                             <img id="guardian-signature-preview" src="uploads/<?php echo htmlspecialchars($_SESSION['form_data']['guardian_signature']); ?>" class="max-w-full max-h-full object-contain absolute inset-0">
                                             <div id="guardian-signature-placeholder" class="hidden flex items-center justify-center h-full">
