@@ -296,45 +296,45 @@ if (isset($_GET['cancel']) && $_GET['cancel'] === '1') {
                             </div>
                             
                             <div class="grid grid-cols-4">
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 12</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 12*</label>
                                 <input type="text" name="grade12_school" class="p-1.5 border border-black w-full box-border col-span-2" value="<?php echo getFormValue('grade12_school'); ?>">
                                 <input type="text" name="grade12_period" class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('grade12_period'); ?>">
                             </div>
                             <div class="grid grid-cols-4">
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 12 GWA</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 12 GWA*</label>
                                 <input type="number" name="grade12_gwa" step="0.01" min="75" max="100" class="p-1.5 border border-black w-full box-border" required value="<?php echo getFormValue('grade12_gwa'); ?>">
                             </div>
                             
                             <div class="grid grid-cols-4">
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 11</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 11*</label>
                                 <input type="text" name="grade11_school" class="p-1.5 border border-black w-full box-border col-span-2" value="<?php echo getFormValue('grade11_school'); ?>">
                                 <input type="text" name="grade11_period" class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('grade11_period'); ?>">
                             </div>
                             <div class="grid grid-cols-4">
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 11 GWA</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 11 GWA*</label>
                                 <input type="number" name="grade11_gwa" step="0.01" min="75" max="100" class="p-1.5 border border-black w-full box-border" required value="<?php echo getFormValue('grade11_gwa'); ?>">
                             </div>
                             
                             <div class="grid grid-cols-4">
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 10</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 10*</label>
                                 <input type="text" name="grade10_school"  class="p-1.5 border border-black w-full box-border col-span-2" value="<?php echo getFormValue('grade10_school'); ?>">
                                 <input type="text" name="grade10_period"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('grade10_period'); ?>">
                             </div>
                             
                             <div class="grid grid-cols-4">
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 9</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 9*</label>
                                 <input type="text" name="grade9_school"  class="p-1.5 border border-black w-full box-border col-span-2" value="<?php echo getFormValue('grade9_school'); ?>">
                                 <input type="text" name="grade9_period"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('grade9_period'); ?>">
                             </div>
                             
                             <div class="grid grid-cols-4">
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 8</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 8*</label>
                                 <input type="text" name="grade8_school"  class="p-1.5 border border-black w-full box-border col-span-2" value="<?php echo getFormValue('grade8_school'); ?>">
                                 <input type="text" name="grade8_period"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('grade8_period'); ?>">
                             </div>
                             
                             <div class="grid grid-cols-4">
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 7</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">GRADE 7*</label>
                                 <input type="text" name="grade7_school"  class="p-1.5 border border-black w-full box-border col-span-2" value="<?php echo getFormValue('grade7_school'); ?>">
                                 <input type="text" name="grade7_period"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('grade7_period'); ?>">
                             </div>
