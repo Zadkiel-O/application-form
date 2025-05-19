@@ -54,24 +54,8 @@ $error_message = isset($_GET['error']) ? "Error deleting applicant." : "";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Applicant Management</title>
+    <title>ADMIN | Applicant Management</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        sidebar: '#B0B0FF',
-                        container: '#B8D0B8',
-                        header: '#7b0c8c7a',
-                        section: '#000059',
-                        cancel: '#FF0004',
-                        proceed: '#00AB42'
-                    }
-                }
-            }
-        }
-    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
     </style>
@@ -94,16 +78,20 @@ $error_message = isset($_GET['error']) ? "Error deleting applicant." : "";
     <aside class="max-sm:w-0 max-sm:px-0 w-20 bg-[linear-gradient(to_bottom,_#6a11cb,_#a044ff)] text-white pt-3 pb-4 flex flex-col gap-4 [transition:width_0.3s_ease] overflow-auto sm:hover:w-72 sm:hover:items-start group">
         <nav class="flex flex-col w-full overflow-auto">
             <div class="text-white no-underline flex items-center whitespace-nowrap overflow-hidden [transition:background_0.3s] rounded-md pt-3 pb-2 font-bold text-xl leading-[1.2]">
-                <img class="ml-4 mr-2 w-12 h-auto max-w-none" src="logo.png" alt="Logo"><span name="sidebar-text" class="opacity-0 [transition:opacity_0.3s_ease,_margin-left_0.3s_ease] ml-0 sm:group-hover:opacity-100 sm:group-hover:ml-1">TOM YANG<br>COLLEGE</span>
+                <img class="ml-4 mr-2 w-12 h-auto max-w-none" src="general-template/assets/core/TomYang-Logo.png" alt="Logo"><span name="sidebar-text" class="opacity-0 [transition:opacity_0.3s_ease,_margin-left_0.3s_ease] ml-0 sm:group-hover:opacity-100 sm:group-hover:ml-1">TOM YANG<br>UNIVERSITY</span>
             </div>
             <div class="mt-3 overflow-y-auto overflow-x-hidden">
-                <!-- Admin Navigation Items -->
-                <div class="mb-2 ml-4 mr-6 text-white no-underline flex items-center font-medium whitespace-nowrap overflow-hidden p-3 [transition:background_0.3s] rounded-md bg-[rgba(0,_0,_0,_0.3)]">
-                    <img class="w-5 [transition:margin_0.3s_ease] sm:group-hover:mr-3 max-w-none filter brightness-0 invert" src="assets/core/Applications-Icon.png" onerror="this.src='user.png'; this.onerror=null;">
-                    <span name="sidebar-text" class="text-base opacity-0 [transition:opacity_0.3s_ease,_margin-left_0.3s_ease] ml-0 sm:group-hover:opacity-100 sm:group-hover:ml-1">Applicant Form</span>
+                <!-- Admin Navigation Buttons -->
+                <div class="mb-2 ml-4 mr-6 text-white no-underline flex items-center font-medium whitespace-nowrap overflow-hidden p-3 bg-[rgba(255,_255,_255,_0.3)] rounded-md">
+                    <img class="w-5 [transition:margin_0.3s_ease] sm:group-hover:mr-3 max-w-none" src="general-template/assets/core/Applications-Icon.png">
+                    <span name="sidebar-text" class="text-base opacity-0 [transition:opacity_0.3s_ease,_margin-left_0.3s_ease] ml-0 sm:group-hover:opacity-100 sm:group-hover:ml-1 font-bold">Applicant Form</span>
                 </div>
+                <a href="admin_dashboard.php" class="mb-2 ml-4 mr-6 text-white no-underline flex items-center font-medium whitespace-nowrap overflow-hidden p-3 [transition:background_0.3s] rounded-md hover:bg-[rgba(0,_0,_0,_0.3)]">
+                    <img class="w-5 [transition:margin_0.3s_ease] sm:group-hover:mr-3 max-w-none" src="general-template/assets/core/Dashboard-Icon.png">
+                    <span name="sidebar-text" class="text-base opacity-0 [transition:opacity_0.3s_ease,_margin-left_0.3s_ease] ml-0 sm:group-hover:opacity-100 sm:group-hover:ml-1">Dashboard</span>
+                </a>
                 <a href="logout.php" class="mb-2 ml-4 mr-6 text-white no-underline flex items-center font-medium whitespace-nowrap overflow-hidden p-3 [transition:background_0.3s] rounded-md hover:bg-[rgba(0,_0,_0,_0.3)]">
-                    <img class="w-5 [transition:margin_0.3s_ease] sm:group-hover:mr-3 max-w-none filter brightness-0 invert" src="assets/core/Logout-Icon.png" onerror="this.src='user.png'; this.onerror=null;">
+                    <img class="w-5 [transition:margin_0.3s_ease] sm:group-hover:mr-3 max-w-none" src="general-template/assets/core/Logout-Icon.png">
                     <span name="sidebar-text" class="text-base opacity-0 [transition:opacity_0.3s_ease,_margin-left_0.3s_ease] ml-0 sm:group-hover:opacity-100 sm:group-hover:ml-1">Logout</span>
                 </a>
             </div>
@@ -114,23 +102,21 @@ $error_message = isset($_GET['error']) ? "Error deleting applicant." : "";
         <!-- Header from template -->
         <header class="bg-[linear-gradient(to_right,_#6a11cb,_#a044ff)] h-24 flex items-center justify-between pr-10 py-3">
             <div class="flex items-center">
-                <button id="menu-button" class="sm:hidden ml-3 p-3 min-w-11 [transition:background_0.3s] rounded-md hover:bg-[rgba(0,_0,_0,_0.3)]">
-                    <img class="h-5 cursor-pointer filter brightness-0 invert" src="assets/core/Menu-Icon.png" alt="Menu" onerror="this.src='user.png'; this.onerror=null;">
-                </button>
+                <button id="menu-button" class="sm:hidden ml-3 p-3 min-w-11 [transition:background_0.3s] rounded-md hover:bg-[rgba(0,_0,_0,_0.3)]"><img class="h-5 cursor-pointer filter brightness-0 invert" src="general-template/assets/core/Menu-Icon.png" alt="Menu"></button>
                 <h1 class="max-sm:ml-3 ml-7 whitespace-nowrap text-ellipsis text-3xl text-white font-bold">Applicant Management</h1>
             </div>
-            <div class="max-sm:hidden flex">
-                <img class="h-5 ml-5 cursor-pointer filter brightness-0 invert" src="assets/core/Phone-Icon.png" alt="Phone" onerror="this.src='phone.png'; this.onerror=null;">
-                <img class="h-5 ml-5 cursor-pointer filter brightness-0 invert" src="assets/core/Notification-Icon.png" alt="Notifications" onerror="this.src='bell.png'; this.onerror=null;">
-                <img class="h-5 ml-5 cursor-pointer filter brightness-0 invert" src="assets/core/Profile-Icon.png" alt="Profile" onerror="this.src='user.png'; this.onerror=null;">
+            <div class="flex">
+                <img class="h-5 ml-5 cursor-pointer filter brightness-0 invert" src="general-template/assets/core/Phone-Icon.png" alt="Phone">
+                <img class="h-5 ml-5 cursor-pointer filter brightness-0 invert" src="general-template/assets/core/Notification-Icon.png" alt="Notifications">
+                <img class="h-5 ml-5 cursor-pointer filter brightness-0 invert" src="general-template/assets/core/Profile-Icon.png" alt="Profile">
             </div>
         </header>
 
         <main class="flex flex-col h-full overflow-auto">
             <div class="bg-white border border-solid border-black rounded-xl rounded-tr-none rounded-br-none m-3 px-6 py-5 overflow-auto">
-                <!-- Search and Filter Form -->
-                <div class="bg-white p-4 rounded-lg mb-4 shadow-md">
-                    <form method="GET" class="flex flex-col md:flex-row gap-4 items-center">
+                <!-- Main content -->
+                <div class="bg-white p-4 rounded-lg mb-4">
+                    <form method="GET" class="flex gap-4 items-center">
                         <div class="flex-1">
                             <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>" 
                                 class="w-full p-2 border border-gray-300 rounded" 
@@ -149,15 +135,14 @@ $error_message = isset($_GET['error']) ? "Error deleting applicant." : "";
                             Filter
                         </button>
                         <?php if ($search || $status_filter): ?>
-                            <a href="admin_page.php" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                            <a href="admin_page_template.php" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
                                 Clear
                             </a>
                         <?php endif; ?>
                     </form>
                 </div>
 
-                <!-- Applicants Table -->
-                <div class="bg-white rounded-lg overflow-hidden shadow-md">
+                <div class="bg-white rounded-lg overflow-x-auto">
                     <table class="w-full border-2 border-black">
                         <thead class="bg-purple-700 text-white">
                             <tr>
@@ -219,15 +204,15 @@ $error_message = isset($_GET['error']) ? "Error deleting applicant." : "";
                                     <td class="border border-black p-2 text-center">
                                         <div class="flex gap-1 justify-center">
                                             <a href="view_applicant.php?id=<?php echo $row["id"]; ?>" 
-                                              class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                                                 View
                                             </a>
                                             <a href="edit_applicant.php?id=<?php echo $row["id"]; ?>" 
-                                              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                                 Edit
                                             </a>
                                             <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded delete-btn" 
-                                                  data-id="<?php echo $row["id"]; ?>">
+                                                    data-id="<?php echo $row["id"]; ?>">
                                                 Delete
                                             </button>
                                         </div>
@@ -247,7 +232,7 @@ $error_message = isset($_GET['error']) ? "Error deleting applicant." : "";
 
         <!-- Footer from template -->
         <div class="bg-white rounded-xl m-3 px-6 py-3 mt-auto">
-            <p class="text-center text-sm text-gray-600">© 2025 Tom Yang College. All rights reserved.</p>
+            <p class="text-center text-gray-600">&copy; <?php echo date('Y'); ?> Tom Yang University. All rights reserved.</p>
         </div>
     </section>
 
@@ -282,10 +267,6 @@ $error_message = isset($_GET['error']) ? "Error deleting applicant." : "";
         </div>
     </div>
 
-    <!-- Add JavaScript from general template -->
-    <script src="general-template/javascript/index.js" onerror="console.log('Could not load general template JavaScript');"></script>
-
-    <!-- Custom JavaScript for admin functionality -->
     <script>
         // Image Modal Functions
         function showImageModal(src) {
@@ -326,6 +307,13 @@ $error_message = isset($_GET['error']) ? "Error deleting applicant." : "";
             }
         }
 
+        // Mobile menu toggle
+        document.getElementById('menu-button')?.addEventListener('click', function() {
+            const sidebar = document.querySelector('aside');
+            sidebar.classList.toggle('max-sm:w-0');
+            sidebar.classList.toggle('max-sm:w-64');
+        });
+
         // Auto-hide success/error messages after 3 seconds
         setTimeout(() => {
             const messages = document.querySelectorAll('.fixed.top-4.right-4');
@@ -333,17 +321,10 @@ $error_message = isset($_GET['error']) ? "Error deleting applicant." : "";
                 msg.style.display = 'none';
             });
         }, 3000);
-
-        // Mobile menu toggle
-        document.getElementById('menu-button')?.addEventListener('click', function() {
-            const sidebar = document.querySelector('aside');
-            sidebar.classList.toggle('max-sm:w-0');
-            sidebar.classList.toggle('max-sm:w-72');
-        });
     </script>
 </body>
 </html>
 
 <?php
 $conn->close();
-?>
+?> 

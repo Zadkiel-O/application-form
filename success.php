@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,5 +17,16 @@
             <a href="index.php" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">Return to Home</a>
         </div>
     </div>
+
+    <script>
+        // Clear sessionStorage to ensure a fresh application next time
+        if (typeof sessionStorage !== 'undefined') {
+            sessionStorage.clear();
+        }
+    </script>
 </body>
 </html>
+<?php
+// Clear the session flag after using it
+unset($_SESSION['clear_storage']);
+?>

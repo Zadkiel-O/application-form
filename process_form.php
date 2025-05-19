@@ -8,6 +8,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_POST
     );
     
+    // Ensure image fields from session are preserved if not in POST data
+    $imageFields = ['profile_photo', 'student_signature', 'guardian_signature'];
+    foreach ($imageFields as $field) {
+        if (empty($formData[$field]) && isset($_SESSION['form_data'][$field])) {
+            $formData[$field] = $_SESSION['form_data'][$field];
+        }
+    }
+    
     // Get database connection
     $conn = require_once 'db_connect.php';
     
@@ -77,7 +85,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Execute the statement
         if ($stmt->execute()) {
             // Clear the session data after successful insertion
+            $imageFields = ['profile_photo', 'student_signature', 'guardian_signature'];
+            foreach ($imageFields as $field) {
+                if (!empty($_SESSION['form_data'][$field])) {
+                    // Don't delete the files as they're now stored in the database
+                    unset($_SESSION['form_data'][$field]);
+                }
+            }
+            // Clear all session data
             unset($_SESSION['form_data']);
+            
+            // Clear all sessionStorage items
+            $_SESSION['clear_storage'] = true;
             
             $_SESSION['success_message'] = "Application submitted successfully!";
             $stmt->close();

@@ -30,7 +30,24 @@ $applicant = $result->fetch_assoc();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Applicant - TOM YANG College</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sidebar: '#B0B0FF',
+                        container: '#B8D0B8',
+                        header: '#7b0c8c7a',
+                        section: '#000059',
+                        cancel: '#FF0004',
+                        proceed: '#00AB42'
+                    }
+                }
+            }
+        }
+    </script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
         .modal {
             display: none;
             position: fixed;
@@ -61,44 +78,66 @@ $applicant = $result->fetch_assoc();
     </style>
 </head>
 
-<body class="bg-purple-200">
+<body class="font-[Roboto] h-full flex flex-1 overflow-auto box-border bg-gray-100">
     <!-- Image Preview Modal -->
-    <div id="imageModal" class="modal flex items-center justify-center">
-        <span class="close">&times;</span>
-        <img id="modalImage" class="modal-content">
-    </div>
-
-    <div class="bg-indigo-200 flex justify-between items-center p-3 h-24">
-        <img src="logo.png" alt="Logo" class="h-20 ml-3">
-        <div class="mr-3 flex items-center">
-            <img src="phone.png" alt="Phone" class="h-12 ml-4 cursor-pointer">
-            <img src="bell.png" alt="Notifications" class="h-12 ml-4 cursor-pointer">
-            <img src="user.png" alt="User Profile" class="h-12 ml-4 cursor-pointer">
+    <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-50 z-50" style="display: none;">
+        <div class="absolute inset-0 flex items-center justify-center">
+            <div class="relative bg-white p-2 rounded-lg">
+                <button onclick="closeImageModal()" class="absolute top-2 right-2 text-gray-600 hover:text-gray-800 text-xl font-bold">&times;</button>
+                <img id="modalImage" src="" alt="Enlarged Image" class="max-w-3xl max-h-[80vh] object-contain">
+            </div>
         </div>
     </div>
 
-    <div class="flex">
-        <div class="bg-indigo-200 p-4 h-screen w-48 flex flex-col items-center">
-            <h2 class="text-center font-bold text-2xl mb-5 text-black">ADMIN</h2>
-            <a href="admin_page.php" class="bg-gray-300 p-2 mt-2 text-center font-bold w-full rounded text-black">Applicant List</a>
-            <a href="admin_dashboard.php" class="bg-purple-500 p-2 mt-2 text-center font-bold w-full rounded text-white hover:bg-purple-700">Dashboard</a>
-            <a href="logout.php" class="bg-red-500 p-2 mt-2 text-center font-bold w-full rounded text-white hover:bg-red-700">Logout</a>
-        </div>
+    <!-- Template-based Admin Sidebar -->
+    <aside class="max-sm:w-0 max-sm:px-0 w-20 bg-[linear-gradient(to_bottom,_#6a11cb,_#a044ff)] text-white pt-3 pb-4 flex flex-col gap-4 [transition:width_0.3s_ease] overflow-auto sm:hover:w-72 sm:hover:items-start group">
+        <nav class="flex flex-col w-full overflow-auto">
+            <div class="text-white no-underline flex items-center whitespace-nowrap overflow-hidden [transition:background_0.3s] rounded-md pt-3 pb-2 font-bold text-xl leading-[1.2]">
+                <img class="ml-4 mr-2 w-12 h-auto max-w-none" src="logo.png" alt="Logo"><span name="sidebar-text" class="opacity-0 [transition:opacity_0.3s_ease,_margin-left_0.3s_ease] ml-0 sm:group-hover:opacity-100 sm:group-hover:ml-1">TOM YANG<br>COLLEGE</span>
+            </div>
+            <div class="mt-3 overflow-y-auto overflow-x-hidden">
+                <!-- Admin Navigation Items -->
+                <a href="admin_page.php" class="mb-2 ml-4 mr-6 text-white no-underline flex items-center font-medium whitespace-nowrap overflow-hidden p-3 [transition:background_0.3s] rounded-md hover:bg-[rgba(0,_0,_0,_0.3)]">
+                    <img class="w-5 [transition:margin_0.3s_ease] sm:group-hover:mr-3 max-w-none filter brightness-0 invert" src="assets/core/Applications-Icon.png" onerror="this.src='user.png'; this.onerror=null;">
+                    <span name="sidebar-text" class="text-base opacity-0 [transition:opacity_0.3s_ease,_margin-left_0.3s_ease] ml-0 sm:group-hover:opacity-100 sm:group-hover:ml-1">Applicant Form</span>
+                </a>
+                <a href="logout.php" class="mb-2 ml-4 mr-6 text-white no-underline flex items-center font-medium whitespace-nowrap overflow-hidden p-3 [transition:background_0.3s] rounded-md hover:bg-[rgba(0,_0,_0,_0.3)]">
+                    <img class="w-5 [transition:margin_0.3s_ease] sm:group-hover:mr-3 max-w-none filter brightness-0 invert" src="assets/core/Logout-Icon.png" onerror="this.src='user.png'; this.onerror=null;">
+                    <span name="sidebar-text" class="text-base opacity-0 [transition:opacity_0.3s_ease,_margin-left_0.3s_ease] ml-0 sm:group-hover:opacity-100 sm:group-hover:ml-1">Logout</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
 
-        <div class="flex-1 p-8">
-            <div class="bg-purple-500 rounded-lg max-w-6xl mx-auto p-5 mb-8">
-                <div class="flex justify-between items-center mb-4">
-                    <h1 class="text-white text-2xl font-bold">Applicant Details</h1>
-                    <div>
-                        <a href="admin_page.php" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded inline-block mr-2">
-                            Back to List
-                        </a>
-                        <a href="edit_applicant.php?id=<?php echo $id; ?>" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block">
-                            Edit Details
-                        </a>
-                    </div>
+    <section class="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+        <!-- Header from template -->
+        <header class="bg-[linear-gradient(to_right,_#6a11cb,_#a044ff)] h-24 flex items-center justify-between pr-10 py-3">
+            <div class="flex items-center">
+                <button id="menu-button" class="sm:hidden ml-3 p-3 min-w-11 [transition:background_0.3s] rounded-md hover:bg-[rgba(0,_0,_0,_0.3)]">
+                    <img class="h-5 cursor-pointer filter brightness-0 invert" src="assets/core/Menu-Icon.png" alt="Menu" onerror="this.src='phone.png'; this.onerror=null;">
+                </button>
+                <h1 class="max-sm:ml-3 ml-7 whitespace-nowrap text-ellipsis text-3xl text-white font-bold">Applicant Details</h1>
+            </div>
+            <div class="max-sm:hidden flex">
+                <img class="h-5 ml-5 cursor-pointer filter brightness-0 invert" src="assets/core/Phone-Icon.png" alt="Phone" onerror="this.src='phone.png'; this.onerror=null;">
+                <img class="h-5 ml-5 cursor-pointer filter brightness-0 invert" src="assets/core/Notification-Icon.png" alt="Notifications" onerror="this.src='bell.png'; this.onerror=null;">
+                <img class="h-5 ml-5 cursor-pointer filter brightness-0 invert" src="assets/core/Profile-Icon.png" alt="Profile" onerror="this.src='user.png'; this.onerror=null;">
+            </div>
+        </header>
+
+        <main class="flex flex-col h-full overflow-auto">
+            <div class="bg-white border border-solid border-black rounded-xl rounded-tr-none rounded-br-none m-3 px-6 py-5 overflow-auto">
+                <!-- Actions Button Row -->
+                <div class="flex justify-end mb-4">
+                    <a href="admin_page.php" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded inline-block mr-2">
+                        Back to List
+                    </a>
+                    <a href="edit_applicant.php?id=<?php echo $id; ?>" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block">
+                        Edit Details
+                    </a>
                 </div>
 
+                <!-- Main content - keep everything from the original white container -->
                 <div class="bg-white p-6 rounded-lg shadow-lg">
                     <div class="border-b-2 border-purple-500 pb-4 mb-6">
                         <h2 class="text-xl font-bold text-purple-800 mb-4">A. Personal Information</h2>
@@ -382,30 +421,10 @@ $applicant = $result->fetch_assoc();
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </main>
+    </section>
 
-    <script>
-        // Modal functionality
-        const modal = document.getElementById("imageModal");
-        const modalImg = document.getElementById("modalImage");
-        const span = document.getElementsByClassName("close")[0];
-
-        function showModal(src) {
-            modal.style.display = "flex";
-            modalImg.src = src;
-        }
-
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    </script>
+            <script>        // Modal functionality        function showModal(src) {            document.getElementById('imageModal').style.display = 'flex';            document.getElementById('modalImage').src = src;        }        function closeImageModal() {            document.getElementById('imageModal').style.display = 'none';        }        // Close modal when clicking outside        window.onclick = function(event) {            const modal = document.getElementById('imageModal');            const modalContent = modal.querySelector('.relative');                        if (event.target === modal && !modalContent.contains(event.target)) {                closeImageModal();            }        }                // Mobile menu toggle        document.getElementById('menu-button')?.addEventListener('click', function() {            const sidebar = document.querySelector('aside');            sidebar.classList.toggle('max-sm:w-0');            sidebar.classList.toggle('max-sm:w-72');        });    </script>
 </body>
 
 </html>
