@@ -134,8 +134,8 @@ if (isset($_GET['cancel']) && $_GET['cancel'] === '1') {
                     <div class="flex justify-between items-start">
                         <div class="flex-grow">
                             <div class="grid grid-cols-4">
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">FIRST NAME</label>
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">LAST NAME</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">FIRST NAME*</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">LAST NAME*</label>
                                 <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">MIDDLE NAME</label>
                                 <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">EXTENSION NAME</label>
                                 <input type="text" name="first_name" maxlength="50" required class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('first_name'); ?>">
@@ -146,10 +146,10 @@ if (isset($_GET['cancel']) && $_GET['cancel'] === '1') {
                             <div class="bg-section h-5"></div>
 
                             <div class="grid grid-cols-5">
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">DATE OF BIRTH</label>
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center col-span-2">PLACE OF BIRTH</label>
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">AGE</label>
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">SEX</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">DATE OF BIRTH*</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center col-span-2">PLACE OF BIRTH*</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">AGE*</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">SEX*</label>
                                 <input type="date" name="date_of_birth"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('date_of_birth'); ?>">
                                 <input type="text" name="place_of_birth"  class="p-1.5 border border-black w-full box-border col-span-2" value="<?php echo getFormValue('place_of_birth'); ?>">
                                 <input type="number" name="age" min="0"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('age'); ?>">
@@ -165,10 +165,10 @@ if (isset($_GET['cancel']) && $_GET['cancel'] === '1') {
                             <div class="bg-section h-5"></div>
 
                             <div class="grid grid-cols-4">
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">CIVIL STATUS</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">CIVIL STATUS*</label>
                                 <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">RELIGIOUS AFFILIATION</label>
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">CITIZENSHIP</label>
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">NO. OF SIBLINGS</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">CITIZENSHIP*</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">NO. OF SIBLINGS*</label>
                                 <select name="civil_status"  class="p-1.5 border border-black w-full box-border">
                                     <option value="Single" <?php if(getFormValue('civil_status') == 'Single') echo 'selected'; ?>>Single</option>
                                     <option value="Married" <?php if(getFormValue('civil_status') == 'Married') echo 'selected'; ?>>Married</option>
@@ -215,23 +215,23 @@ if (isset($_GET['cancel']) && $_GET['cancel'] === '1') {
                     <div class="flex justify-between items-start">
                         <div class="flex-grow">
                             <div class="grid grid-cols-5">
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center col-span-2">HOUSE/ROOM/BLDG/BLOCK/PHASE/STREET/SUBD</label>
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">BARANGAY</label>
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">CITY/MUNICIPALITY</label>
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">DISTRICT</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center col-span-2">HOUSE/ROOM/BLDG/BLOCK/PHASE/STREET/SUBD*</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">BARANGAY*</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">CITY/MUNICIPALITY*</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">DISTRICT*</label>
                                 <input type="text" name="house"  class="p-1.5 border border-black w-full box-border col-span-2" value="<?php echo getFormValue('house'); ?>">
                                 <input type="text" name="barangay"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('barangay'); ?>">
                                 <input type="text" name="city"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('city'); ?>">
                                 <input type="text" name="district"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('district'); ?>">
                             </div>
                             <div class="grid grid-cols-5">
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">ZIP CODE</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">ZIP CODE*</label>
                                 <input type="number" name="zip_code" min="0"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('zip_code'); ?>">
                             </div>
 
                             <div class="grid grid-cols-3">
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">ACTIVE PERSONAL NUMBER</label>
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">ACTIVE PERSONAL EMAIL ADDRESS</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">ACTIVE PERSONAL NUMBER*</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">ACTIVE PERSONAL EMAIL ADDRESS*</label>
                                 <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">LANDLINE NUMBER</label>
                                 <input type="number" name="personal_number" min="0"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('personal_number'); ?>">
                                 <input type="email" name="personal_email"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('personal_email'); ?>">
@@ -247,12 +247,12 @@ if (isset($_GET['cancel']) && $_GET['cancel'] === '1') {
                         </div>
                         <div class="flex-grow">
                             <div class="grid grid-cols-6">
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">FIRST NAME</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">FIRST NAME*</label>
                                 <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">MIDDLE NAME</label>
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">LAST NAME</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">LAST NAME*</label>
                                 <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">EXTENSION NAME</label>
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">AGE</label>
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">SEX</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">AGE*</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">SEX*</label>
                             </div>
 
                             <div class="grid grid-cols-6">
@@ -268,9 +268,9 @@ if (isset($_GET['cancel']) && $_GET['cancel'] === '1') {
                             </div>
 
                             <div class="grid grid-cols-4">
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">RELATIONSHIP TO APPLICANT</label>
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center col-span-2">CURRENT ADDRESS</label>
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">ACTIVE CONTACT NUMBER</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">RELATIONSHIP TO APPLICANT*</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center col-span-2">CURRENT ADDRESS*</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">ACTIVE CONTACT NUMBER*</label>
                             </div>
 
                             <div class="grid grid-cols-4">
@@ -280,7 +280,7 @@ if (isset($_GET['cancel']) && $_GET['cancel'] === '1') {
                             </div>
                             
                             <div class="grid grid-cols-4">
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">ACTIVE EMAIL ADDRESS</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">ACTIVE EMAIL ADDRESS*</label>
                                 <input type="email" name="guardian_email"  class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('guardian_email'); ?>">
                             </div>
                         </div>
@@ -290,9 +290,9 @@ if (isset($_GET['cancel']) && $_GET['cancel'] === '1') {
                     <div class="flex justify-between items-start">
                         <div class="flex-grow">
                             <div class="grid grid-cols-4">
-                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">ENROLLMENT HISTORY</label>
-                                <label class="p-1 font-bold text-sm text-black bg-white border border-black flex items-center col-span-2">COMPLETE NAME OF SCHOOL</label>
-                                <label class="p-1 font-bold text-sm text-black bg-white border border-black flex items-center">PERIOD OF ATTENDANCE</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">ENROLLMENT HISTORY </label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center col-span-2">COMPLETE NAME OF SCHOOL*</label>
+                                <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center">PERIOD OF ATTENDANCE*</label>
                             </div>
                             
                             <div class="grid grid-cols-4">
@@ -347,7 +347,7 @@ if (isset($_GET['cancel']) && $_GET['cancel'] === '1') {
                         <div class="text-white font-bold text-center text-sm uppercase">CHOOSE THE SELECTED COLLEGE AND COURSES</div>
                     </div>
                       <div class="grid grid-cols-11 mt-2">
-                        <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center col-span-2">SELECT COURSES</label>
+                        <label class="p-1 font-bold text-sm text-black bg-sidebar border border-black flex items-center col-span-2">SELECT COURSES*</label>
                         <div class="col-span-9 grid grid-cols-2 gap-4">
                             <select name="course_1" id="course_1" class="p-1.5 border border-black w-full box-border" required>
                                 <option value="">Select Course 1</option>
@@ -445,14 +445,14 @@ if (isset($_GET['cancel']) && $_GET['cancel'] === '1') {
 
                             <div class="grid grid-cols-2 gap-4 mt-4">
                                 <div>
-                                    <label class="block mb-2 font-bold">Student's Full Name</label>
+                                    <label class="block mb-2 font-bold">Student's Full PRINTED Name*</label>
                                     <input type="text" name="student_consent_name" required class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('student_consent_name'); ?>">
                                                                         <div class="border-2 border-dashed border-black h-32 mt-2 relative">
                                         <?php if (!empty($_SESSION['form_data']['student_signature'])): ?>
                                             <img id="student-signature-preview" src="uploads/<?php echo htmlspecialchars($_SESSION['form_data']['student_signature']); ?>" class="max-w-full max-h-full object-contain absolute inset-0">
                                             <div id="student-signature-placeholder" class="hidden flex items-center justify-center h-full">
                                                 <label for="student-signature-input" class="bg-black cursor-pointer w-full h-full flex items-center justify-center m-0">
-                                                    <span class="text-gray-500">Click to upload signature (JPG/PNG)</span>
+                                                    <span class="text-gray-500">Click to upload signature (JPG/PNG)*</span>
                                                     <input type="file" name="student_signature" accept="image/jpeg,image/png" class="bg-black absolute inset-0 opacity-0 z-10" id="student-signature-input" onchange="handleImageUpload(this, 'student-signature-preview', 'student-signature-placeholder', 'student-signature-success', 'delete-student-signature')" style=" pointer-events: auto;">
                                                 </label>
                                             </div>
@@ -460,7 +460,7 @@ if (isset($_GET['cancel']) && $_GET['cancel'] === '1') {
                                             <img id="student-signature-preview" class="hidden max-w-full max-h-full object-contain absolute inset-0">
                                             <div id="student-signature-placeholder" class="flex items-center justify-center h-full">
                                                 <label for="student-signature-input" class="cursor-pointer w-full h-full flex items-center justify-center m-0">
-                                                    <span class="text-gray-500">Click to upload signature (JPG/PNG)</span>
+                                                    <span class="text-gray-500">Click to upload signature (JPG/PNG)*</span>
                                                     <input type="file" name="student_signature" accept="image/jpeg,image/png" class="absolute inset-0 opacity-0 z-10" id="student-signature-input" onchange="handleImageUpload(this, 'student-signature-preview', 'student-signature-placeholder', 'student-signature-success', 'delete-student-signature')" <?php if (empty($_SESSION['form_data']['student_signature'])) echo 'required'; ?> style="pointer-events: auto;">
                                                 </label>
                                             </div>
@@ -474,7 +474,7 @@ if (isset($_GET['cancel']) && $_GET['cancel'] === '1') {
                                     </div>
                                 </div>
                                 <div>
-                                    <label class="block mb-2 font-bold">Guardian/Parent's Full Name</label>
+                                    <label class="block mb-2 font-bold">Guardian/Parent's Full PRINTED Name*</label>
                                     <input type="text" name="guardian_consent_name" required class="p-1.5 border border-black w-full box-border" value="<?php echo getFormValue('guardian_consent_name'); ?>">
                                         <div class="border-2 border-dashed border-black h-32 mt-2 relative">
                                         <?php if (!empty($_SESSION['form_data']['guardian_signature'])): ?>
