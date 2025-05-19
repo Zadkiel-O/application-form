@@ -100,7 +100,7 @@ if (isset($_GET['cancel']) && $_GET['cancel'] === '1') {
         <!-- Original admission_form.php content -->
         <div class="w-32 bg-sidebar flex justify-center items-start pt-5 fixed top-0 left-0 h-screen z-10 sm:hidden">
             <div class="logo">
-                <img src="logo.png" alt="Logo" class="w-20 h-auto">
+                <img src="TomYang-Logo.png" alt="Logo" class="w-20 h-auto">
             </div>
         </div>
 
