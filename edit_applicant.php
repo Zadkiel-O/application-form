@@ -28,11 +28,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $place_of_birth = $_POST['place_of_birth'];
     $age = $_POST['age'];
     $sex = $_POST['sex'];
+    $blood_type = $_POST['blood_type'];
+    $civil_status = $_POST['civil_status'];
+    $religious_affiliation = $_POST['religious_affiliation'];
+    $citizenship = $_POST['citizenship'];
+    $no_of_siblings = $_POST['no_of_siblings'];
+    
     $personal_email = $_POST['personal_email'];
     $personal_number = $_POST['personal_number'];
     $house = $_POST['house'];
     $barangay = $_POST['barangay'];
     $city = $_POST['city'];
+    $district = $_POST['district'];
+    $zip_code = $_POST['zip_code'];
+    $landline_number = $_POST['landline_number'];
+    
+    // Guardian information
+    $guardian_first_name = $_POST['guardian_first_name'];
+    $guardian_middle_name = $_POST['guardian_middle_name'];
+    $guardian_last_name = $_POST['guardian_last_name'];
+    $guardian_extension_name = $_POST['guardian_extension_name'];
+    $guardian_age = $_POST['guardian_age'];
+    $guardian_sex = $_POST['guardian_sex'];
+    $guardian_relationship = $_POST['guardian_relationship'];
+    $guardian_address = $_POST['guardian_address'];
+    $guardian_contact_number = $_POST['guardian_contact_number'];
+    $guardian_email = $_POST['guardian_email'];
+    
+    // Educational information
+    $grade12_school = $_POST['grade12_school'];
+    $grade12_period = $_POST['grade12_period'];
+    $grade12_gwa = $_POST['grade12_gwa'];
+    $grade11_school = $_POST['grade11_school'];
+    $grade11_period = $_POST['grade11_period'];
+    $grade11_gwa = $_POST['grade11_gwa'];
+    $grade10_school = $_POST['grade10_school'];
+    $grade10_period = $_POST['grade10_period'];
+    $grade9_school = $_POST['grade9_school'];
+    $grade9_period = $_POST['grade9_period'];
+    $grade8_school = $_POST['grade8_school'];
+    $grade8_period = $_POST['grade8_period'];
+    $grade7_school = $_POST['grade7_school'];
+    $grade7_period = $_POST['grade7_period'];
+    
+    // College and course information
+    $college_offered = $_POST['college_offered'];
+    $course_offered = $_POST['course_offered'];
     $course_1 = $_POST['course_1'];
     $course_2 = $_POST['course_2'];
 
@@ -45,21 +86,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         place_of_birth = ?,
         age = ?,
         sex = ?,
+        blood_type = ?,
+        civil_status = ?,
+        religious_affiliation = ?,
+        citizenship = ?,
+        no_of_siblings = ?,
         personal_email = ?,
         personal_number = ?,
         house = ?,
         barangay = ?,
         city = ?,
+        district = ?,
+        zip_code = ?,
+        landline_number = ?,
+        guardian_first_name = ?,
+        guardian_middle_name = ?,
+        guardian_last_name = ?,
+        guardian_extension_name = ?,
+        guardian_age = ?,
+        guardian_sex = ?,
+        guardian_relationship = ?,
+        guardian_address = ?,
+        guardian_contact_number = ?,
+        guardian_email = ?,
+        grade12_school = ?,
+        grade12_period = ?,
+        grade12_gwa = ?,
+        grade11_school = ?,
+        grade11_period = ?,
+        grade11_gwa = ?,
+        grade10_school = ?,
+        grade10_period = ?,
+        grade9_school = ?,
+        grade9_period = ?,
+        grade8_school = ?,
+        grade8_period = ?,
+        grade7_school = ?,
+        grade7_period = ?,
+        college_offered = ?,
+        course_offered = ?,
         course_1 = ?,
         course_2 = ?
         WHERE id = ?";
 
     $stmt = $conn->prepare($update_sql);
-    $stmt->bind_param("sssssssssssssssi", 
+    $stmt->bind_param("ssssssssssssissssssssssssssssssssssssssssssssssssi", 
         $first_name, $middle_name, $last_name, $extension_name,
         $date_of_birth, $place_of_birth, $age, $sex,
+        $blood_type, $civil_status, $religious_affiliation, $citizenship, $no_of_siblings,
         $personal_email, $personal_number, $house,
-        $barangay, $city, $course_1, $course_2, $id
+        $barangay, $city, $district, $zip_code, $landline_number,
+        $guardian_first_name, $guardian_middle_name, $guardian_last_name, $guardian_extension_name,
+        $guardian_age, $guardian_sex, $guardian_relationship, $guardian_address,
+        $guardian_contact_number, $guardian_email,
+        $grade12_school, $grade12_period, $grade12_gwa,
+        $grade11_school, $grade11_period, $grade11_gwa,
+        $grade10_school, $grade10_period,
+        $grade9_school, $grade9_period,
+        $grade8_school, $grade8_period,
+        $grade7_school, $grade7_period,
+        $college_offered, $course_offered, $course_1, $course_2, $id
     );
 
     if ($stmt->execute()) {
@@ -192,80 +278,267 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Personal Email</label>
-                                <input type="email" name="personal_email" value="<?php echo htmlspecialchars($applicant['personal_email']); ?>"
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" required>
+                                <label class="block text-sm font-medium text-gray-700">Blood Type</label>
+                                <input type="text" name="blood_type" value="<?php echo htmlspecialchars($applicant['blood_type']); ?>"
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Personal Number</label>
-                                <input type="text" name="personal_number" value="<?php echo htmlspecialchars($applicant['personal_number']); ?>"
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" required>
+                                <label class="block text-sm font-medium text-gray-700">Civil Status</label>
+                                <input type="text" name="civil_status" value="<?php echo htmlspecialchars($applicant['civil_status']); ?>"
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">House/Building</label>
-                                <input type="text" name="house" value="<?php echo htmlspecialchars($applicant['house']); ?>"
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" required>
+                                <label class="block text-sm font-medium text-gray-700">Religious Affiliation</label>
+                                <input type="text" name="religious_affiliation" value="<?php echo htmlspecialchars($applicant['religious_affiliation']); ?>"
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Barangay</label>
-                                <input type="text" name="barangay" value="<?php echo htmlspecialchars($applicant['barangay']); ?>"
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" required>
+                                <label class="block text-sm font-medium text-gray-700">Citizenship</label>
+                                <input type="text" name="citizenship" value="<?php echo htmlspecialchars($applicant['citizenship']); ?>"
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">City</label>
-                                <input type="text" name="city" value="<?php echo htmlspecialchars($applicant['city']); ?>"
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" required>
+                                <label class="block text-sm font-medium text-gray-700">No. of Siblings</label>
+                                <input type="number" name="no_of_siblings" value="<?php echo htmlspecialchars($applicant['no_of_siblings']); ?>"
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Course 1</label>
-                                <select name="course_1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" required>
-                                    <option value="">Select Course 1</option>
-                                    <optgroup label="Technology Courses">
-                                        <option value="Information Technology (IT)" <?php echo $applicant['course_1'] === 'Information Technology (IT)' ? 'selected' : ''; ?>>Information Technology (IT)</option>
-                                        <option value="Computer Science" <?php echo $applicant['course_1'] === 'Computer Science' ? 'selected' : ''; ?>>Computer Science</option>
-                                        <option value="Computer Engineering" <?php echo $applicant['course_1'] === 'Computer Engineering' ? 'selected' : ''; ?>>Computer Engineering</option>
-                                        <option value="Information Systems" <?php echo $applicant['course_1'] === 'Information Systems' ? 'selected' : ''; ?>>Information Systems</option>
-                                    </optgroup>
-                                    <optgroup label="Business Courses">
-                                        <option value="Marketing Management" <?php echo $applicant['course_1'] === 'Marketing Management' ? 'selected' : ''; ?>>Marketing Management</option>
-                                        <option value="Business Administration" <?php echo $applicant['course_1'] === 'Business Administration' ? 'selected' : ''; ?>>Business Administration</option>
-                                        <option value="Accounting" <?php echo $applicant['course_1'] === 'Accounting' ? 'selected' : ''; ?>>Accounting</option>
-                                        <option value="Economics" <?php echo $applicant['course_1'] === 'Economics' ? 'selected' : ''; ?>>Economics</option>
-                                    </optgroup>
-                                    <optgroup label="Education Courses">
-                                        <option value="Special Education (SPED)" <?php echo $applicant['course_1'] === 'Special Education (SPED)' ? 'selected' : ''; ?>>Special Education (SPED)</option>
-                                        <option value="Elementary Education" <?php echo $applicant['course_1'] === 'Elementary Education' ? 'selected' : ''; ?>>Elementary Education</option>
-                                        <option value="Secondary Education" <?php echo $applicant['course_1'] === 'Secondary Education' ? 'selected' : ''; ?>>Secondary Education</option>
-                                        <option value="Early Childhood Education" <?php echo $applicant['course_1'] === 'Early Childhood Education' ? 'selected' : ''; ?>>Early Childhood Education</option>
-                                    </optgroup>
-                                </select>
+                        <!-- Address and Contact Information -->
+                        <div class="border-t border-gray-200 pt-4 mt-4">
+                            <h2 class="text-lg font-semibold mb-4">Address and Contact Information</h2>
+                            <div class="grid grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Personal Email</label>
+                                    <input type="email" name="personal_email" value="<?php echo htmlspecialchars($applicant['personal_email']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Personal Number</label>
+                                    <input type="text" name="personal_number" value="<?php echo htmlspecialchars($applicant['personal_number']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">House/Building</label>
+                                    <input type="text" name="house" value="<?php echo htmlspecialchars($applicant['house']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Barangay</label>
+                                    <input type="text" name="barangay" value="<?php echo htmlspecialchars($applicant['barangay']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">City</label>
+                                    <input type="text" name="city" value="<?php echo htmlspecialchars($applicant['city']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">District</label>
+                                    <input type="text" name="district" value="<?php echo htmlspecialchars($applicant['district']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Zip Code</label>
+                                    <input type="text" name="zip_code" value="<?php echo htmlspecialchars($applicant['zip_code']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Landline Number</label>
+                                    <input type="text" name="landline_number" value="<?php echo htmlspecialchars($applicant['landline_number']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Course 2</label>
-                                <select name="course_2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" required>
-                                    <option value="">Select Course 2</option>
-                                    <optgroup label="Technology Courses">
-                                        <option value="Information Technology (IT)" <?php echo $applicant['course_2'] === 'Information Technology (IT)' ? 'selected' : ''; ?>>Information Technology (IT)</option>
-                                        <option value="Computer Science" <?php echo $applicant['course_2'] === 'Computer Science' ? 'selected' : ''; ?>>Computer Science</option>
-                                        <option value="Computer Engineering" <?php echo $applicant['course_2'] === 'Computer Engineering' ? 'selected' : ''; ?>>Computer Engineering</option>
-                                        <option value="Information Systems" <?php echo $applicant['course_2'] === 'Information Systems' ? 'selected' : ''; ?>>Information Systems</option>
-                                    </optgroup>
-                                    <optgroup label="Business Courses">
-                                        <option value="Marketing Management" <?php echo $applicant['course_2'] === 'Marketing Management' ? 'selected' : ''; ?>>Marketing Management</option>
-                                        <option value="Business Administration" <?php echo $applicant['course_2'] === 'Business Administration' ? 'selected' : ''; ?>>Business Administration</option>
-                                        <option value="Accounting" <?php echo $applicant['course_2'] === 'Accounting' ? 'selected' : ''; ?>>Accounting</option>
-                                        <option value="Economics" <?php echo $applicant['course_2'] === 'Economics' ? 'selected' : ''; ?>>Economics</option>
-                                    </optgroup>
-                                    <optgroup label="Education Courses">
-                                        <option value="Special Education (SPED)" <?php echo $applicant['course_2'] === 'Special Education (SPED)' ? 'selected' : ''; ?>>Special Education (SPED)</option>
-                                        <option value="Elementary Education" <?php echo $applicant['course_2'] === 'Elementary Education' ? 'selected' : ''; ?>>Elementary Education</option>
-                                        <option value="Secondary Education" <?php echo $applicant['course_2'] === 'Secondary Education' ? 'selected' : ''; ?>>Secondary Education</option>
-                                        <option value="Early Childhood Education" <?php echo $applicant['course_2'] === 'Early Childhood Education' ? 'selected' : ''; ?>>Early Childhood Education</option>
-                                    </optgroup>
-                                </select>
+                        </div>
+
+                        <!-- Guardian Information -->
+                        <div class="border-t border-gray-200 pt-4 mt-4">
+                            <h2 class="text-lg font-semibold mb-4">Guardian Information</h2>
+                            <div class="grid grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Guardian's First Name</label>
+                                    <input type="text" name="guardian_first_name" value="<?php echo htmlspecialchars($applicant['guardian_first_name']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Guardian's Middle Name</label>
+                                    <input type="text" name="guardian_middle_name" value="<?php echo htmlspecialchars($applicant['guardian_middle_name']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Guardian's Last Name</label>
+                                    <input type="text" name="guardian_last_name" value="<?php echo htmlspecialchars($applicant['guardian_last_name']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Guardian's Extension Name</label>
+                                    <input type="text" name="guardian_extension_name" value="<?php echo htmlspecialchars($applicant['guardian_extension_name']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Guardian's Age</label>
+                                    <input type="number" name="guardian_age" value="<?php echo htmlspecialchars($applicant['guardian_age']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Guardian's Sex</label>
+                                    <select name="guardian_sex" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                        <option value="Male" <?php echo $applicant['guardian_sex'] === 'Male' ? 'selected' : ''; ?>>Male</option>
+                                        <option value="Female" <?php echo $applicant['guardian_sex'] === 'Female' ? 'selected' : ''; ?>>Female</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Guardian's Relationship</label>
+                                    <input type="text" name="guardian_relationship" value="<?php echo htmlspecialchars($applicant['guardian_relationship']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Guardian's Address</label>
+                                    <input type="text" name="guardian_address" value="<?php echo htmlspecialchars($applicant['guardian_address']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Guardian's Contact Number</label>
+                                    <input type="text" name="guardian_contact_number" value="<?php echo htmlspecialchars($applicant['guardian_contact_number']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Guardian's Email</label>
+                                    <input type="email" name="guardian_email" value="<?php echo htmlspecialchars($applicant['guardian_email']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Educational Information -->
+                        <div class="border-t border-gray-200 pt-4 mt-4">
+                            <h2 class="text-lg font-semibold mb-4">Educational Information</h2>
+                            <div class="grid grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Grade 12 School</label>
+                                    <input type="text" name="grade12_school" value="<?php echo htmlspecialchars($applicant['grade12_school']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Grade 12 Period</label>
+                                    <input type="text" name="grade12_period" value="<?php echo htmlspecialchars($applicant['grade12_period']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Grade 12 GWA</label>
+                                    <input type="text" name="grade12_gwa" value="<?php echo htmlspecialchars($applicant['grade12_gwa']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Grade 11 School</label>
+                                    <input type="text" name="grade11_school" value="<?php echo htmlspecialchars($applicant['grade11_school']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Grade 11 Period</label>
+                                    <input type="text" name="grade11_period" value="<?php echo htmlspecialchars($applicant['grade11_period']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Grade 11 GWA</label>
+                                    <input type="text" name="grade11_gwa" value="<?php echo htmlspecialchars($applicant['grade11_gwa']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Grade 10 School</label>
+                                    <input type="text" name="grade10_school" value="<?php echo htmlspecialchars($applicant['grade10_school']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Grade 10 Period</label>
+                                    <input type="text" name="grade10_period" value="<?php echo htmlspecialchars($applicant['grade10_period']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Grade 9 School</label>
+                                    <input type="text" name="grade9_school" value="<?php echo htmlspecialchars($applicant['grade9_school']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Grade 9 Period</label>
+                                    <input type="text" name="grade9_period" value="<?php echo htmlspecialchars($applicant['grade9_period']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Grade 8 School</label>
+                                    <input type="text" name="grade8_school" value="<?php echo htmlspecialchars($applicant['grade8_school']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Grade 8 Period</label>
+                                    <input type="text" name="grade8_period" value="<?php echo htmlspecialchars($applicant['grade8_period']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Grade 7 School</label>
+                                    <input type="text" name="grade7_school" value="<?php echo htmlspecialchars($applicant['grade7_school']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Grade 7 Period</label>
+                                    <input type="text" name="grade7_period" value="<?php echo htmlspecialchars($applicant['grade7_period']); ?>"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- College and Course Information -->
+                        <div class="border-t border-gray-200 pt-4 mt-4">
+                            <h2 class="text-lg font-semibold mb-4">College and Course Information</h2>
+                            <div class="grid grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Alternative Course 1</label>
+                                    <select name="course_1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" required>
+                                        <option value="">Select Course 1</option>
+                                        <optgroup label="Technology Courses">
+                                            <option value="Information Technology (IT)" <?php echo $applicant['course_1'] === 'Information Technology (IT)' ? 'selected' : ''; ?>>Information Technology (IT)</option>
+                                            <option value="Computer Science" <?php echo $applicant['course_1'] === 'Computer Science' ? 'selected' : ''; ?>>Computer Science</option>
+                                            <option value="Computer Engineering" <?php echo $applicant['course_1'] === 'Computer Engineering' ? 'selected' : ''; ?>>Computer Engineering</option>
+                                            <option value="Information Systems" <?php echo $applicant['course_1'] === 'Information Systems' ? 'selected' : ''; ?>>Information Systems</option>
+                                        </optgroup>
+                                        <optgroup label="Business Courses">
+                                            <option value="Marketing Management" <?php echo $applicant['course_1'] === 'Marketing Management' ? 'selected' : ''; ?>>Marketing Management</option>
+                                            <option value="Business Administration" <?php echo $applicant['course_1'] === 'Business Administration' ? 'selected' : ''; ?>>Business Administration</option>
+                                            <option value="Accounting" <?php echo $applicant['course_1'] === 'Accounting' ? 'selected' : ''; ?>>Accounting</option>
+                                            <option value="Economics" <?php echo $applicant['course_1'] === 'Economics' ? 'selected' : ''; ?>>Economics</option>
+                                        </optgroup>
+                                        <optgroup label="Education Courses">
+                                            <option value="Special Education (SPED)" <?php echo $applicant['course_1'] === 'Special Education (SPED)' ? 'selected' : ''; ?>>Special Education (SPED)</option>
+                                            <option value="Elementary Education" <?php echo $applicant['course_1'] === 'Elementary Education' ? 'selected' : ''; ?>>Elementary Education</option>
+                                            <option value="Secondary Education" <?php echo $applicant['course_1'] === 'Secondary Education' ? 'selected' : ''; ?>>Secondary Education</option>
+                                            <option value="Early Childhood Education" <?php echo $applicant['course_1'] === 'Early Childhood Education' ? 'selected' : ''; ?>>Early Childhood Education</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Alternative Course 2</label>
+                                    <select name="course_2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" required>
+                                        <option value="">Select Course 2</option>
+                                        <optgroup label="Technology Courses">
+                                            <option value="Information Technology (IT)" <?php echo $applicant['course_2'] === 'Information Technology (IT)' ? 'selected' : ''; ?>>Information Technology (IT)</option>
+                                            <option value="Computer Science" <?php echo $applicant['course_2'] === 'Computer Science' ? 'selected' : ''; ?>>Computer Science</option>
+                                            <option value="Computer Engineering" <?php echo $applicant['course_2'] === 'Computer Engineering' ? 'selected' : ''; ?>>Computer Engineering</option>
+                                            <option value="Information Systems" <?php echo $applicant['course_2'] === 'Information Systems' ? 'selected' : ''; ?>>Information Systems</option>
+                                        </optgroup>
+                                        <optgroup label="Business Courses">
+                                            <option value="Marketing Management" <?php echo $applicant['course_2'] === 'Marketing Management' ? 'selected' : ''; ?>>Marketing Management</option>
+                                            <option value="Business Administration" <?php echo $applicant['course_2'] === 'Business Administration' ? 'selected' : ''; ?>>Business Administration</option>
+                                            <option value="Accounting" <?php echo $applicant['course_2'] === 'Accounting' ? 'selected' : ''; ?>>Accounting</option>
+                                            <option value="Economics" <?php echo $applicant['course_2'] === 'Economics' ? 'selected' : ''; ?>>Economics</option>
+                                        </optgroup>
+                                        <optgroup label="Education Courses">
+                                            <option value="Special Education (SPED)" <?php echo $applicant['course_2'] === 'Special Education (SPED)' ? 'selected' : ''; ?>>Special Education (SPED)</option>
+                                            <option value="Elementary Education" <?php echo $applicant['course_2'] === 'Elementary Education' ? 'selected' : ''; ?>>Elementary Education</option>
+                                            <option value="Secondary Education" <?php echo $applicant['course_2'] === 'Secondary Education' ? 'selected' : ''; ?>>Secondary Education</option>
+                                            <option value="Early Childhood Education" <?php echo $applicant['course_2'] === 'Early Childhood Education' ? 'selected' : ''; ?>>Early Childhood Education</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
